@@ -1,0 +1,14 @@
+body {
+    background-image: url("../../images/bonette.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+
+    .maintenance {
+        position: absolute;
+        top: 40%;
+        width: 100%;
+        text-align: center;
+        color: white;
+    }
+}

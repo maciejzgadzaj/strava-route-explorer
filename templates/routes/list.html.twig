@@ -1,0 +1,162 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'Routes'|trans }} - {{ parent() }}{% endblock %}
+
+{% block body %}
+    <div class="routes">
+        {% include 'routes/pager.html.twig' %}
+
+        {% set query = app.request.query.all %}
+        <div class="head">
+            <div class="image"></div>
+            <div class="name">
+                <div class="label">
+                    <span class="accesskey">R</span>oute
+                </div>
+                {% set dir, direction, icon = 'asc', 'ascending', 'icon-sort.svg' %}
+                {% if query.sort is defined and query.sort == 'name' %}
+                    {% set icon = 'icon-sort-active.svg' %}
+                    {% if query.dir is defined and query.dir == 'asc' %}
+                        {% set dir, direction = 'desc', 'descending' %}
+                    {% endif %}
+                {% endif %}
+                <div class="sort">
+                    <a title="Sort routes by name in {{ direction }} order" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({ 'sort': 'name', 'dir': dir })) }}"><img src="images/{{ icon }}" width="12" height="12" /></a>
+                </div>
+            </div>
+            <div class="distance">
+                <div class="label">
+                    <span class="accesskey">D</span>istance
+                </div>
+                {% set dir, direction, icon = 'asc', 'ascending', 'icon-sort.svg' %}
+                {% if query.sort is defined and query.sort == 'distance' %}
+                    {% set icon = 'icon-sort-active.svg' %}
+                    {% if query.dir is defined and query.dir == 'asc' %}
+                        {% set dir, direction = 'desc', 'descending' %}
+                    {% endif %}
+                {% endif %}
+                <div class="sort">
+                    <a title="Sort routes by distance in {{ direction }} order" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({ 'sort': 'distance', 'dir': dir })) }}"><img src="images/{{ icon }}" width="12" height="12" /></a>
+                </div>
+            </div>
+            <div class="elevation_gain">
+                <div class="label">
+                    <span class="accesskey">E</span>levation
+                </div>
+                {% set dir, direction, icon = 'asc', 'ascending', 'icon-sort.svg' %}
+                {% if query.sort is defined and query.sort == 'elevation' %}
+                    {% set icon = 'icon-sort-active.svg' %}
+                    {% if query.dir is defined and query.dir == 'asc' %}
+                        {% set dir, direction = 'desc', 'descending' %}
+                    {% endif %}
+                {% endif %}
+                <div class="sort">
+                    <a title="Sort routes by elevation gain in {{ direction }} order" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({ 'sort': 'elevation', 'dir': dir })) }}"><img src="images/{{ icon }}" width="12" height="12" /></a>
+                </div>
+            </div>
+            <div class="athlete">
+                <div class="label">
+                    <span class="accesskey">A</span>thlete
+                </div>
+                {% set dir, direction, icon = 'asc', 'ascending', 'icon-sort.svg' %}
+                {% if query.sort is defined and query.sort == 'athlete' %}
+                    {% set icon = 'icon-sort-active.svg' %}
+                    {% if query.dir is defined and query.dir == 'asc' %}
+                        {% set dir, direction = 'desc', 'descending' %}
+                    {% endif %}
+                {% endif %}
+                <div class="sort">
+                    <a title="Sort routes by athlete in {{ direction }} order" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({ 'sort': 'athlete', 'dir': dir })) }}"><img src="images/{{ icon }}" width="12" height="12" /></a>
+                </div>
+            </div>
+            <div class="updated">
+                <div class="label">
+                    Updated
+                </div>
+                {% set dir, direction, icon = 'desc', 'descending', 'icon-sort.svg' %}
+                {% if query.sort is defined and query.sort == 'date' %}
+                    {% set icon = 'icon-sort-active.svg' %}
+                    {% if query.dir is defined and query.dir == 'desc' %}
+                        {% set dir, direction = 'asc', 'ascending' %}
+                    {% endif %}
+                {% endif %}
+                <div class="sort">
+                    <a title="Sort routes by updated date in {{ direction }} order" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({ 'sort': 'date', 'dir': dir })) }}"><img src="images/{{ icon }}" width="12" height="12" /></a>
+                </div>
+            </div>
+        </div>
+
+        {{ form_start(route_filter_form) }}
+        <div class="filters">
+            <div class="image">
+                {{ form_row(route_filter_form.type) }}
+            </div>
+            <div class="name">
+                {{ form_row(route_filter_form.name) }}
+            </div>
+            <div class="distance">
+                {{ form_row(route_filter_form.distance_min) }}
+                {{ form_row(route_filter_form.distance_max) }}
+            </div>
+            <div class="elevation_gain">
+                {{ form_row(route_filter_form.elevation_gain_min) }}
+                {{ form_row(route_filter_form.elevation_gain_max) }}
+            </div>
+            <div class="athlete">
+                {{ form_row(route_filter_form.athlete) }}
+            </div>
+            <div class="updated">
+                {{ form_row(route_filter_form.type) }}
+                {{ form_widget(route_filter_form.filter) }}
+                <a class="button reset" title="Clear all filters and sorts" href="{{ path('routes') }}">&nbsp;</a>
+            </div>
+        </div>
+        {{ form_end(route_filter_form) }}
+
+        <div class="rows">
+            {% if routes.results|length > 0 %}
+                {% for route in routes.results %}
+                    <div class="row type-{{ route.type }} {{ cycle(['odd', 'even'], loop.index0) }}">
+                        <div class="image">
+                            <a href="https://www.strava.com/routes/{{ route.id }}"><img src="images/routes/{{ route.athlete.id }}/{{ route.id }}.jpg" width="75" height="50" /></a>
+                        </div>
+                        <div class="name">
+                            <a title="See route on Strava.com" href="https://www.strava.com/routes/{{ route.id }}">{{ route.name }}</a>
+                            <div class="description">{{ route.id }}</div>
+                            <div class="description">{{ route.description }}</div>
+                        </div>
+                        <div class="distance">
+                            {{ (route.distance // 1000)|number_format }} <span class="unit">km</span>
+                        </div>
+                        <div class="elevation_gain">
+                            {% if route.climbCategory > 3 %}
+                                <div class="climb cat-{{ route.climbCategory }}"></div>
+                            {% endif %}
+                            {{ route.elevationGain|number_format }} <span class="unit">m</span>
+                        </div>
+                        <div class="athlete">
+                            <a title="See athlete profile on Strava.com" href="https://www.strava.com/athletes/{{ route.athlete.id }}">{{ route.athlete.name}}</a>
+                            <div class="description">{{ route.athlete.id }}</div>
+                        </div>
+                        <div class="updated">
+                            {{ route.updatedAt|date('Y-m-d') }}
+                            <div class="description" title="Created">{{ route.createdAt|date('Y-m-d') }}</div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="row">
+                    <div class="name">No routes found matching your criteria.</div>
+                </div>
+            {% endif %}
+        </div>
+
+        {% include 'routes/pager.html.twig' %}
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('build/routes.css') }}">
+{% endblock %}
+

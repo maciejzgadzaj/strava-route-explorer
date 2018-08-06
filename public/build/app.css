@@ -1,0 +1,83 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, system-ui, BlinkMacSystemFont, Roboto, "Segoe UI", "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; }
+  body .header {
+    padding: 0.5em 1em;
+    background-color: #fc4c02; }
+    body .header .logo-title, body .header .menu {
+      display: inline-block; }
+    body .header .logo-title {
+      font-size: 25px;
+      color: white; }
+    body .header .menu {
+      margin: .1em 0 0 2em;
+      vertical-align: top; }
+      body .header .menu a {
+        display: inline-block;
+        padding: .5em .7em;
+        color: white;
+        text-decoration: none; }
+    body .header .add-route {
+      float: right;
+      background-color: #fc4c02;
+      color: #ffffff; }
+      body .header .add-route input {
+        padding: .5em;
+        border: 1px solid #dc3b02;
+        background-color: #f3f3f3;
+        font-size: .9em; }
+        body .header .add-route input::placeholder {
+          color: #bbb;
+          opacity: 1; }
+        body .header .add-route input:-ms-input-placeholder {
+          color: #bbb; }
+        body .header .add-route input::-ms-input-placeholder {
+          color: #bbb; }
+    body .header .sync-routes {
+      float: right;
+      margin: .5em; }
+      body .header .sync-routes a {
+        padding: .8em;
+        color: white;
+        text-decoration: none; }
+  body .flashes .flash {
+    margin: 2px 0;
+    padding: 1em;
+    text-align: center; }
+    body .flashes .flash.flash-notice {
+      background-color: lightgreen; }
+    body .flashes .flash.flash-error {
+      color: white;
+      background-color: red; }
+  body .footer {
+    display: flex;
+    justify-content: center;
+    padding: 1em;
+    background-color: #f0f0f0; }
+    body .footer a {
+      display: block;
+      padding: .5em 1em;
+      text-decoration: none;
+      font-size: .8em;
+      color: #aaa; }
+      body .footer a:hover {
+        color: black; }
+  body ul.menu {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #fc4c02;
+    list-style-type: none; }
+    body ul.menu li {
+      display: inline; }
+      body ul.menu li a {
+        display: inline-block;
+        padding: 0.5em 1em;
+        color: #ffffff;
+        text-decoration: none; }
+        body ul.menu li a:hover {
+          color: #fc4c02;
+          background-color: #ffffff; }
+
+/*# sourceMappingURL=app.css.map */

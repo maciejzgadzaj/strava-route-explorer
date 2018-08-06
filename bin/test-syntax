@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+set -e
+
+GREEN='\033[1;32m'
+NOCOLOR='\033[0m'
+
+echo -e "${GREEN}"'for file in $(find src/ -name "*.php"); do php -l $file; done'"${NOCOLOR}"
+for file in $(find src/ -name "*.php"); do php -l $file; done
+
+echo -e "\n${GREEN}"'for file in $(find public/ -name "*.php"); do php -l $file; done'"${NOCOLOR}"
+for file in $(find public/ -name "*.php"); do php -l $file; done
+
+echo -e "\n${GREEN}"'for file in $(find config/ -name "*.php"); do php -l $file; done'"${NOCOLOR}"
+for file in $(find config/ -name "*.php"); do php -l $file; done
+
+echo -e "\n${GREEN}"'for file in $(find tests/ -name "*.php"); do php -l $file; done'"${NOCOLOR}"
+for file in $(find tests/ -name "*.php"); do php -l $file; done
+
+echo -e "\n${GREEN}"'bin/console lint:yaml config/'"${NOCOLOR}"
+bin/console lint:yaml config/
+
+echo -e "${GREEN}"'bin/console lint:yaml src/'"${NOCOLOR}"
+bin/console lint:yaml src/
+
+echo -e "${GREEN}"'bin/console lint:twig src/'"${NOCOLOR}"
+bin/console lint:twig src/
+
+echo -e "${GREEN}"'bin/console lint:yaml translations/'"${NOCOLOR}"
+bin/console lint:yaml translations/
+
+echo -e "${GREEN}"'bin/console lint:xliff translations/'"${NOCOLOR}"
+bin/console lint:xliff translations/
+
+echo -e "${GREEN}"'vendor/bin/phpcs --extensions=php src/'"${NOCOLOR}"
+vendor/bin/phpcs --extensions=php --colors src/
+
+echo -e "${GREEN}"'vendor/bin/phpcs --extensions=php tests/'"${NOCOLOR}"
+vendor/bin/phpcs --extensions=php --colors tests/

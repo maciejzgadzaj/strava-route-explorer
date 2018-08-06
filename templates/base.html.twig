@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Strava Route Explorer{% endblock %}</title>
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ google_analytics_tag }}"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '{{ google_analytics_tag }}');
+        </script>
+        {% block stylesheets %}
+            <link rel="stylesheet" href="{{ asset('build/app.css') }}">
+        {% endblock %}
+    </head>
+    <body>
+        {% block header %}
+            <div class="header">
+                <div class="add-route">
+                    {{ form_start(route_add_form) }}
+                    {{ form_widget(route_add_form) }}
+                    {{ form_end(route_add_form) }}
+                </div>
+                <div class="sync-routes">
+                    {% if (app.session.get('athlete')) %}
+                        <a href="{{ path('routes_sync') }}">sync my routes</a>
+                    {% else %}
+                        <a href="{{ path('routes_sync') }}">connect with strava</a>
+                    {% endif %}
+                </div>
+                <div class="logo-title">
+                    <a href="{{ path('homepage') }}"><img src="images/logo.png" alt="Strava Route Explorer" title="Strava Route Explorer" width="125" height="35" /></a>
+                </div>
+                <div class="menu">
+                    <a href="{{ path('routes') }}">all routes</a>
+                    {% if (app.session.get('athlete')) %}
+                        <a href="{{ path('routes', { 'filter[athlete]': app.session.get('athlete').id }) }}">my routes</a>
+                    {% endif %}
+                </div>
+            </div>
+        {% endblock %}
+
+        {% block flash %}
+            <div class="flashes">
+                {% for label, messages in app.flashes %}
+                    {% for message in messages %}
+                        <div class="flash flash-{{ label }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        {% endblock %}
+
+        {% block body %}{% endblock %}
+
+        {% block footer %}
+            <div class="footer">
+                <a href="https://github.com/maciejzgadzaj/strava-route-explorer/wiki/About">about</a>
+                <a href="https://github.com/maciejzgadzaj/strava-route-explorer/wiki/FAQ">faq</a>
+                <a href="https://github.com/maciejzgadzaj/strava-route-explorer/wiki/Developers">developers</a>
+                <a href="https://github.com/maciejzgadzaj/strava-route-explorer/issues">issues</a>
+                <a href="https://chat.whatsapp.com/4JQyW36fqxL3VzFja0115c">whatsapp</a>
+                <a href="https://www.meetup.com/Paris-Cycling-B-Group/">meetup</a>
+            </div>
+        {% endblock %}
+
+        {% block javascripts %}
+            <script src="{{ asset('build/app.js') }}"></script>
+        {% endblock %}
+    </body>
+</html>

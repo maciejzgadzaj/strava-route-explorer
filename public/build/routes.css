@@ -1,0 +1,219 @@
+.routes .pager {
+  position: relative;
+  margin: 2px 0;
+  padding: 1em;
+  background-color: #f0f0f0;
+  text-align: center; }
+  .routes .pager .per_page {
+    position: absolute;
+    top: .5em;
+    left: 1em;
+    color: #bbb; }
+    .routes .pager .per_page input {
+      width: 2em;
+      margin: 0;
+      padding: .5em;
+      border: 1px solid #ddd;
+      background-color: white;
+      font-size: .9em; }
+      .routes .pager .per_page input:hover {
+        border-color: #fc4c02; }
+  .routes .pager .results {
+    color: #bbb; }
+    .routes .pager .results .number {
+      color: #000; }
+  .routes .pager .links {
+    position: absolute;
+    top: .5em;
+    right: 1em; }
+    .routes .pager .links .button {
+      padding: .4em .7em .5em;
+      border: 1px solid #ddd;
+      color: #f0f0f0; }
+      .routes .pager .links .button.previous, .routes .pager .links .button.next {
+        padding: .4em .8em .5em; }
+    .routes .pager .links a.button {
+      text-decoration: none;
+      background-color: white;
+      color: #aaa; }
+      .routes .pager .links a.button:hover {
+        border-color: #fc4c02;
+        background-color: #fc4c02;
+        color: #ffffff;
+        -moz-transition: all .1s ease-in;
+        -webkit-transition: all .1s ease-in;
+        -o-transition: all .1s ease-in;
+        transition: all .1s ease-in; }
+    .routes .pager .links input {
+      width: 2em;
+      margin: 0;
+      padding: .5em;
+      border: 1px solid #ddd;
+      background-color: white;
+      text-align: center;
+      font-size: .9em; }
+      .routes .pager .links input:hover {
+        border-color: #fc4c02; }
+  .routes .pager a {
+    color: #bbb; }
+.routes .head {
+  display: flex;
+  margin: 2px 0 0;
+  padding: 0;
+  background-color: #f0f0f0; }
+  .routes .head > div {
+    display: flex;
+    padding: .5em 1em 0; }
+    .routes .head > div .sort {
+      margin: 0 0 0 .3em; }
+  .routes .head::after {
+    content: "";
+    clear: both;
+    display: table; }
+  .routes .head.even {
+    background-color: #f9f9f9; }
+  .routes .head .image {
+    width: 75px; }
+  .routes .head .name {
+    width: calc(40% - 2em); }
+  .routes .head .distance {
+    width: calc(10% - 2em); }
+    .routes .head .distance .unit {
+      font-size: .8em;
+      color: #aaa; }
+  .routes .head .elevation_gain {
+    width: calc(10% - 2em); }
+    .routes .head .elevation_gain .unit {
+      font-size: .8em;
+      color: #aaa; }
+  .routes .head .athlete {
+    width: calc(18% - 2em); }
+  .routes .head .updated {
+    width: calc(12% - 2em); }
+.routes .filters {
+  display: flex;
+  margin: 0 0 2px;
+  background-color: #f0f0f0;
+  border-bottom: 1px solid #eee; }
+  .routes .filters > div {
+    padding: 0 1em .5em; }
+  .routes .filters .image {
+    width: 75px; }
+    .routes .filters .image select {
+      color: #bbb; }
+      .routes .filters .image select option .placeholder {
+        color: #bbb; }
+  .routes .filters .name {
+    width: calc(40% - 2em); }
+  .routes .filters .distance {
+    width: calc(10% - 2em);
+    display: flex;
+    justify-content: space-between; }
+    .routes .filters .distance div {
+      width: 43%; }
+  .routes .filters .elevation_gain {
+    width: calc(10% - 2em);
+    display: flex;
+    justify-content: space-between; }
+    .routes .filters .elevation_gain div {
+      width: 43%; }
+  .routes .filters .athlete {
+    width: calc(18% - 2em); }
+  .routes .filters .updated {
+    width: calc(12% - 2em);
+    display: flex; }
+    .routes .filters .updated .filter {
+      width: 20px;
+      height: 20px;
+      margin: 1.3em 0 0;
+      border: 0 none;
+      background: transparent url(../../images/icon-search.svg) no-repeat;
+      background-size: 20px;
+      cursor: pointer; }
+    .routes .filters .updated .reset {
+      width: 18px;
+      height: 18px;
+      margin: .95em 0 0 .5em;
+      text-decoration: none;
+      background: transparent url(../../images/icon-delete.svg) no-repeat;
+      background-size: 18px; }
+  .routes .filters select, .routes .filters input {
+    width: 95%;
+    margin-top: .5em;
+    padding: .5em;
+    border: 1px solid #ddd;
+    background-color: white;
+    font-size: .9em; }
+    .routes .filters select::placeholder, .routes .filters input::placeholder {
+      color: #ccc;
+      opacity: 1; }
+    .routes .filters select:-ms-input-placeholder, .routes .filters input:-ms-input-placeholder {
+      color: #ccc; }
+    .routes .filters select::-ms-input-placeholder, .routes .filters input::-ms-input-placeholder {
+      color: #ccc; }
+    .routes .filters select:hover, .routes .filters input:hover {
+      border-color: #fc4c02; }
+  .routes .filters select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none; }
+  .routes .filters input:not(:placeholder-shown) {
+    border-color: #fc4c02; }
+.routes .row {
+  border-bottom: 1px solid #eee; }
+  .routes .row.even {
+    background-color: #f9f9f9; }
+  .routes .row > * {
+    float: left;
+    margin: 0;
+    padding: 0.5em 1em; }
+  .routes .row .image {
+    width: 75px; }
+  .routes .row .name {
+    width: calc(40% - 2em); }
+  .routes .row .distance {
+    width: calc(10% - 2em); }
+    .routes .row .distance .unit {
+      font-size: .8em;
+      color: #aaa; }
+  .routes .row .elevation_gain {
+    width: calc(10% - 2em); }
+    .routes .row .elevation_gain .climb {
+      display: inline-block;
+      width: 17px;
+      height: 17px;
+      text-align: right;
+      vertical-align: bottom;
+      margin-right: .3em;
+      background-image: url(../../images/sprites-category.png); }
+      .routes .row .elevation_gain .climb.cat-1 {
+        background-position: 0 -19px; }
+      .routes .row .elevation_gain .climb.cat-2 {
+        background-position: 0 -38px; }
+      .routes .row .elevation_gain .climb.cat-3 {
+        background-position: 0 -57px; }
+      .routes .row .elevation_gain .climb.cat-4 {
+        background-position: 0 -76px; }
+      .routes .row .elevation_gain .climb.cat-5 {
+        background-position: 0 -95px; }
+    .routes .row .elevation_gain .unit {
+      font-size: .8em;
+      color: #aaa; }
+  .routes .row .athlete {
+    width: calc(18% - 2em); }
+  .routes .row .updated {
+    width: calc(12% - 2em); }
+  .routes .row::after {
+    content: "";
+    clear: both;
+    display: table; }
+  .routes .row .description {
+    margin-top: .3em;
+    font-size: .6em;
+    color: #aaa; }
+  .routes .row .distance {
+    text-align: right; }
+  .routes .row .elevation_gain {
+    text-align: right; }
+
+/*# sourceMappingURL=routes.css.map */

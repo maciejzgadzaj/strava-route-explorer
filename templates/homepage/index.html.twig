@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }}{% endblock %}
+
+{% block header %}{% endblock %}
+
+{% block body %}
+    <div class="app">
+        <div class="title">Strava Route Explorer</div>
+        <div class="strapline">Where do you want to go today?</div>
+    </div>
+    <div class="step1">
+        <div class="step">Step 1.</div>
+        <div class="step-title">Connect with STRAVA<br />and sync your public routes.</div>
+        <div class="step-desc">
+            Only your public routes will be synchronised from Strava.
+            <br />You can also manually add individual routes by their id,
+            <br />even if they were created by other athletes.
+        </div>
+        <a href="{{ path('strava_auth') }}" class="button">Connect with Strava</a>
+    </div>
+    <div class="step2">
+        <div class="step">Step 2.</div>
+        <div class="step-title">Browse and search<br />{{ count }} bike and run routes.</div>
+        <div class="step-desc">
+            Browse and search our database of bike and run routes.
+            <br />Filter results by name, distance, elevation gain, and more.
+        </div>
+        <a href="{{ path('routes') }}" class="button">Explore routes</a>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('build/home.css') }}" />
+{% endblock %}
+
+{% block footer %}{% endblock %}
