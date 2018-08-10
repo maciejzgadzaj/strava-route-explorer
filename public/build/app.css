@@ -63,6 +63,10 @@ body {
       color: #aaa; }
       body .footer a:hover {
         color: black; }
+  body a {
+    color: black; }
+    body a:hover {
+      color: #fc4c02; }
   body ul.menu {
     width: 100%;
     margin: 0;

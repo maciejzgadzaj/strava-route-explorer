@@ -8,14 +8,16 @@ parameters:
 doctrine:
     dbal:
         # configure these for your database server
+        url: '%env(resolve:DATABASE_URL)%'
         driver: 'pdo_mysql'
         server_version: '5.6'
         charset: utf8mb4
         default_table_options:
             charset: utf8mb4
             collate: utf8mb4_unicode_ci
+        types:
+            point: CrEOF\Spatial\DBAL\Types\Geometry\PointType
 
-        url: '%env(resolve:DATABASE_URL)%'
     orm:
         auto_generate_proxy_classes: '%kernel.debug%'
         naming_strategy: doctrine.orm.naming_strategy.underscore
@@ -27,3 +29,15 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Entity'
                 prefix: 'App\Entity'
                 alias: App
+        # https://symfony.com/doc/current/doctrine/custom_dql_functions.html
+        # https://github.com/beberlei/DoctrineExtensions/blob/master/config/mysql.yml
+        dql:
+            numeric_functions:
+                acos: DoctrineExtensions\Query\Mysql\Acos
+                cos: DoctrineExtensions\Query\Mysql\Cos
+                point: CrEOF\Spatial\ORM\Query\AST\Functions\MySql\Point
+                radians: DoctrineExtensions\Query\Mysql\Radians
+                sin: DoctrineExtensions\Query\Mysql\Sin
+                x: CrEOF\Spatial\ORM\Query\AST\Functions\MySql\X
+                y: CrEOF\Spatial\ORM\Query\AST\Functions\MySql\Y
+

@@ -7,12 +7,15 @@ use App\Exception\NoticeException;
 use App\Form\RouteAddType;
 use App\Form\RouteFilterType;
 use App\Service\AthleteService;
+use App\Service\MapQuestService;
 use App\Service\MapService;
+use App\Service\OpenStreetMapService;
 use App\Service\RouteService;
 use App\Service\StravaService;
 use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp\Exception\ClientException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -43,6 +46,7 @@ class RoutesController extends Controller
         if ($routeAddForm->isSubmitted() && $routeAddForm->isValid()) {
             $routeId = str_replace('https://www.strava.com/routes/', '', $routeAddForm->getData()['route_id']);
             $routeId = preg_replace('/[^0-9]/', '', $routeId);
+
             return $this->redirectToRoute('routes_add', ['route_id' => $routeId]);
         }
 
@@ -52,6 +56,9 @@ class RoutesController extends Controller
 
         $filters = [];
         if ($routeFilterForm->isSubmitted() && $routeFilterForm->isValid()) {
+            if ($routeFilterForm->get('reset')->isClicked()) {
+                return $this->redirectToRoute('routes');
+            }
             $filters = array_filter($routeFilterForm->getData());
         }
         /** @var \App\Repository\RouteRepository $repository */
@@ -73,15 +80,18 @@ class RoutesController extends Controller
         $dir = $request->query->get('dir', 'desc');
 
         // Routes.
-        $routes = $repository->findByFilters($filters, [$orderBy => $dir], $perPage, ($page-1)*$perPage);
+        $routes = $repository->findByFilters($filters, [$orderBy => $dir], $perPage, ($page - 1) * $perPage);
 
-        return $this->render('routes/list.html.twig', [
-            'routes' => $routes,
-            'per_page' => $perPage,
-            'pages' => $routes['pages'],
-            'route_add_form' => $routeAddForm->createView(),
-            'route_filter_form' => $routeFilterForm->createView(),
-        ]);
+        return $this->render(
+            'routes/list.html.twig',
+            [
+                'routes' => $routes,
+                'per_page' => $perPage,
+                'pages' => $routes['pages'],
+                'route_add_form' => $routeAddForm->createView(),
+                'route_filter_form' => $routeFilterForm->createView(),
+            ]
+        );
     }
 
     /**
@@ -99,12 +109,13 @@ class RoutesController extends Controller
     public function getMapsAction(
         $athlete_id,
         $route_id,
+        RouteService $routeService,
         MapService $mapService,
         EntityManagerInterface $entityManager
     ) {
-        $map = $mapService->loadByRouteId($route_id);
+        $route = $routeService->load($route_id);
 
-        return $mapService->getMap($map);
+        return $mapService->getMap($route);
     }
 
     /**
@@ -168,7 +179,7 @@ class RoutesController extends Controller
             $route = $routeService->save($content);
 
             // Save map details.
-            $map = $mapService->save($content->map);
+//            $map = $mapService->save($content->map);
 
             $this->addFlash(
                 'notice',
@@ -256,8 +267,6 @@ class RoutesController extends Controller
                             $athleteService->save($routeData->athlete);
                         }
 
-                        // @TODO: map and climbs.
-
                         // Create or update route.
                         $route = $routeService->save($routeData);
                         if ($route->isNew()) {
@@ -300,5 +309,22 @@ class RoutesController extends Controller
         }
 
         return $this->redirectToRoute('routes', $redirectParams ?? []);
+    }
+
+    /**
+     * Synchronize all user public routes.
+     *
+     * @Route("/routes/autocomplete/location", name="routes_autocomplete_location")
+     */
+    public function autocompleteLocationAction(Request $request, OpenStreetMapService $openStreetMapService)
+    {
+        $name = trim(strip_tags($request->get('term')));
+
+        $names = $openStreetMapService->getLocationsByName($name);
+
+        $response = new JsonResponse();
+        $response->setData($names);
+
+        return $response;
     }
 }

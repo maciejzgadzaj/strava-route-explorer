@@ -77,7 +77,7 @@ class ExplorerDoCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var \App\Entity\Athlete[] $athletes */
-        $athletes = $this->entityManager->getRepository(Athlete::class)->findAll();
+        /** @var \App\Entity\Route[] $routes */
+        $routes = $this->entityManager->getRepository(Route::class)->findAll();
     }
 }

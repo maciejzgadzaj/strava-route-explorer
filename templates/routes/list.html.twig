@@ -87,60 +87,95 @@
         </div>
 
         {{ form_start(route_filter_form) }}
-        <div class="filters">
-            <div class="image">
+        <div class="filters basic_filters">
+            <div class="filter image">
                 {{ form_row(route_filter_form.type) }}
             </div>
-            <div class="name">
+            <div class="filter name">
                 {{ form_row(route_filter_form.name) }}
             </div>
-            <div class="distance">
-                {{ form_row(route_filter_form.distance_min) }}
-                {{ form_row(route_filter_form.distance_max) }}
+            <div class="filter distance">
+                {{ form_widget(route_filter_form.distance_min) }}
+                {{ form_widget(route_filter_form.distance_max) }}
             </div>
-            <div class="elevation_gain">
-                {{ form_row(route_filter_form.elevation_gain_min) }}
-                {{ form_row(route_filter_form.elevation_gain_max) }}
+            <div class="filter elevation_gain">
+                {{ form_widget(route_filter_form.elevation_gain_min) }}
+                {{ form_widget(route_filter_form.elevation_gain_max) }}
             </div>
-            <div class="athlete">
+            <div class="filter athlete">
                 {{ form_row(route_filter_form.athlete) }}
             </div>
-            <div class="updated">
+            <div class="filter updated{% if app.request.query.get('filter') %}{{ ' active' }}{% endif %}">
                 {{ form_row(route_filter_form.type) }}
-                {{ form_widget(route_filter_form.filter) }}
-                <a class="button reset" title="Clear all filters and sorts" href="{{ path('routes') }}">&nbsp;</a>
+                {{ form_widget(route_filter_form.search) }}
+                {{ form_widget(route_filter_form.reset) }}
+            </div>
+        </div>
+
+        {% set advanced_filters_display = 'none' %}
+        {% if app.request.query.get('filter') and (app.request.query.get('filter').start_latlon is defined and app.request.query.get('filter').start_latlon or app.request.query.get('filter').end_latlon is defined and app.request.query.get('filter').end_latlon) %}
+            {% set advanced_filters_display = 'block' %}
+        {% endif %}
+
+        <div class="filters advanced_filters" style="display:{{ advanced_filters_display }}">
+            <div class="filter location start">
+                <div class="label">{{ form_label(route_filter_form.start) }}</div>
+                <div class="address">{{ form_widget(route_filter_form.start) }}<img class="geolocate" data-target="start" src="images/icon-geolocate.svg" style="display:none" /></div>
+                <div class="label">{{ form_label(route_filter_form.start_dist) }}</div>
+                <div class="distance">{{ form_widget(route_filter_form.start_dist) }}</div>
+                {{ form_widget(route_filter_form.start_latlon) }}
+            </div>
+            <div class="filter location end">
+                <div class="label">{{ form_label(route_filter_form.end) }}</div>
+                <div class="address">{{ form_widget(route_filter_form.end) }}<img class="geolocate" data-target="end" src="images/icon-geolocate.svg" style="display:none" /></div>
+                <div class="label">{{ form_label(route_filter_form.end_dist) }}</div>
+                <div class="distance">{{ form_widget(route_filter_form.end_dist) }}</div>
+                {{ form_widget(route_filter_form.end_latlon) }}
             </div>
         </div>
         {{ form_end(route_filter_form) }}
+        <div class="filters filter-links">
+            <span class="advanced-filters-toggle">+ more filters</span>
+        </div>
 
         <div class="rows">
             {% if routes.results|length > 0 %}
                 {% for route in routes.results %}
-                    <div class="row type-{{ route.type }} {{ cycle(['odd', 'even'], loop.index0) }}">
+                    <div class="row type-{{ route.route.type }} {{ cycle(['odd', 'even'], loop.index0) }}">
                         <div class="image">
-                            <a href="https://www.strava.com/routes/{{ route.id }}"><img src="images/routes/{{ route.athlete.id }}/{{ route.id }}.jpg" width="75" height="50" /></a>
+                            <a href="https://www.strava.com/routes/{{ route.route.id }}"><img src="images/routes/{{ route.route.athlete.id }}/{{ route.route.id }}.jpg" width="75" height="50" /></a>
                         </div>
                         <div class="name">
-                            <a title="See route on Strava.com" href="https://www.strava.com/routes/{{ route.id }}">{{ route.name }}</a>
-                            <div class="description">{{ route.id }}</div>
-                            <div class="description">{{ route.description }}</div>
+                            <a title="See route on Strava.com" href="https://www.strava.com/routes/{{ route.route.id }}">{{ route.route.name }}</a>
+                            <div class="description">{{ route.route.id }}</div>
+                            <div class="description">{{ route.route.description }}</div>
+                            {% if route.start_dist is defined or route.end_dist is defined %}
+                                <div class="distances">
+                                    {% if route.start_dist is defined %}
+                                        <span class="start_dist">Start: <span class="distance">{{ route.start_dist|number_format(1, '.', ',') }} km</span></span>
+                                    {% endif %}
+                                    {% if route.end_dist is defined %}
+                                        <span class="end_dist">End: <span class="distance">{{ route.end_dist|number_format(1, '.', ',') }} km</span></span>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
                         </div>
                         <div class="distance">
-                            {{ (route.distance // 1000)|number_format }} <span class="unit">km</span>
+                            {{ (route.route.distance // 1000)|number_format }} <span class="unit">km</span>
                         </div>
                         <div class="elevation_gain">
-                            {% if route.climbCategory > 3 %}
-                                <div class="climb cat-{{ route.climbCategory }}"></div>
+                            {% if route.route.climbCategory > 3 %}
+                                <div class="climb cat-{{ route.route.climbCategory }}"></div>
                             {% endif %}
-                            {{ route.elevationGain|number_format }} <span class="unit">m</span>
+                            {{ route.route.elevationGain|number_format }} <span class="unit">m</span>
                         </div>
                         <div class="athlete">
-                            <a title="See athlete profile on Strava.com" href="https://www.strava.com/athletes/{{ route.athlete.id }}">{{ route.athlete.name}}</a>
-                            <div class="description">{{ route.athlete.id }}</div>
+                            <a title="See athlete profile on Strava.com" href="https://www.strava.com/athletes/{{ route.route.athlete.id }}">{{ route.route.athlete.name}}</a>
+                            <div class="description">{{ route.route.athlete.id }}</div>
                         </div>
                         <div class="updated">
-                            {{ route.updatedAt|date('Y-m-d') }}
-                            <div class="description" title="Created">{{ route.createdAt|date('Y-m-d') }}</div>
+                            {{ route.route.updatedAt|date('Y-m-d') }}
+                            <div class="description" title="Created">{{ route.route.createdAt|date('Y-m-d') }}</div>
                         </div>
                     </div>
                 {% endfor %}
@@ -160,3 +195,75 @@
     <link rel="stylesheet" href="{{ asset('build/routes.css') }}">
 {% endblock %}
 
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".advanced-filters-toggle").on("click", function(){
+                $(".advanced_filters").slideToggle("fast", function(){
+                    console.log($(this).is(":visible"));
+                    if ($(this).is(":visible")) {
+                        $(".advanced-filters-toggle").text('- less filters');
+                    } else {
+                        $(".advanced-filters-toggle").text('+ more filters');
+                    }
+                });
+            });
+            // https://jqueryui.com/autocomplete/
+            // http://api.jqueryui.com/autocomplete/
+            $('#filter_start, #filter_end').autocomplete({
+                source: "{{ path('routes_autocomplete_location') }}",
+                minLength: 3,
+                delay: 200,
+                search: function(event, ui){
+                    var name = $(this).attr("id");
+                    $("#"+name).parent().find('.geolocate').attr('src', "images/spinner.gif").addClass("clicked");
+                },
+                response: function(event, ui){
+                    $("img.geolocate.clicked").attr("src", "images/icon-geolocate.svg").removeClass("clicked");
+                },
+                select: function(event, ui){
+                    var name = $(this).attr("id");
+                    $("#"+name+"_latlon").val(ui.item.latitude+","+ui.item.longitude);
+                }
+            }).data("ui-autocomplete")._renderItem = function( ul, item ) {
+                var listItem = $("<li></li>").data("ui-autocomplete-item", item);
+
+                // Add span around characters typed by user to make them strong.
+                var re = new RegExp(this.term, 'i');
+                var t = item.label.replace(re, '<span class="autocomplete-search-string">' + this.term + '</span>');
+                listItem.html(t);
+
+                return listItem.appendTo(ul);
+            };
+
+            // Geolocation for route "Start" and "End" filters.
+            if (navigator.geolocation) {
+                $('.geolocate').attr('style', '');
+            }
+            $('.geolocate').on("click", function(){
+                $(this).attr('src', "images/spinner.gif").addClass("clicked");
+                navigator.geolocation.getCurrentPosition(handlePosition);
+            });
+            function handlePosition(position, target) {
+                navigator.geolocation.getCurrentPosition(handlePosition);
+                $.ajax({
+                    type: "GET",
+                    url: "https://nominatim.openstreetmap.org/reverse?format=json&lat="+position.coords.latitude+"&lon="+position.coords.longitude,
+                    timeout: 5000,
+                    success: function(data){
+                        var target = $("img.geolocate.clicked").attr("data-target");
+                        $("img.geolocate.clicked").attr("src", "images/icon-geolocate.svg").removeClass("clicked");
+                        $("#filter_"+target).val(data.display_name);
+                        $("#filter_"+target+"_latlon").val(data.lat+","+data.lon);
+                    },
+                    error: function(data){
+                        $("img.geolocate.clicked").attr("src", "images/icon-geolocate.svg").removeClass("clicked");
+                    }
+                });
+            }
+        });
+    </script>
+{% endblock %}

@@ -8,3 +8,9 @@ csa_guzzle:
         strava:
             config:
                 base_uri: 'https://www.strava.com'
+        mapquest:
+            config:
+                base_uri: 'https://www.mapquestapi.com'
+        openstreetmap.nominatim:
+            config:
+                base_uri: 'https://nominatim.openstreetmap.org/'

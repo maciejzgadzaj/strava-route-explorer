@@ -7,6 +7,7 @@ $distanceWidth: calc(10% - 2em);
 $elevationGainWidth: calc(10% - 2em);
 $athleteWidth: calc(18% - 2em);
 $updatedWidth: calc(12% - 2em);
+$locationWidth: calc(30% - 2em);
 
 .routes {
     .pager {
@@ -128,72 +129,8 @@ $updatedWidth: calc(12% - 2em);
     }
 
     .filters {
-        display: flex;
-        margin: 0 0 2px;
         background-color: #f0f0f0;
-        border-bottom: 1px solid #eee;
-
-        & > div {
-            padding: 0 1em .5em;
-        }
-
-        .image {
-            width: $imageWidth;
-            select {
-                color: #bbb;
-                option {
-                    .placeholder {
-                        color: #bbb;
-                    }
-                }
-            }
-        }
-        .name {
-            width: $nameWidth;
-        }
-        .distance {
-            width: $distanceWidth;
-            display: flex;
-            justify-content: space-between;
-            div {
-                width: 43%;
-            }
-        }
-        .elevation_gain {
-            width: $elevationGainWidth;
-            display: flex;
-            justify-content: space-between;
-            div {
-                width: 43%;
-            }
-        }
-        .athlete {
-            width: $athleteWidth;
-        }
-        .updated {
-            width: $updatedWidth;
-            display: flex;
-            .filter {
-                width: 20px;
-                height: 20px;
-                margin: 1.3em 0 0;
-                border: 0 none;
-                background: transparent url(../../images/icon-search.svg) no-repeat;
-                background-size: 20px;
-                //color: transparent;
-                cursor: pointer;
-            }
-            .reset {
-                width: 18px;
-                height: 18px;
-                margin: .95em 0 0 .5em;
-                text-decoration: none;
-                background: transparent url(../../images/icon-delete.svg) no-repeat;
-                background-size: 18px;
-            }
-        }
-
-        select, input {
+        select, input, button {
             width: 95%;
             margin-top: .5em;
             padding: .5em;
@@ -215,7 +152,7 @@ $updatedWidth: calc(12% - 2em);
                 border-color: $orange;
             }
         }
-        select {
+        input, select, button {
             -webkit-appearance: none;
             -moz-appearance: none;
             appearance: none;
@@ -225,60 +162,45 @@ $updatedWidth: calc(12% - 2em);
                 border-color: $orange;
 
             }
-
         }
     }
-
-    .row {
+    .basic_filters {
+        display: flex;
+        margin: 0;
         border-bottom: 1px solid #eee;
-        &.even {
-            background-color: #f9f9f9;
+
+        .filter {
+            padding: 0 1em .5em;
         }
-        & > * {
-            float: left;
-            margin: 0;
-            padding: $padding;
-        }
+
         .image {
             width: $imageWidth;
+            select {
+                color: #bbb;
+                option {
+                    .placeholder {
+                        color: #bbb;
+                    }
+                }
+            }
         }
         .name {
             width: $nameWidth;
         }
         .distance {
             width: $distanceWidth;
-            .unit {
-                @include unit;
+            display: flex;
+            input {
+                width: 40%;
+                margin-right: .25em;
             }
         }
         .elevation_gain {
             width: $elevationGainWidth;
-            .climb {
-                display: inline-block;
-                width: 17px;
-                height: 17px;
-                text-align: right;
-                vertical-align: bottom;
-                margin-right: .3em;
-                background-image: url(../../images/sprites-category.png);
-                &.cat-1 {
-                    background-position: 0 -19px;
-                }
-                &.cat-2 {
-                    background-position: 0 -38px;
-                }
-                &.cat-3 {
-                    background-position: 0 -57px;
-                }
-                &.cat-4 {
-                    background-position: 0 -76px;
-                }
-                &.cat-5 {
-                    background-position: 0 -95px;
-                }
-            }
-            .unit {
-                @include unit;
+            display: flex;
+            input {
+                width: 40%;
+                margin-right: .25em;
             }
         }
         .athlete {
@@ -286,23 +208,177 @@ $updatedWidth: calc(12% - 2em);
         }
         .updated {
             width: $updatedWidth;
+            display: flex;
+            button {
+                margin-right: .5em;
+                padding: .5em 1em;
+                &.search {
+                }
+                &.reset {
+                    background-color: #f0f0f0;
+                    color: #bbb;
+                }
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+            &.active {
+                .reset {
+                    background-color: white;
+                    color: black;
+                }
+            }
         }
-        &::after {
-            content: "";
-            clear: both;
-            display: table;
+    }
+    .advanced_filters {
+        .filter {
+            margin-left: 22px;
+            padding: 0 1em .5em 3em;
         }
-        .description {
-            margin-top: .3em;
-            font-size: .6em;
-            color: #aaa;
+        .location {
+            display: flex;
+            align-items: baseline;
+            .label {
+                width: 4%;
+            }
+            .address {
+                width: 60%;
+                position: relative;
+                .geolocate {
+                    position: absolute;
+                    top: .9em;
+                    right: 1.9em;
+                    width: 18px;
+                    height: 18px;
+                    &:hover {
+                        cursor: pointer;
+                    }
+                }
+            }
+            .distance {
+                width: 6%;
+            }
         }
-        .distance {
-            text-align: right;
-        }
-        .elevation_gain {
-            text-align: right;
+    }
+    .filter-links {
+        margin-top: -.25em;
+        padding: 0 1em 1em 125px;
+        font-size: .8em;
+        color: #999;
+        .advanced-filters-toggle {
+            &:hover {
+                cursor: pointer;
+                color: black;
+            }
         }
     }
 
+    .rows {
+        margin: 2px 0;
+
+        .row {
+            border-bottom: 1px solid #eee;
+            &.even {
+                background-color: #f9f9f9;
+            }
+            & > * {
+                float: left;
+                margin: 0;
+                padding: $padding;
+            }
+            .image {
+                width: $imageWidth;
+            }
+            .name {
+                width: $nameWidth;
+                .distances {
+                    margin-top: .5em;
+                    font-size: .8em;
+                    color: #aaa;
+                    .distance {
+                        margin-right: 1em;
+                        color: #333;
+                    }
+                }
+            }
+            .distance {
+                width: $distanceWidth;
+                .unit {
+                    @include unit;
+                }
+            }
+            .elevation_gain {
+                width: $elevationGainWidth;
+                .climb {
+                    display: inline-block;
+                    width: 17px;
+                    height: 17px;
+                    text-align: right;
+                    vertical-align: bottom;
+                    margin-right: .3em;
+                    background-image: url(../../images/sprites-category.png);
+                    &.cat-1 {
+                        background-position: 0 -19px;
+                    }
+                    &.cat-2 {
+                        background-position: 0 -38px;
+                    }
+                    &.cat-3 {
+                        background-position: 0 -57px;
+                    }
+                    &.cat-4 {
+                        background-position: 0 -76px;
+                    }
+                    &.cat-5 {
+                        background-position: 0 -95px;
+                    }
+                }
+                .unit {
+                    @include unit;
+                }
+            }
+            .athlete {
+                width: $athleteWidth;
+            }
+            .updated {
+                width: $updatedWidth;
+            }
+            &::after {
+                content: "";
+                clear: both;
+                display: table;
+            }
+            .description {
+                margin-top: .3em;
+                font-size: .6em;
+                color: #aaa;
+            }
+            .distance {
+                text-align: right;
+            }
+            .elevation_gain {
+                text-align: right;
+            }
+        }
+    }
+}
+
+.autocomplete-search-string {
+    font-weight: bold;
+}
+ul.ui-autocomplete.ui-menu {
+    width: 60%;
+    background-color: #f9f9f9;
+    border: 1px solid #bbb;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    li {
+        margin: 0;
+        padding: .6em 1em;
+        &:hover {
+            background-color: white;
+            cursor: pointer;
+        }
+    }
 }

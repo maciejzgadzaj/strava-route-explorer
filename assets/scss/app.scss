@@ -92,6 +92,12 @@ body {
         }
     }
 
+    a {
+        color: black;
+        &:hover {
+            color: $orange;
+        }
+    }
 
     ul.menu {
         width: 100%;

@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\Athlete;
 use App\Entity\Route;
+use CrEOF\Spatial\PHP\Types\Geometry\Point;
 
 /**
  * Class RouteService
@@ -100,6 +101,8 @@ class RouteService extends EntityService
         $route->setCreatedAt(\DateTime::createFromFormat('Y-m-d\TH:i:s\Z', $routeData->created_at));
         $route->setUpdatedAt(\DateTime::createFromFormat('Y-m-d\TH:i:s\Z', $routeData->updated_at));
 
+        // No segments are included in getRoutesByAthleteId,
+        // they are added only to the getRouteById.
         $climbCategory = 0;
         if (!empty($routeData->segments)) {
             foreach ($routeData->segments as $segment) {
@@ -109,6 +112,21 @@ class RouteService extends EntityService
             }
         }
         $route->setClimbCategory($climbCategory);
+
+        if (!empty($routeData->map->summary_polyline)) {
+            $route->setPolylineSummary($routeData->map->summary_polyline);
+
+            $list = \Polyline::decode($routeData->map->summary_polyline);
+            $pairs = \Polyline::pair($list);
+
+            $start = reset($pairs);
+            $startPoint = new Point($start[0], $start[1]);
+            $route->setStart($startPoint);
+
+            $end = end($pairs);
+            $endPoint = new Point($end[0], $end[1]);
+            $route->setEnd($endPoint);
+        }
 
         $this->entityManager->persist($route);
         $this->entityManager->flush();

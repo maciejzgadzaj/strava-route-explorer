@@ -1,4 +1,19 @@
 {
+    "beberlei/doctrineextensions": {
+        "version": "v1.1.3"
+    },
+    "creof/doctrine2-spatial": {
+        "version": "1.2.0"
+    },
+    "creof/geo-parser": {
+        "version": "2.1.0"
+    },
+    "creof/wkb-parser": {
+        "version": "v2.3.0"
+    },
+    "creof/wkt-parser": {
+        "version": "2.2.0"
+    },
     "csa/guzzle-bundle": {
         "version": "3.0",
         "recipe": {

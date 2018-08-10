@@ -4,8 +4,277 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "feba4d88e0314aa66c97c3525ddc1ea7",
+    "content-hash": "1a16c83e9ad48854771f1772df7764c4",
     "packages": [
+        {
+            "name": "beberlei/DoctrineExtensions",
+            "version": "v1.1.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/beberlei/DoctrineExtensions.git",
+                "reference": "51d93393ddced649da6066db233bc8e285a6588c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/beberlei/DoctrineExtensions/zipball/51d93393ddced649da6066db233bc8e285a6588c",
+                "reference": "51d93393ddced649da6066db233bc8e285a6588c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4"
+            },
+            "require-dev": {
+                "doctrine/orm": "^2.5",
+                "friendsofphp/php-cs-fixer": "^2.2.19",
+                "nesbot/carbon": "*",
+                "phpunit/phpunit": "^4.5",
+                "symfony/yaml": "^2.6",
+                "zf1/zend-date": "^1.12",
+                "zf1/zend-registry": "^1.12"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "DoctrineExtensions\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Benjamin Eberlei",
+                    "email": "kontakt@beberlei.de"
+                },
+                {
+                    "name": "Steve Lacey",
+                    "email": "steve@stevelacey.net"
+                }
+            ],
+            "description": "A set of extensions to Doctrine 2 that add support for additional query functions available in MySQL and Oracle.",
+            "keywords": [
+                "database",
+                "doctrine",
+                "orm"
+            ],
+            "time": "2018-07-14T09:31:10+00:00"
+        },
+        {
+            "name": "creof/doctrine2-spatial",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/creof/doctrine2-spatial.git",
+                "reference": "58ea5fae1c1b450ee08d7dac25cd9e8f5e6fdebd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/creof/doctrine2-spatial/zipball/58ea5fae1c1b450ee08d7dac25cd9e8f5e6fdebd",
+                "reference": "58ea5fae1c1b450ee08d7dac25cd9e8f5e6fdebd",
+                "shasum": ""
+            },
+            "require": {
+                "creof/geo-parser": "~2.0",
+                "creof/wkb-parser": "~2.0",
+                "creof/wkt-parser": "~2.0",
+                "doctrine/orm": ">=2.3"
+            },
+            "require-dev": {
+                "phpunit/phpcov": "*",
+                "phpunit/phpunit": "<5.0",
+                "satooshi/php-coveralls": "~1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "CrEOF\\Spatial": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Derek Lambert",
+                    "email": "dlambert@dereklambert.com"
+                }
+            ],
+            "description": "Doctrine2 multi-platform support for spatial types and functions",
+            "keywords": [
+                "database",
+                "dbal",
+                "geography",
+                "geometry",
+                "gis",
+                "mysql",
+                "opengis",
+                "orm",
+                "postgis",
+                "postgresql",
+                "spatial"
+            ],
+            "time": "2017-07-13T16:48:25+00:00"
+        },
+        {
+            "name": "creof/geo-parser",
+            "version": "2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/creof/geo-parser.git",
+                "reference": "14fbd732207bc264cfeff836230ef6022bb751b6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/creof/geo-parser/zipball/14fbd732207bc264cfeff836230ef6022bb751b6",
+                "reference": "14fbd732207bc264cfeff836230ef6022bb751b6",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/lexer": ">=1.0",
+                "ext-spl": "*",
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "codeclimate/php-test-reporter": "dev-master",
+                "phpunit/phpunit": ">=4.8"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "CrEOF\\Geo\\String": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Derek J. Lambert",
+                    "email": "dlambert@dereklambert.com"
+                }
+            ],
+            "description": "Parser for geography coordinate strings",
+            "keywords": [
+                "coordinate",
+                "geo",
+                "geography",
+                "geometry",
+                "lexer",
+                "parser",
+                "spatial",
+                "string",
+                "text"
+            ],
+            "time": "2016-05-03T18:19:41+00:00"
+        },
+        {
+            "name": "creof/wkb-parser",
+            "version": "v2.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/creof/wkb-parser.git",
+                "reference": "1ddb69da8cc90607dd528fd9992ef1fc10cc8839"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/creof/wkb-parser/zipball/1ddb69da8cc90607dd528fd9992ef1fc10cc8839",
+                "reference": "1ddb69da8cc90607dd528fd9992ef1fc10cc8839",
+                "shasum": ""
+            },
+            "require": {
+                "ext-spl": "*",
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "codeclimate/php-test-reporter": "dev-master",
+                "phpunit/phpunit": ">=4.8",
+                "satooshi/php-coveralls": "~1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "CrEOF\\Geo\\WKB": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Derek J. Lambert",
+                    "email": "dlambert@dereklambert.com"
+                }
+            ],
+            "description": "Parser for well-known binary (WKB/EWKB) object data",
+            "keywords": [
+                "ewkb",
+                "geography",
+                "geometry",
+                "parser",
+                "spatial",
+                "string",
+                "text",
+                "wkb"
+            ],
+            "time": "2016-05-22T22:47:16+00:00"
+        },
+        {
+            "name": "creof/wkt-parser",
+            "version": "2.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/creof/wkt-parser.git",
+                "reference": "bc4c051b7a4e99b4943e2ec358218ed200aa991e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/creof/wkt-parser/zipball/bc4c051b7a4e99b4943e2ec358218ed200aa991e",
+                "reference": "bc4c051b7a4e99b4943e2ec358218ed200aa991e",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/lexer": "~1.0",
+                "ext-spl": "*",
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "codeclimate/php-test-reporter": "dev-master",
+                "phpunit/phpunit": ">=4.8"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "CrEOF\\Geo\\WKT": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Derek J. Lambert",
+                    "email": "dlambert@dereklambert.com"
+                }
+            ],
+            "description": "Parser for well-known text (WKT) object strings",
+            "keywords": [
+                "ewkt",
+                "geography",
+                "geometry",
+                "lexer",
+                "parser",
+                "spatial",
+                "string",
+                "text",
+                "wkt"
+            ],
+            "time": "2016-05-03T16:15:16+00:00"
+        },
         {
             "name": "csa/guzzle-bundle",
             "version": "v3.1.0",

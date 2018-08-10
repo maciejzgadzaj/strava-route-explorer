@@ -91,129 +91,181 @@
   .routes .head .updated {
     width: calc(12% - 2em); }
 .routes .filters {
-  display: flex;
-  margin: 0 0 2px;
-  background-color: #f0f0f0;
-  border-bottom: 1px solid #eee; }
-  .routes .filters > div {
-    padding: 0 1em .5em; }
-  .routes .filters .image {
-    width: 75px; }
-    .routes .filters .image select {
-      color: #bbb; }
-      .routes .filters .image select option .placeholder {
-        color: #bbb; }
-  .routes .filters .name {
-    width: calc(40% - 2em); }
-  .routes .filters .distance {
-    width: calc(10% - 2em);
-    display: flex;
-    justify-content: space-between; }
-    .routes .filters .distance div {
-      width: 43%; }
-  .routes .filters .elevation_gain {
-    width: calc(10% - 2em);
-    display: flex;
-    justify-content: space-between; }
-    .routes .filters .elevation_gain div {
-      width: 43%; }
-  .routes .filters .athlete {
-    width: calc(18% - 2em); }
-  .routes .filters .updated {
-    width: calc(12% - 2em);
-    display: flex; }
-    .routes .filters .updated .filter {
-      width: 20px;
-      height: 20px;
-      margin: 1.3em 0 0;
-      border: 0 none;
-      background: transparent url(../../images/icon-search.svg) no-repeat;
-      background-size: 20px;
-      cursor: pointer; }
-    .routes .filters .updated .reset {
-      width: 18px;
-      height: 18px;
-      margin: .95em 0 0 .5em;
-      text-decoration: none;
-      background: transparent url(../../images/icon-delete.svg) no-repeat;
-      background-size: 18px; }
-  .routes .filters select, .routes .filters input {
+  background-color: #f0f0f0; }
+  .routes .filters select, .routes .filters input, .routes .filters button {
     width: 95%;
     margin-top: .5em;
     padding: .5em;
     border: 1px solid #ddd;
     background-color: white;
     font-size: .9em; }
-    .routes .filters select::placeholder, .routes .filters input::placeholder {
+    .routes .filters select::placeholder, .routes .filters input::placeholder, .routes .filters button::placeholder {
       color: #ccc;
       opacity: 1; }
-    .routes .filters select:-ms-input-placeholder, .routes .filters input:-ms-input-placeholder {
+    .routes .filters select:-ms-input-placeholder, .routes .filters input:-ms-input-placeholder, .routes .filters button:-ms-input-placeholder {
       color: #ccc; }
-    .routes .filters select::-ms-input-placeholder, .routes .filters input::-ms-input-placeholder {
+    .routes .filters select::-ms-input-placeholder, .routes .filters input::-ms-input-placeholder, .routes .filters button::-ms-input-placeholder {
       color: #ccc; }
-    .routes .filters select:hover, .routes .filters input:hover {
+    .routes .filters select:hover, .routes .filters input:hover, .routes .filters button:hover {
       border-color: #fc4c02; }
-  .routes .filters select {
+  .routes .filters input, .routes .filters select, .routes .filters button {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none; }
   .routes .filters input:not(:placeholder-shown) {
     border-color: #fc4c02; }
-.routes .row {
+.routes .basic_filters {
+  display: flex;
+  margin: 0;
   border-bottom: 1px solid #eee; }
-  .routes .row.even {
-    background-color: #f9f9f9; }
-  .routes .row > * {
-    float: left;
-    margin: 0;
-    padding: 0.5em 1em; }
-  .routes .row .image {
+  .routes .basic_filters .filter {
+    padding: 0 1em .5em; }
+  .routes .basic_filters .image {
     width: 75px; }
-  .routes .row .name {
+    .routes .basic_filters .image select {
+      color: #bbb; }
+      .routes .basic_filters .image select option .placeholder {
+        color: #bbb; }
+  .routes .basic_filters .name {
     width: calc(40% - 2em); }
-  .routes .row .distance {
-    width: calc(10% - 2em); }
-    .routes .row .distance .unit {
-      font-size: .8em;
-      color: #aaa; }
-  .routes .row .elevation_gain {
-    width: calc(10% - 2em); }
-    .routes .row .elevation_gain .climb {
-      display: inline-block;
-      width: 17px;
-      height: 17px;
-      text-align: right;
-      vertical-align: bottom;
-      margin-right: .3em;
-      background-image: url(../../images/sprites-category.png); }
-      .routes .row .elevation_gain .climb.cat-1 {
-        background-position: 0 -19px; }
-      .routes .row .elevation_gain .climb.cat-2 {
-        background-position: 0 -38px; }
-      .routes .row .elevation_gain .climb.cat-3 {
-        background-position: 0 -57px; }
-      .routes .row .elevation_gain .climb.cat-4 {
-        background-position: 0 -76px; }
-      .routes .row .elevation_gain .climb.cat-5 {
-        background-position: 0 -95px; }
-    .routes .row .elevation_gain .unit {
-      font-size: .8em;
-      color: #aaa; }
-  .routes .row .athlete {
+  .routes .basic_filters .distance {
+    width: calc(10% - 2em);
+    display: flex; }
+    .routes .basic_filters .distance input {
+      width: 40%;
+      margin-right: .25em; }
+  .routes .basic_filters .elevation_gain {
+    width: calc(10% - 2em);
+    display: flex; }
+    .routes .basic_filters .elevation_gain input {
+      width: 40%;
+      margin-right: .25em; }
+  .routes .basic_filters .athlete {
     width: calc(18% - 2em); }
-  .routes .row .updated {
-    width: calc(12% - 2em); }
-  .routes .row::after {
-    content: "";
-    clear: both;
-    display: table; }
-  .routes .row .description {
-    margin-top: .3em;
-    font-size: .6em;
-    color: #aaa; }
-  .routes .row .distance {
-    text-align: right; }
-  .routes .row .elevation_gain {
-    text-align: right; }
+  .routes .basic_filters .updated {
+    width: calc(12% - 2em);
+    display: flex; }
+    .routes .basic_filters .updated button {
+      margin-right: .5em;
+      padding: .5em 1em; }
+      .routes .basic_filters .updated button.reset {
+        background-color: #f0f0f0;
+        color: #bbb; }
+      .routes .basic_filters .updated button:hover {
+        cursor: pointer; }
+    .routes .basic_filters .updated.active .reset {
+      background-color: white;
+      color: black; }
+.routes .advanced_filters .filter {
+  margin-left: 22px;
+  padding: 0 1em .5em 3em; }
+.routes .advanced_filters .location {
+  display: flex;
+  align-items: baseline; }
+  .routes .advanced_filters .location .label {
+    width: 4%; }
+  .routes .advanced_filters .location .address {
+    width: 60%;
+    position: relative; }
+    .routes .advanced_filters .location .address .geolocate {
+      position: absolute;
+      top: .9em;
+      right: 1.9em;
+      width: 18px;
+      height: 18px; }
+      .routes .advanced_filters .location .address .geolocate:hover {
+        cursor: pointer; }
+  .routes .advanced_filters .location .distance {
+    width: 6%; }
+.routes .filter-links {
+  margin-top: -.25em;
+  padding: 0 1em 1em 125px;
+  font-size: .8em;
+  color: #999; }
+  .routes .filter-links .advanced-filters-toggle:hover {
+    cursor: pointer;
+    color: black; }
+.routes .rows {
+  margin: 2px 0; }
+  .routes .rows .row {
+    border-bottom: 1px solid #eee; }
+    .routes .rows .row.even {
+      background-color: #f9f9f9; }
+    .routes .rows .row > * {
+      float: left;
+      margin: 0;
+      padding: 0.5em 1em; }
+    .routes .rows .row .image {
+      width: 75px; }
+    .routes .rows .row .name {
+      width: calc(40% - 2em); }
+      .routes .rows .row .name .distances {
+        margin-top: .5em;
+        font-size: .8em;
+        color: #aaa; }
+        .routes .rows .row .name .distances .distance {
+          margin-right: 1em;
+          color: #333; }
+    .routes .rows .row .distance {
+      width: calc(10% - 2em); }
+      .routes .rows .row .distance .unit {
+        font-size: .8em;
+        color: #aaa; }
+    .routes .rows .row .elevation_gain {
+      width: calc(10% - 2em); }
+      .routes .rows .row .elevation_gain .climb {
+        display: inline-block;
+        width: 17px;
+        height: 17px;
+        text-align: right;
+        vertical-align: bottom;
+        margin-right: .3em;
+        background-image: url(../../images/sprites-category.png); }
+        .routes .rows .row .elevation_gain .climb.cat-1 {
+          background-position: 0 -19px; }
+        .routes .rows .row .elevation_gain .climb.cat-2 {
+          background-position: 0 -38px; }
+        .routes .rows .row .elevation_gain .climb.cat-3 {
+          background-position: 0 -57px; }
+        .routes .rows .row .elevation_gain .climb.cat-4 {
+          background-position: 0 -76px; }
+        .routes .rows .row .elevation_gain .climb.cat-5 {
+          background-position: 0 -95px; }
+      .routes .rows .row .elevation_gain .unit {
+        font-size: .8em;
+        color: #aaa; }
+    .routes .rows .row .athlete {
+      width: calc(18% - 2em); }
+    .routes .rows .row .updated {
+      width: calc(12% - 2em); }
+    .routes .rows .row::after {
+      content: "";
+      clear: both;
+      display: table; }
+    .routes .rows .row .description {
+      margin-top: .3em;
+      font-size: .6em;
+      color: #aaa; }
+    .routes .rows .row .distance {
+      text-align: right; }
+    .routes .rows .row .elevation_gain {
+      text-align: right; }
+
+.autocomplete-search-string {
+  font-weight: bold; }
+
+ul.ui-autocomplete.ui-menu {
+  width: 60%;
+  background-color: #f9f9f9;
+  border: 1px solid #bbb;
+  margin: 0;
+  padding: 0;
+  list-style-type: none; }
+  ul.ui-autocomplete.ui-menu li {
+    margin: 0;
+    padding: .6em 1em; }
+    ul.ui-autocomplete.ui-menu li:hover {
+      background-color: white;
+      cursor: pointer; }
 
 /*# sourceMappingURL=routes.css.map */

@@ -81,12 +81,12 @@ class Route
      */
     private $elevationGain;
 
-    /**
-     * @var integer
-     *
-     * @ORM\OneToOne(targetEntity="Map", mappedBy="route")
-     */
-    private $map;
+//    /**
+//     * @var integer
+//     *
+//     * @ORM\OneToOne(targetEntity="Map", mappedBy="route")
+//     */
+//    private $map;
 
     /**
      * @var integer
@@ -94,6 +94,27 @@ class Route
      * @ORM\Column(type="integer", name="climb_category")
      */
     private $climbCategory;
+
+    /**
+     * @var \CrEOF\Spatial\PHP\Types\Geometry\Point
+     *
+     * @ORM\Column(type="point")
+     */
+    private $start;
+
+    /**
+     * @var \CrEOF\Spatial\PHP\Types\Geometry\Point
+     *
+     * @ORM\Column(type="point")
+     */
+    private $end;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="text", name="polyline_summary")
+     */
+    private $polylineSummary;
 
     /**
      * @var \DateTime
@@ -251,21 +272,21 @@ class Route
         $this->elevationGain = $elevationGain;
     }
 
-    /**
-     * @return int
-     */
-    public function getMap(): int
-    {
-        return $this->map;
-    }
-
-    /**
-     * @param int $map
-     */
-    public function setMap(int $map): void
-    {
-        $this->map = $map;
-    }
+//    /**
+//     * @return int
+//     */
+//    public function getMap(): int
+//    {
+//        return $this->map;
+//    }
+//
+//    /**
+//     * @param int $map
+//     */
+//    public function setMap(int $map): void
+//    {
+//        $this->map = $map;
+//    }
 
     /**
      * @return int
@@ -281,6 +302,54 @@ class Route
     public function setClimbCategory(int $climbCategory): void
     {
         $this->climbCategory = $climbCategory;
+    }
+
+    /**
+     * @return \CrEOF\Spatial\PHP\Types\Geometry\Point
+     */
+    public function getStart(): \CrEOF\Spatial\PHP\Types\Geometry\Point
+    {
+        return $this->start;
+    }
+
+    /**
+     * @param \CrEOF\Spatial\PHP\Types\Geometry\Point $start
+     */
+    public function setStart(\CrEOF\Spatial\PHP\Types\Geometry\Point $start): void
+    {
+        $this->start = $start;
+    }
+
+    /**
+     * @return \CrEOF\Spatial\PHP\Types\Geometry\Point
+     */
+    public function getEnd(): \CrEOF\Spatial\PHP\Types\Geometry\Point
+    {
+        return $this->end;
+    }
+
+    /**
+     * @param \CrEOF\Spatial\PHP\Types\Geometry\Point $end
+     */
+    public function setEnd(\CrEOF\Spatial\PHP\Types\Geometry\Point $end): void
+    {
+        $this->end = $end;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPolylineSummary(): string
+    {
+        return $this->polylineSummary;
+    }
+
+    /**
+     * @param string $polylineSummary
+     */
+    public function setPolylineSummary(string $polylineSummary): void
+    {
+        $this->polylineSummary = $polylineSummary;
     }
 
     /**

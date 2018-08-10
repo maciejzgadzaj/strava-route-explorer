@@ -23,9 +23,9 @@ class MapService extends EntityService
     private $repository;
 
     /**
-     * @var \Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface
+     * @var \App\Service\MapQuestService
      */
-    private $params;
+    private $mapQuestService;
 
     /**
      * @var \Psr\Log\LoggerInterface
@@ -37,19 +37,19 @@ class MapService extends EntityService
      *
      * @param \Doctrine\ORM\EntityManagerInterface $entityManager
      * @param \Symfony\Component\HttpFoundation\Session\SessionInterface $session
-     * @param \Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface $params
+     * @param \App\Service\MapQuestService $mapQuestService
      * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
         \Doctrine\ORM\EntityManagerInterface $entityManager,
         \Symfony\Component\HttpFoundation\Session\SessionInterface $session,
-        ParameterBagInterface $params,
+        MapQuestService $mapQuestService,
         LoggerInterface $logger
     ) {
         parent::__construct($entityManager, $session);
 
         $this->repository = $this->entityManager->getRepository(Map::class);
-        $this->params = $params;
+        $this->mapQuestService = $mapQuestService;
         $this->logger = $logger;
     }
 
@@ -149,22 +149,15 @@ class MapService extends EntityService
      *
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    public function getMap(Map $map, $force = false)
+    public function getMap(Route $route, $force = false)
     {
         $fileSystem = new Filesystem();
-        $route = $map->getRoute();
 
         $dir = 'images/routes/'.$route->getAthlete()->getId();
         $path = $dir.'/'.$route->getId().'.jpg';
 
         if (!$fileSystem->exists($path) || $force) {
-            $query = [
-                'key' => $this->params->get('mapquest_consumer_key'),
-                'size' => '225,150',
-                'shape' => 'border:ff0000|weight:3|cmp|enc:'.$map->getPolylineSummary(),
-            ];
-            $uri = 'https://www.mapquestapi.com/staticmap/v5/map?'.http_build_query($query);
-            $content = file_get_contents($uri);
+            $content = $this->mapQuestService->getStaticMapWithPolyline($route->getPolylineSummary());
 
             if (!$fileSystem->exists($dir)) {
                 $fileSystem->mkdir($dir);

@@ -25,7 +25,7 @@ class Map
     /**
      * @var \App\Entity\Route
      *
-     * @ORM\OneToOne(targetEntity="Route", inversedBy="map")
+     * @ORM\OneToOne(targetEntity="Route")
      * @ORM\JoinColumn(name="route_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $route;
