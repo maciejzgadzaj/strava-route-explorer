@@ -2,12 +2,16 @@
 
 {% block title %}Maintenance - {{ parent() }}{% endblock %}
 
+{% block header %}{% endblock %}
+
 {% block body %}
     <div class="maintenance">
         <h1>Temporarily down for maintenance.</h1>
         <p>We are performing scheduled maintenance. We should be back online shortly.</p>
     </div>
 {% endblock %}
+
+{% block footer %}{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
