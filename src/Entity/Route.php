@@ -81,13 +81,6 @@ class Route
      */
     private $elevationGain;
 
-//    /**
-//     * @var integer
-//     *
-//     * @ORM\OneToOne(targetEntity="Map", mappedBy="route")
-//     */
-//    private $map;
-
     /**
      * @var integer
      *

@@ -127,7 +127,6 @@ class RoutesController extends Controller
      * @param \App\Service\StravaService $stravaService
      * @param \App\Service\RouteService $routeService
      * @param \App\Service\AthleteService $athleteService
-     * @param \App\Service\MapService $mapService
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      *
@@ -138,8 +137,7 @@ class RoutesController extends Controller
         $route_id,
         StravaService $stravaService,
         RouteService $routeService,
-        AthleteService $athleteService,
-        MapService $mapService
+        AthleteService $athleteService
     ) {
         try {
             // To fetch single route details we can use generic app access token.
@@ -177,9 +175,6 @@ class RoutesController extends Controller
 
             // Save route.
             $route = $routeService->save($content);
-
-            // Save map details.
-//            $map = $mapService->save($content->map);
 
             $this->addFlash(
                 'notice',
