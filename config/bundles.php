@@ -17,4 +17,5 @@ return [
     Csa\Bundle\GuzzleBundle\CsaGuzzleBundle::class => ['all' => true],
     Kilik\TableBundle\KilikTableBundle::class => ['all' => true],
     Lexik\Bundle\MaintenanceBundle\LexikMaintenanceBundle::class => ['all' => true],
+    Knp\Bundle\TimeBundle\KnpTimeBundle::class => ['all' => true],
 ];

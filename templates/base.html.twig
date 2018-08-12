@@ -24,9 +24,9 @@
                 </div>
                 <div class="sync-routes">
                     {% if (app.session.get('athlete')) %}
-                        <a href="{{ path('routes_sync') }}">sync my routes</a>
+                        <a href="{{ path('routes_sync', { 'athlete_id': app.session.get('athlete').id }) }}">sync my routes</a>
                     {% else %}
-                        <a href="{{ path('routes_sync') }}">connect with strava</a>
+                        <a href="{{ path('strava_auth') }}">connect with strava</a>
                     {% endif %}
                 </div>
                 <div class="logo-title">
@@ -37,6 +37,7 @@
                     {% if (app.session.get('athlete')) %}
                         <a href="{{ path('routes', { 'filter[athlete]': app.session.get('athlete').id }) }}">my routes</a>
                     {% endif %}
+                    <a href="{{ path('athletes') }}">athletes</a>
                 </div>
             </div>
         {% endblock %}

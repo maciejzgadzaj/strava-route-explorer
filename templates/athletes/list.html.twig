@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'Athletes'|trans }} - {{ parent() }}{% endblock %}
+
+{% block body %}
+    <div class="athletes">
+        {% include 'pager.html.twig' %}
+
+        {% set query = app.request.query.all %}
+        <div class="head">
+            <div class="image"></div>
+            <div class="name">
+                <div class="label">Athlete</div>
+                {% set dir, direction, icon = 'asc', 'ascending', 'icon-sort.svg' %}
+                {% if query.sort is defined and query.sort == 'name' %}
+                    {% set icon = 'icon-sort-active.svg' %}
+                    {% if query.dir is defined and query.dir == 'asc' %}
+                        {% set dir, direction = 'desc', 'descending' %}
+                    {% endif %}
+                {% endif %}
+                <div class="sort">
+                    <a title="Sort athletes by name in {{ direction }} order" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({ 'sort': 'name', 'dir': dir })) }}"><img src="images/{{ icon }}" width="12" height="12" /></a>
+                </div>
+            </div>
+            <div class="routes">
+                <div class="label">Routes</div>
+                {% set dir, direction, icon = 'desc', 'descending', 'icon-sort.svg' %}
+                {% if query.sort is defined and query.sort == 'route_count' %}
+                    {% set icon = 'icon-sort-active.svg' %}
+                    {% if query.dir is defined and query.dir == 'desc' %}
+                        {% set dir, direction = 'asc', 'ascending' %}
+                    {% endif %}
+                {% endif %}
+                <div class="sort">
+                    <a title="Sort athletes by route count in {{ direction }} order" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({ 'sort': 'route_count', 'dir': dir })) }}"><img src="images/{{ icon }}" width="12" height="12" /></a>
+                </div>
+            </div>
+            <div class="last_sync">
+                <div class="label">Last sync</div>
+                {% set dir, direction, icon = 'desc', 'descending', 'icon-sort.svg' %}
+                {% if query.sort is defined and query.sort == 'last_sync' %}
+                    {% set icon = 'icon-sort-active.svg' %}
+                    {% if query.dir is defined and query.dir == 'desc' %}
+                        {% set dir, direction = 'asc', 'ascending' %}
+                    {% endif %}
+                {% endif %}
+                <div class="sort">
+                    <a title="Sort athletes by last routes sync date in {{ direction }} order" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({ 'sort': 'last_sync', 'dir': dir })) }}"><img src="images/{{ icon }}" width="12" height="12" /></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="rows">
+            {% if data.results|length > 0 %}
+                {% for row in data.results %}
+                    <div class="row synchronised-{{ row.synchronized }} {{ cycle(['odd', 'even'], loop.index0) }}">
+                        <div class="image">
+                            {% set profile = row.athlete.profile %}
+                            {% if profile|slice(0, 4) != 'http' %}
+                                {% set profile = 'https://d3nn82uaxijpm6.cloudfront.net/assets/' ~ profile %}
+                            {% endif %}
+                            <a href="https://www.strava.com/athletes/{{ row.athlete.id }}"><img src="{{ profile }}" width="70" height="70" /></a>
+                        </div>
+                        <div class="name">
+                            <a title="See athlete on Strava.com" href="https://www.strava.com/athletes/{{ row.athlete.id }}">{{ row.athlete.name }}</a>
+                            <div class="description">{{ row.athlete.id }}</div>
+                        </div>
+                        <div class="routes">
+                            <a href="/routes?filter[athlete]={{ row.athlete.id }}">{{ row.route_count }}</a>
+                        </div>
+                        <div class="last_sync">
+                            {% if row.athlete.lastSync %}
+                                {{ row.athlete.lastSync|ago }}
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="row">
+                    <div class="name">No athletes found matching your criteria.</div>
+                </div>
+            {% endif %}
+        </div>
+
+        {% include 'pager.html.twig' %}
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('build/athletes.css') }}">
+    <link rel="stylesheet" href="{{ asset('build/pager.css') }}">
+{% endblock %}

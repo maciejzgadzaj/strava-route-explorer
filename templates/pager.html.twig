@@ -2,15 +2,15 @@
 {% set page = app.request.get('page', 1) %}
 {% set min = (page-1)*per_page+1 %}
 {% set max = page*per_page %}
-{% if (max > routes.total) %}
-    {% set max = routes.total %}
+{% if (max > data.total) %}
+    {% set max = data.total %}
 {% endif %}
 
 <form method="GET" action="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': null, 'per_page': null})) }}">
     <div class="pager">
 
         <div class="per_page">
-            <input name="per_page" value="{{ per_page }}" /> routes per page
+            <input name="per_page" value="{{ per_page }}" /> results per page
             <input type="submit" style="display:none" />
         </div>
 
@@ -37,10 +37,10 @@
         </div>
 
         <div class="results">
-            {% if min <= routes.total %}
-                Routes <span class="number">{{ min }}-{{ max }}</span> of <span class="number">{{ routes.total }}</span>
+            {% if min <= data.total %}
+                Results <span class="highlight">{{ min }}-{{ max }}</span> of <span class="highlight">{{ data.total }}</span>
             {% else %}
-                Whoa, did you get lost? <a href="{{ path('routes') }}">Back to the listing</a>.
+                <span class="highlight">Whoa, did you get lost? <a class="highlight" href="{{ path(app.request.attributes.get('_route')) }}">Back to the listing</a>.</span>
             {% endif %}
         </div>
 

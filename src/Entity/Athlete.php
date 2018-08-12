@@ -65,6 +65,13 @@ class Athlete
     private $profile;
 
     /**
+     * @var \DateTime|null
+     *
+     * @ORM\Column(type="datetime", name="last_sync", nullable=true)
+     */
+    private $lastSync;
+
+    /**
      * @var bool
      */
     private $isNew = false;
@@ -188,6 +195,22 @@ class Athlete
     public function setProfile(string $profile): void
     {
         $this->profile = $profile;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getLastSync(): ?\DateTime
+    {
+        return $this->lastSync;
+    }
+
+    /**
+     * @param \DateTime|null $lastSync
+     */
+    public function setLastSync(?\DateTime $lastSync): void
+    {
+        $this->lastSync = $lastSync;
     }
 
     /**

@@ -1,0 +1,71 @@
+.athletes .head {
+  display: flex;
+  margin: 2px 0 0;
+  padding: 0;
+  background-color: #f0f0f0; }
+  .athletes .head > div {
+    display: flex;
+    padding: .5em 1em; }
+    .athletes .head > div .sort {
+      margin: 0 0 0 .3em; }
+  .athletes .head::after {
+    content: "";
+    clear: both;
+    display: table; }
+  .athletes .head.even {
+    background-color: #f9f9f9; }
+  .athletes .head .image {
+    width: 75px; }
+  .athletes .head .name {
+    width: calc(40% - 2em); }
+  .athletes .head .distance {
+    width: calc(10% - 2em); }
+    .athletes .head .distance .unit {
+      font-size: .8em;
+      color: #aaa; }
+  .athletes .head .elevation_gain {
+    width: calc(10% - 2em); }
+    .athletes .head .elevation_gain .unit {
+      font-size: .8em;
+      color: #aaa; }
+  .athletes .head .athlete {
+    width: calc(18% - 2em); }
+  .athletes .head .updated {
+    width: calc(12% - 2em); }
+.athletes .rows {
+  margin: 2px 0; }
+  .athletes .rows .row {
+    border-bottom: 1px solid #eee; }
+    .athletes .rows .row.even {
+      background-color: #f9f9f9; }
+    .athletes .rows .row.synchronised-1 .name {
+      font-weight: bold; }
+    .athletes .rows .row > * {
+      float: left;
+      margin: 0;
+      padding: 0.5em 1em; }
+    .athletes .rows .row .image {
+      width: 75px; }
+      .athletes .rows .row .image img {
+        border-radius: 50%; }
+    .athletes .rows .row .name {
+      width: calc(40% - 2em); }
+    .athletes .rows .row .routes {
+      width: calc(10% - 2em); }
+    .athletes .rows .row .last_sync {
+      color: #bbb; }
+    .athletes .rows .row::after {
+      content: "";
+      clear: both;
+      display: table; }
+    .athletes .rows .row .description {
+      margin-top: .3em;
+      font-size: .6em;
+      color: #aaa;
+      font-weight: normal; }
+    .athletes .rows .row .distance {
+      text-align: right; }
+    .athletes .rows .row .elevation_gain {
+      text-align: right; }
+
+/*# sourceMappingURL=athletes.css.map */

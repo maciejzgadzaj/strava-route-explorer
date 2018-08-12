@@ -4,7 +4,7 @@
 
 {% block body %}
     <div class="routes">
-        {% include 'routes/pager.html.twig' %}
+        {% include 'pager.html.twig' %}
 
         {% set query = app.request.query.all %}
         <div class="head">
@@ -139,43 +139,43 @@
         </div>
 
         <div class="rows">
-            {% if routes.results|length > 0 %}
-                {% for route in routes.results %}
-                    <div class="row type-{{ route.route.type }} {{ cycle(['odd', 'even'], loop.index0) }}">
+            {% if data.results|length > 0 %}
+                {% for row in data.results %}
+                    <div class="row type-{{ row.route.type }} {{ cycle(['odd', 'even'], loop.index0) }}">
                         <div class="image">
-                            <a href="https://www.strava.com/routes/{{ route.route.id }}"><img src="images/routes/{{ route.route.athlete.id }}/{{ route.route.id }}.jpg" width="75" height="50" /></a>
+                            <a href="https://www.strava.com/routes/{{ row.route.id }}"><img src="images/routes/{{ row.route.athlete.id }}/{{ row.route.id }}.jpg" width="75" height="50" /></a>
                         </div>
                         <div class="name">
-                            <a title="See route on Strava.com" href="https://www.strava.com/routes/{{ route.route.id }}">{{ route.route.name }}</a>
-                            <div class="description">{{ route.route.id }}</div>
-                            <div class="description">{{ route.route.description }}</div>
-                            {% if route.start_dist is defined or route.end_dist is defined %}
+                            <a title="See route on Strava.com" href="https://www.strava.com/routes/{{ row.route.id }}">{{ row.route.name }}</a>
+                            <div class="description">{{ row.route.id }}</div>
+                            <div class="description">{{ row.route.description }}</div>
+                            {% if row.route.start_dist is defined or row.route.end_dist is defined %}
                                 <div class="distances">
-                                    {% if route.start_dist is defined %}
-                                        <span class="start_dist">Start: <span class="distance">{{ route.start_dist|number_format(1, '.', ',') }} km</span></span>
+                                    {% if row.start_dist is defined %}
+                                        <span class="start_dist">Start: <span class="distance">{{ row.start_dist|number_format(1, '.', ',') }} km</span></span>
                                     {% endif %}
-                                    {% if route.end_dist is defined %}
-                                        <span class="end_dist">End: <span class="distance">{{ route.end_dist|number_format(1, '.', ',') }} km</span></span>
+                                    {% if row.end_dist is defined %}
+                                        <span class="end_dist">End: <span class="distance">{{ row.end_dist|number_format(1, '.', ',') }} km</span></span>
                                     {% endif %}
                                 </div>
                             {% endif %}
                         </div>
                         <div class="distance">
-                            {{ (route.route.distance // 1000)|number_format }} <span class="unit">km</span>
+                            {{ (row.route.distance // 1000)|number_format }} <span class="unit">km</span>
                         </div>
                         <div class="elevation_gain">
-                            {% if route.route.climbCategory > 3 %}
-                                <div class="climb cat-{{ route.route.climbCategory }}"></div>
+                            {% if row.route.climbCategory > 3 %}
+                                <div class="climb cat-{{ row.route.climbCategory }}"></div>
                             {% endif %}
-                            {{ route.route.elevationGain|number_format }} <span class="unit">m</span>
+                            {{ row.route.elevationGain|number_format }} <span class="unit">m</span>
                         </div>
                         <div class="athlete">
-                            <a title="See athlete profile on Strava.com" href="https://www.strava.com/athletes/{{ route.route.athlete.id }}">{{ route.route.athlete.name}}</a>
-                            <div class="description">{{ route.route.athlete.id }}</div>
+                            <a title="See athlete profile on Strava.com" href="https://www.strava.com/athletes/{{ row.route.athlete.id }}">{{ row.route.athlete.name}}</a>
+                            <div class="description">{{ row.route.athlete.id }}</div>
                         </div>
                         <div class="updated">
-                            {{ route.route.updatedAt|date('Y-m-d') }}
-                            <div class="description" title="Created">{{ route.route.createdAt|date('Y-m-d') }}</div>
+                            {{ row.route.updatedAt|date('Y-m-d') }}
+                            <div class="description" title="Created">{{ row.route.createdAt|date('Y-m-d') }}</div>
                         </div>
                     </div>
                 {% endfor %}
@@ -186,13 +186,14 @@
             {% endif %}
         </div>
 
-        {% include 'routes/pager.html.twig' %}
+        {% include 'pager.html.twig' %}
     </div>
 {% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('build/routes.css') }}">
+    <link rel="stylesheet" href="{{ asset('build/pager.css') }}">
 {% endblock %}
 
 {% block javascripts %}

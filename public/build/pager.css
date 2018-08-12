@@ -1,0 +1,60 @@
+.pager {
+  position: relative;
+  margin: 2px 0;
+  padding: 1em;
+  background-color: #f0f0f0;
+  text-align: center; }
+  .pager .per_page {
+    position: absolute;
+    top: .5em;
+    left: 1em;
+    color: #bbb; }
+    .pager .per_page input {
+      width: 2em;
+      margin: 0;
+      padding: .5em;
+      border: 1px solid #ddd;
+      background-color: white;
+      font-size: .9em; }
+      .pager .per_page input:hover {
+        border-color: #fc4c02; }
+  .pager .results {
+    color: #bbb; }
+    .pager .results .highlight {
+      color: #000; }
+  .pager .links {
+    position: absolute;
+    top: .5em;
+    right: 1em; }
+    .pager .links .button {
+      padding: .4em .7em .5em;
+      border: 1px solid #ddd;
+      color: #f0f0f0; }
+      .pager .links .button.previous, .pager .links .button.next {
+        padding: .4em .8em .5em; }
+    .pager .links a.button {
+      text-decoration: none;
+      background-color: white;
+      color: #aaa; }
+      .pager .links a.button:hover {
+        border-color: #fc4c02;
+        background-color: #fc4c02;
+        color: #ffffff;
+        -moz-transition: all .1s ease-in;
+        -webkit-transition: all .1s ease-in;
+        -o-transition: all .1s ease-in;
+        transition: all .1s ease-in; }
+    .pager .links input {
+      width: 2em;
+      margin: 0;
+      padding: .5em;
+      border: 1px solid #ddd;
+      background-color: white;
+      text-align: center;
+      font-size: .9em; }
+      .pager .links input:hover {
+        border-color: #fc4c02; }
+  .pager a {
+    color: #bbb; }
+
+/*# sourceMappingURL=pager.css.map */

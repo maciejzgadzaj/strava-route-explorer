@@ -7,7 +7,6 @@ use App\Exception\NoticeException;
 use App\Form\RouteAddType;
 use App\Form\RouteFilterType;
 use App\Service\AthleteService;
-use App\Service\MapQuestService;
 use App\Service\MapService;
 use App\Service\OpenStreetMapService;
 use App\Service\RouteService;
@@ -85,7 +84,7 @@ class RoutesController extends Controller
         return $this->render(
             'routes/list.html.twig',
             [
-                'routes' => $routes,
+                'data' => $routes,
                 'per_page' => $perPage,
                 'pages' => $routes['pages'],
                 'route_add_form' => $routeAddForm->createView(),
@@ -223,10 +222,14 @@ class RoutesController extends Controller
     /**
      * Synchronize all user public routes.
      *
-     * @Route("/routes/sync", name="routes_sync")
+     * @Route("/routes/sync/{athlete_id}", name="routes_sync")
      *
+     * @param string $athlete_id
+     * @param \Symfony\Component\HttpFoundation\Session\SessionInterface $session
+     * @param \Doctrine\ORM\EntityManagerInterface $entityManager
      * @param \App\Service\StravaService $stravaService
      * @param \App\Service\RouteService $routeService
+     * @param \App\Service\AthleteService $athleteService
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      *
@@ -234,24 +237,40 @@ class RoutesController extends Controller
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     public function syncAction(
+        $athlete_id,
         SessionInterface $session,
+        EntityManagerInterface $entityManager,
         StravaService $stravaService,
         RouteService $routeService,
         AthleteService $athleteService
     ) {
         try {
-            // We don't know who is using the service.
-            if (!$athlete = $session->get('athlete')) {
-                return $this->redirectToRoute('strava_auth');
+            if (!$athlete = $athleteService->load($athlete_id)) {
+                throw new \Exception(strtr('Athlete %athlete_id% not found.', [
+                    '%athlete_id%' => $athlete_id,
+                ]));
+            }
+
+            // Athlete has not connected his Strava account yet.
+            if (!$accessToken = $athlete->getAccessToken()) {
+                throw new \Exception(strtr('No token found for athlete %athlete_id%.', [
+                    '%athlete_id%' => $athlete_id,
+                ]));
             }
 
             $added = $updated = $skipped = $deleted = 0;
             $page = 1;
 
             do {
+                $options = [
+                    'headers' => [
+                        'Authorization' => 'Bearer '.$accessToken,
+                    ],
+                ];
                 $response = $stravaService->apiRequest(
                     'get',
-                    '/api/v3/athletes/'.$athlete->id.'/routes?per_page=200&page='.$page
+                    '/api/v3/athletes/'.$athlete->getId().'/routes?per_page=200&page='.$page,
+                    $options
                 );
                 $content = \GuzzleHttp\json_decode($response->getBody()->getContents());
 
@@ -281,6 +300,9 @@ class RoutesController extends Controller
                 $page++;
             } while (!empty($content));
 
+            $athlete->setLastSync(new \DateTime());
+            $entityManager->flush();
+
             $this->addFlash(
                 'notice',
                 strtr(
@@ -295,7 +317,7 @@ class RoutesController extends Controller
                 )
             );
 
-            $redirectParams = ['filter[athlete]' => $athlete->id];
+            $redirectParams = ['filter[athlete]' => $athlete->getId()];
         } catch (ClientException $e) {
             $content = \GuzzleHttp\json_decode($e->getResponse()->getBody()->getContents());
             $this->addFlash('error', $content->message);

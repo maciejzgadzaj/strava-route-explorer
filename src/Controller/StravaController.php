@@ -70,6 +70,6 @@ class StravaController extends Controller
         $session->set('athlete', $content->athlete);
         $session->set('strava_access_token', $content->access_token);
 
-        return $this->redirectToRoute('routes_sync');
+        return $this->redirectToRoute('routes_sync', ['athlete_id' => $content->athlete->id]);
     }
 }
