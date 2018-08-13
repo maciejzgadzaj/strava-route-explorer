@@ -130,7 +130,7 @@ $locationWidth: calc(30% - 2em);
 
     .filters {
         background-color: #f0f0f0;
-        select, input, button {
+        select, input:not([type='checkbox']), button {
             width: 95%;
             margin-top: .5em;
             padding: .5em;
@@ -152,12 +152,12 @@ $locationWidth: calc(30% - 2em);
                 border-color: $orange;
             }
         }
-        input, select, button {
+        input:not([type='checkbox']), select, button {
             -webkit-appearance: none;
             -moz-appearance: none;
             appearance: none;
         }
-        input {
+        input:not([type='checkbox']) {
             &:not(:placeholder-shown) {
                 border-color: $orange;
 
@@ -204,7 +204,13 @@ $locationWidth: calc(30% - 2em);
             }
         }
         .athlete {
+            position: relative;
             width: $athleteWidth;
+            .starred {
+                position: absolute;
+                margin-top: .3em;
+                font-size: .9em;
+            }
         }
         .updated {
             width: $updatedWidth;
@@ -291,6 +297,9 @@ $locationWidth: calc(30% - 2em);
             }
             .name {
                 width: $nameWidth;
+                .starred {
+                    color: $orange;
+                }
                 .veloviewer {
                     text-decoration: none;
                     color: #bbb;

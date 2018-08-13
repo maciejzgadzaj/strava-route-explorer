@@ -63,6 +63,11 @@
       font-size: .6em;
       color: #aaa;
       font-weight: normal; }
+      .athletes .rows .row .description a {
+        text-decoration: none;
+        color: #aaa; }
+        .athletes .rows .row .description a:hover {
+          color: #fc4c02; }
     .athletes .rows .row .distance {
       text-align: right; }
     .athletes .rows .row .elevation_gain {

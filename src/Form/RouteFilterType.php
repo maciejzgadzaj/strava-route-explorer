@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -128,6 +129,19 @@ class RouteFilterType extends AbstractType
                     'title' => 'Filter routes by athlete name or id',
                     'accesskey' => 'a',
                     '@focus' => '$event.target.select()',
+                ],
+            ]
+        );
+
+        $builder->add(
+            'starred',
+            CheckboxType::class,
+            [
+                'label' => 'Include starred routes',
+                'required' => false,
+                'data' => true,
+                'attr' => [
+                    'title' => 'Include routes starred by athlete',
                 ],
             ]
         );

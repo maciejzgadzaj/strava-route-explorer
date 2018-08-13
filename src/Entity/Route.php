@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -124,6 +125,18 @@ class Route
     private $updatedAt;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection|\App\Entity\Athlete[]
+     *
+     * @ORM\ManyToMany(targetEntity="Athlete")
+     * @ORM\JoinTable(
+     *     name="route_starred_by",
+     *     joinColumns={@ORM\JoinColumn(name="route_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="athlete_id", referencedColumnName="id")}
+     * )
+     */
+    private $starredBy;
+
+    /**
      * @var bool
      */
     private $isNew = false;
@@ -133,6 +146,8 @@ class Route
      */
     public function __construct()
     {
+        $this->starredBy = new ArrayCollection();
+
         // This will not be saved in the database.
         $this->isNew = true;
     }
@@ -265,22 +280,6 @@ class Route
         $this->elevationGain = $elevationGain;
     }
 
-//    /**
-//     * @return int
-//     */
-//    public function getMap(): int
-//    {
-//        return $this->map;
-//    }
-//
-//    /**
-//     * @param int $map
-//     */
-//    public function setMap(int $map): void
-//    {
-//        $this->map = $map;
-//    }
-
     /**
      * @return int
      */
@@ -375,6 +374,46 @@ class Route
     public function setUpdatedAt(\DateTime $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
+    }
+
+    /**
+     * @return \App\Entity\Athlete[]|\Doctrine\Common\Collections\Collection
+     */
+    public function getStarredBy()
+    {
+        return $this->starredBy;
+    }
+
+    /**
+     * @param \App\Entity\Athlete[]|\Doctrine\Common\Collections\Collection $starredBy
+     */
+    public function setStarredBy($starredBy): void
+    {
+        $this->starredBy = $starredBy;
+    }
+
+    /**
+     * @param \App\Entity\Athlete $athlete
+     */
+    public function addStarredBy(Athlete $athlete): void
+    {
+        if ($this->starredBy->contains($athlete)) {
+            return;
+        }
+
+        $this->starredBy->add($athlete);
+    }
+
+    /**
+     * @param \App\Entity\Athlete $athlete
+     */
+    public function removeStarredBy(Athlete $athlete): void
+    {
+        if (!$this->starredBy->contains($athlete)) {
+            return;
+        }
+
+        $this->starredBy->removeElement($athlete);
     }
 
     /**

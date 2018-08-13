@@ -104,6 +104,13 @@
             </div>
             <div class="filter athlete">
                 {{ form_row(route_filter_form.athlete) }}
+                {% set display = 'none' %}
+                {% if (app.request.query.get('filter').athlete is defined and app.request.query.get('filter').athlete) %}
+                    {% set display = 'block' %}
+                {% endif %}
+                <div class="starred" style="display:{{ display }}">
+                    {{ form_widget(route_filter_form.starred) }} {{ form_label(route_filter_form.starred) }}
+                </div>
             </div>
             <div class="filter updated{% if app.request.query.get('filter') %}{{ ' active' }}{% endif %}">
                 {{ form_row(route_filter_form.type) }}
@@ -146,6 +153,15 @@
                             <a href="https://www.strava.com/routes/{{ row.route.id }}"><img src="images/routes/{{ row.route.athlete.id }}/{{ row.route.id }}.jpg" width="75" height="50" /></a>
                         </div>
                         <div class="name">
+                            {% set starred_by = null %}
+                            {% if (row.starred_by_current_athlete is defined and row.starred_by_current_athlete) %}
+                                {% set starred_by = 'current' %}
+                            {% elseif (row.starred_by_searched_athlete is defined and row.starred_by_searched_athlete) %}
+                                {% set starred_by = 'searched' %}
+                            {% endif %}
+                            {% if (starred_by) %}
+                                <span class="starred starred_{{ starred_by }}">★</span>
+                            {% endif %}
                             <a title="See route on Strava.com" href="https://www.strava.com/routes/{{ row.route.id }}">{{ row.route.name }}</a>
                             <a title="See route on VeloViewer.com" class="veloviewer" href="https://veloviewer.com/routes/{{ row.route.id }}">vv</a>
                             <div class="description">{{ row.route.id }}</div>
@@ -171,7 +187,7 @@
                             {{ row.route.elevationGain|number_format }} <span class="unit">m</span>
                         </div>
                         <div class="athlete">
-                            <a title="See all routes by {{ row.route.athlete.name }}" href="{{ path('routes', { 'filter[athlete]': row.route.athlete.name }) }}">{{ row.route.athlete.name}}</a>
+                            <a title="See all routes by {{ row.route.athlete.name }}" href="{{ path('routes', { 'filter[athlete]': row.route.athlete.name, 'filter[starred]': true }) }}">{{ row.route.athlete.name}}</a>
                             <div class="description"><a class="description" title="See athlete profile on Strava.com" href="https://www.strava.com/athletes/{{ row.route.athlete.id }}">{{ row.route.athlete.id }}</a></div>
                         </div>
                         <div class="updated">
@@ -203,6 +219,13 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script>
         $(document).ready(function () {
+            $("#filter_athlete").keyup(function(){
+                if ($(this).val()) {
+                    $(".starred").show();
+                } else {
+                    $(".starred").hide();
+                }
+            });
             $(".advanced-filters-toggle").on("click", function(){
                 $(".advanced_filters").slideToggle("fast", function(){
                     console.log($(this).is(":visible"));

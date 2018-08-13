@@ -177,4 +177,33 @@ class RouteService extends EntityService
 
         return count($routesToDelete);
     }
+
+    /**
+     * Unstar athlete starred routes excluding specified ids.
+     *
+     * @param \App\Entity\Athlete $athlete
+     * @param array $excludeIds
+     *
+     * @return int
+     */
+    public function unstarAthleteRoutes(Athlete $athlete, array $excludeIds)
+    {
+        $unstarred = 0;
+
+        $builder = $this->repository->createQueryBuilder('r')
+            ->join('r.starredBy', 'a', 'WITH', 'a.id = :athlete_id')
+            ->setParameter('athlete_id', $athlete->getId());
+
+        /** @var \App\Entity\Route[] $starredRoutes */
+        $starredRoutes = $builder->getQuery()->getResult();
+
+        foreach ($starredRoutes as $starredRoute) {
+            if (!in_array($starredRoute->getId(), $excludeIds)) {
+                $starredRoute->removeStarredBy($athlete);
+                $unstarred++;
+            }
+        }
+
+        return $unstarred;
+    }
 }

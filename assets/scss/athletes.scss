@@ -101,6 +101,13 @@ $locationWidth: calc(30% - 2em);
                 font-size: .6em;
                 color: #aaa;
                 font-weight: normal;
+                a {
+                    text-decoration: none;
+                    color: #aaa;
+                    &:hover {
+                        color: $orange;
+                    }
+                }
             }
             .distance {
                 text-align: right;

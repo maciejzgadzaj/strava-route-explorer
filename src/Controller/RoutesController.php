@@ -282,11 +282,6 @@ class RoutesController extends Controller
                 $content = \GuzzleHttp\json_decode($response->getBody()->getContents());
 
                 foreach ($content as $routeData) {
-                    // Ignore routes created by other athletes, and just starred by user being synchronized.
-                    if ($routeData->athlete->id != $athlete->getId()) {
-                        continue;
-                    }
-
                     // Save public routes only.
                     if (!$routeData->private) {
                         // Create athlete if it doesn't exist yet.
@@ -296,6 +291,11 @@ class RoutesController extends Controller
 
                         // Create or update route.
                         $route = $routeService->save($routeData);
+
+                        if ($route->getAthlete()->getId() != $athlete->getId()) {
+                            $route->addStarredBy($athlete);
+                        }
+
                         if ($route->isNew()) {
                             $publicAdded++;
                         } else {
@@ -316,6 +316,7 @@ class RoutesController extends Controller
             } while (!empty($content));
 
             $publicDeleted = $routeService->deleteAthleteRoutes($athlete, $syncedIds);
+            $unstarred = $routeService->unstarAthleteRoutes($athlete, $syncedIds);
 
             $athlete->setLastSync(new \DateTime());
             $entityManager->flush();
@@ -336,7 +337,10 @@ class RoutesController extends Controller
                 )
             );
 
-            $redirectParams = ['filter[athlete]' => $athlete->getName()];
+            $redirectParams = [
+                'filter[athlete]' => $athlete->getName(),
+                'filter[starred]' => true,
+            ];
         } catch (ClientException $e) {
             $content = \GuzzleHttp\json_decode($e->getResponse()->getBody()->getContents());
             $this->addFlash('error', $content->message);

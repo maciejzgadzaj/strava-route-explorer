@@ -35,7 +35,7 @@
                 <div class="menu">
                     <a href="{{ path('routes') }}">all routes</a>
                     {% if (current_athlete.name is defined) %}
-                        <a href="{{ path('routes', { 'filter[athlete]': current_athlete.name }) }}">my routes</a>
+                        <a href="{{ path('routes', { 'filter[athlete]': current_athlete.name, 'filter[starred]': true }) }}">my routes</a>
                     {% endif %}
                     <a href="{{ path('athletes') }}">athletes</a>
                 </div>

@@ -92,27 +92,27 @@
     width: calc(12% - 2em); }
 .routes .filters {
   background-color: #f0f0f0; }
-  .routes .filters select, .routes .filters input, .routes .filters button {
+  .routes .filters select, .routes .filters input:not([type='checkbox']), .routes .filters button {
     width: 95%;
     margin-top: .5em;
     padding: .5em;
     border: 1px solid #ddd;
     background-color: white;
     font-size: .9em; }
-    .routes .filters select::placeholder, .routes .filters input::placeholder, .routes .filters button::placeholder {
+    .routes .filters select::placeholder, .routes .filters input:not([type='checkbox'])::placeholder, .routes .filters button::placeholder {
       color: #ccc;
       opacity: 1; }
-    .routes .filters select:-ms-input-placeholder, .routes .filters input:-ms-input-placeholder, .routes .filters button:-ms-input-placeholder {
+    .routes .filters select:-ms-input-placeholder, .routes .filters input:not([type='checkbox']):-ms-input-placeholder, .routes .filters button:-ms-input-placeholder {
       color: #ccc; }
-    .routes .filters select::-ms-input-placeholder, .routes .filters input::-ms-input-placeholder, .routes .filters button::-ms-input-placeholder {
+    .routes .filters select::-ms-input-placeholder, .routes .filters input:not([type='checkbox'])::-ms-input-placeholder, .routes .filters button::-ms-input-placeholder {
       color: #ccc; }
-    .routes .filters select:hover, .routes .filters input:hover, .routes .filters button:hover {
+    .routes .filters select:hover, .routes .filters input:not([type='checkbox']):hover, .routes .filters button:hover {
       border-color: #fc4c02; }
-  .routes .filters input, .routes .filters select, .routes .filters button {
+  .routes .filters input:not([type='checkbox']), .routes .filters select, .routes .filters button {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none; }
-  .routes .filters input:not(:placeholder-shown) {
+  .routes .filters input:not([type='checkbox']):not(:placeholder-shown) {
     border-color: #fc4c02; }
 .routes .basic_filters {
   display: flex;
@@ -141,7 +141,12 @@
       width: 40%;
       margin-right: .25em; }
   .routes .basic_filters .athlete {
+    position: relative;
     width: calc(18% - 2em); }
+    .routes .basic_filters .athlete .starred {
+      position: absolute;
+      margin-top: .3em;
+      font-size: .9em; }
   .routes .basic_filters .updated {
     width: calc(12% - 2em);
     display: flex; }
@@ -199,6 +204,8 @@
       width: 75px; }
     .routes .rows .row .name {
       width: calc(40% - 2em); }
+      .routes .rows .row .name .starred {
+        color: #fc4c02; }
       .routes .rows .row .name .veloviewer {
         text-decoration: none;
         color: #bbb; }

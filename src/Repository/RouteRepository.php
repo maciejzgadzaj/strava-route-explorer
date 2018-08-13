@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Route;
+use App\Service\AthleteService;
 use CrEOF\Spatial\PHP\Types\Geometry\Point;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
@@ -16,13 +17,20 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 class RouteRepository extends ServiceEntityRepository
 {
     /**
+     * @var \App\Service\AthleteService
+     */
+    private $athleteService;
+
+    /**
      * RouteRepository constructor.
      *
      * @param \Symfony\Bridge\Doctrine\RegistryInterface $registry
      */
-    public function __construct(RegistryInterface $registry)
+    public function __construct(RegistryInterface $registry, AthleteService $athleteService)
     {
         parent::__construct($registry, Route::class);
+
+        $this->athleteService = $athleteService;
     }
 
     /**
@@ -37,6 +45,8 @@ class RouteRepository extends ServiceEntityRepository
      */
     public function findByFilters(array $criteria, ?array $orderBy = null, $limit = 50, $offset = 0)
     {
+        $currentAthlete = $this->athleteService->getCurrentAthlete();
+
         // Apparently subqueries cannot be used in Doctrine for filtering
         // and ordering, so we have switched to DQL instead.
         // https://symfony.com/doc/current/doctrine.html#querying-with-dql-or-sql
@@ -85,9 +95,20 @@ class RouteRepository extends ServiceEntityRepository
 
                 case 'athlete':
                     $joins['athlete'] = 'JOIN r.athlete a';
-                    $wheres[] = '(a.name LIKE :athlete_name OR a.id = :athlete_id)';
                     $parameters['athlete_name'] = '%'.$value.'%';
                     $parameters['athlete_id'] = $value;
+
+                    if (!empty($criteria['starred'])) {
+                        $joins['starred_by_searched'] = 'LEFT JOIN r.starredBy sbs';
+                        $selects[] = 'CASE WHEN sbs.id IS NOT NULL 
+                                                AND (sbs.name LIKE :athlete_name OR sbs.id = :athlete_id) 
+                                           THEN true 
+                                           ELSE false END AS starred_by_searched_athlete';
+                        $wheres[] = '(a.name LIKE :athlete_name OR a.id = :athlete_id
+                                      OR sbs.name LIKE :athlete_name OR sbs.id = :athlete_id)';
+                    } else {
+                        $wheres[] = '(a.name LIKE :athlete_name OR a.id = :athlete_id)';
+                    }
                     break;
 
                 case 'start_dist':
