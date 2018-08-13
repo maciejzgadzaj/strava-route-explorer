@@ -291,6 +291,13 @@ $locationWidth: calc(30% - 2em);
             }
             .name {
                 width: $nameWidth;
+                .veloviewer {
+                    text-decoration: none;
+                    color: #bbb;
+                    &:hover {
+                        color: $orange;
+                    }
+                }
                 .distances {
                     margin-top: .5em;
                     font-size: .8em;
@@ -352,6 +359,12 @@ $locationWidth: calc(30% - 2em);
                 margin-top: .3em;
                 font-size: .6em;
                 color: #aaa;
+                a {
+                    text-decoration: none;
+                    &:hover {
+                        color: $orange;
+                    }
+                }
             }
             .distance {
                 text-align: right;

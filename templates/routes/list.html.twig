@@ -147,6 +147,7 @@
                         </div>
                         <div class="name">
                             <a title="See route on Strava.com" href="https://www.strava.com/routes/{{ row.route.id }}">{{ row.route.name }}</a>
+                            <a title="See route on VeloViewer.com" class="veloviewer" href="https://veloviewer.com/routes/{{ row.route.id }}">vv</a>
                             <div class="description">{{ row.route.id }}</div>
                             <div class="description">{{ row.route.description }}</div>
                             {% if row.route.start_dist is defined or row.route.end_dist is defined %}
@@ -170,8 +171,8 @@
                             {{ row.route.elevationGain|number_format }} <span class="unit">m</span>
                         </div>
                         <div class="athlete">
-                            <a title="See athlete profile on Strava.com" href="https://www.strava.com/athletes/{{ row.route.athlete.id }}">{{ row.route.athlete.name}}</a>
-                            <div class="description">{{ row.route.athlete.id }}</div>
+                            <a title="See all routes by {{ row.route.athlete.name }}" href="{{ path('routes', { 'filter[athlete]': row.route.athlete.name }) }}">{{ row.route.athlete.name}}</a>
+                            <div class="description"><a class="description" title="See athlete profile on Strava.com" href="https://www.strava.com/athletes/{{ row.route.athlete.id }}">{{ row.route.athlete.id }}</a></div>
                         </div>
                         <div class="updated">
                             {{ row.route.updatedAt|date('Y-m-d') }}

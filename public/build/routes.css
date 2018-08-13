@@ -199,6 +199,11 @@
       width: 75px; }
     .routes .rows .row .name {
       width: calc(40% - 2em); }
+      .routes .rows .row .name .veloviewer {
+        text-decoration: none;
+        color: #bbb; }
+        .routes .rows .row .name .veloviewer:hover {
+          color: #fc4c02; }
       .routes .rows .row .name .distances {
         margin-top: .5em;
         font-size: .8em;
@@ -246,6 +251,10 @@
       margin-top: .3em;
       font-size: .6em;
       color: #aaa; }
+      .routes .rows .row .description a {
+        text-decoration: none; }
+        .routes .rows .row .description a:hover {
+          color: #fc4c02; }
     .routes .rows .row .distance {
       text-align: right; }
     .routes .rows .row .elevation_gain {
