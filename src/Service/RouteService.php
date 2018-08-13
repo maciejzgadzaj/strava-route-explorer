@@ -146,4 +146,33 @@ class RouteService extends EntityService
         $this->entityManager->remove($route);
         $this->entityManager->flush();
     }
+
+    /**
+     * Delete athlete routes excluding specified ids.
+     *
+     * @param \App\Entity\Athlete $athlete
+     * @param array $excludeIds
+     */
+    public function deleteAthleteRoutes(Athlete $athlete, array $excludeIds)
+    {
+        $qb = $this->repository->createQueryBuilder('r');
+
+        $routesToDelete = $qb
+            ->where(
+                $qb->expr()->andX(
+                    $qb->expr()->eq('r.athlete', $athlete->getId()),
+                    $qb->expr()->notIn('r.id', $excludeIds)
+                )
+            )
+            ->getQuery()
+            ->getResult();
+
+        if (!empty($routesToDelete)) {
+            foreach ($routesToDelete as $routeToDelete) {
+                $this->entityManager->remove($routeToDelete);
+            }
+        }
+
+        return count($routesToDelete);
+    }
 }

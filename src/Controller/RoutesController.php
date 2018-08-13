@@ -258,7 +258,8 @@ class RoutesController extends Controller
                 ]));
             }
 
-            $added = $updated = $skipped = $deleted = 0;
+            $publicAdded = $publicUpdated = $privateSkipped = $privateDeleted = 0;
+            $syncedIds = [];
             $page = 1;
 
             do {
@@ -290,21 +291,25 @@ class RoutesController extends Controller
                         // Create or update route.
                         $route = $routeService->save($routeData);
                         if ($route->isNew()) {
-                            $added++;
+                            $publicAdded++;
                         } else {
-                            $updated++;
+                            $publicUpdated++;
                         }
+
+                        $syncedIds[] = $routeData->id;
                     } else {
                         if ($routeService->exists($routeData->id)) {
                             $routeService->delete($routeData->id);
-                            $deleted++;
+                            $privateDeleted++;
                         }
-                        $skipped++;
+                        $privateSkipped++;
                     }
                 }
 
                 $page++;
             } while (!empty($content));
+
+            $publicDeleted = $routeService->deleteAthleteRoutes($athlete, $syncedIds);
 
             $athlete->setLastSync(new \DateTime());
             $entityManager->flush();
@@ -312,13 +317,14 @@ class RoutesController extends Controller
             $this->addFlash(
                 'notice',
                 strtr(
-                    'Routes synchronised: %added% new public added and %updated% updated, 
-                    %skipped% private skipped and %deleted% deleted.',
+                    'Routes synchronised: %public_added% new public added, %public_updated% updated and %public_deleted% deleted, 
+                    %private_skipped% private skipped and %private_deleted% deleted.',
                     [
-                        '%added%' => $added,
-                        '%updated%' => $updated,
-                        '%skipped%' => $skipped,
-                        '%deleted%' => $deleted,
+                        '%public_added%' => $publicAdded,
+                        '%public_updated%' => $publicUpdated,
+                        '%public_deleted%' => $publicDeleted,
+                        '%private_skipped%' => $privateSkipped,
+                        '%private_deleted%' => $privateDeleted,
                     ]
                 )
             );
