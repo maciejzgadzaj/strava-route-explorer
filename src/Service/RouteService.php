@@ -5,6 +5,8 @@ namespace App\Service;
 use App\Entity\Athlete;
 use App\Entity\Route;
 use CrEOF\Spatial\PHP\Types\Geometry\Point;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * Class RouteService
@@ -31,8 +33,8 @@ class RouteService extends EntityService
      * @param \App\Service\MapService $mapService
      */
     public function __construct(
-        \Doctrine\ORM\EntityManagerInterface $entityManager,
-        \Symfony\Component\HttpFoundation\Session\SessionInterface $session,
+        EntityManagerInterface $entityManager,
+        SessionInterface $session,
         MapService $mapService
     ) {
         parent::__construct($entityManager, $session);

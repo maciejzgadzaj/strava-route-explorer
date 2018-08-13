@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Service\AthleteService;
 use App\Service\RouteService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,11 +20,15 @@ class HomepageController extends Controller
      * @Route("/", name="homepage")
      *
      * @param \App\Service\RouteService $routeService
+     * @param \App\Service\AthleteService $athleteService
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function indexAction(RouteService $routeService)
+    public function indexAction(RouteService $routeService, AthleteService $athleteService)
     {
+        // @TODO: Remove in some time.
+        $athleteService->removeOldCookies();
+
         return $this->render(
             'homepage/index.html.twig',
             [

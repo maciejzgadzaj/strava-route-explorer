@@ -16,7 +16,6 @@ use GuzzleHttp\Exception\ClientException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -33,11 +32,18 @@ class RoutesController extends Controller
      *
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @param \Doctrine\ORM\EntityManagerInterface $entityManager
+     * @param \App\Service\AthleteService $athleteService
      *
      * @return \Symfony\Component\HttpFoundation\Response|\Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function listAction(Request $request, EntityManagerInterface $entityManager)
-    {
+    public function listAction(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        AthleteService $athleteService
+    ) {
+        // @TODO: Remove in some time.
+        $athleteService->removeOldCookies();
+
         // Add route.
         $routeAddForm = $this->createForm(RouteAddType::class);
         $routeAddForm->handleRequest($request);
@@ -84,6 +90,7 @@ class RoutesController extends Controller
         return $this->render(
             'routes/list.html.twig',
             [
+                'current_athlete' => $athleteService->getCurrentAthlete(),
                 'data' => $routes,
                 'per_page' => $perPage,
                 'pages' => $routes['pages'],
@@ -139,7 +146,7 @@ class RoutesController extends Controller
         AthleteService $athleteService
     ) {
         try {
-            // To fetch single route details we can use generic app access token.
+            // Use generic app access token to fetch single route details.
             $options = [
                 'headers' => [
                     'Authorization' => 'Bearer '.$this->getParameter('strava_access_token'),
@@ -225,7 +232,6 @@ class RoutesController extends Controller
      * @Route("/routes/sync/{athlete_id}", name="routes_sync")
      *
      * @param string $athlete_id
-     * @param \Symfony\Component\HttpFoundation\Session\SessionInterface $session
      * @param \Doctrine\ORM\EntityManagerInterface $entityManager
      * @param \App\Service\StravaService $stravaService
      * @param \App\Service\RouteService $routeService
@@ -238,7 +244,6 @@ class RoutesController extends Controller
      */
     public function syncAction(
         $athlete_id,
-        SessionInterface $session,
         EntityManagerInterface $entityManager,
         StravaService $stravaService,
         RouteService $routeService,
@@ -252,7 +257,7 @@ class RoutesController extends Controller
             }
 
             // Athlete has not connected his Strava account yet.
-            if (!$accessToken = $athlete->getAccessToken()) {
+            if (!$athleteAccessToken = $athlete->getAccessToken()) {
                 throw new \Exception(strtr('No token found for athlete %athlete_id%.', [
                     '%athlete_id%' => $athlete_id,
                 ]));
@@ -263,9 +268,10 @@ class RoutesController extends Controller
             $page = 1;
 
             do {
+                // Use athlete-specific access token to fetch their routes.
                 $options = [
                     'headers' => [
-                        'Authorization' => 'Bearer '.$accessToken,
+                        'Authorization' => 'Bearer '.$athleteAccessToken,
                     ],
                 ];
                 $response = $stravaService->apiRequest(
@@ -317,7 +323,8 @@ class RoutesController extends Controller
             $this->addFlash(
                 'notice',
                 strtr(
-                    'Routes synchronised: %public_added% new public added, %public_updated% updated and %public_deleted% deleted, 
+                    'Routes synchronised: %public_added% new public added, 
+                    %public_updated% updated and %public_deleted% deleted, 
                     %private_skipped% private skipped and %private_deleted% deleted.',
                     [
                         '%public_added%' => $publicAdded,
@@ -329,7 +336,7 @@ class RoutesController extends Controller
                 )
             );
 
-            $redirectParams = ['filter[athlete]' => $athlete->getId()];
+            $redirectParams = ['filter[athlete]' => $athlete->getName()];
         } catch (ClientException $e) {
             $content = \GuzzleHttp\json_decode($e->getResponse()->getBody()->getContents());
             $this->addFlash('error', $content->message);

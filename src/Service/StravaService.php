@@ -2,13 +2,7 @@
 
 namespace App\Service;
 
-use App\Entity\Athlete;
-use App\Entity\Route;
-use Doctrine\ORM\EntityManagerInterface;
 use Psr\Container\ContainerInterface;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
@@ -56,10 +50,6 @@ class StravaService
     {
         /** @var \GuzzleHttp\Client $client */
         $client = $this->container->get('csa_guzzle.client.strava');
-
-        if (empty($options['headers']['Authorization'])) {
-            $options['headers']['Authorization'] = 'Bearer '.$this->session->get('strava_access_token');
-        }
 
         return $client->$method($uri, $options);
     }

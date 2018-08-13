@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Athlete;
 use App\Form\RouteAddType;
+use App\Service\AthleteService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,10 +24,11 @@ class AthletesController extends Controller
      *
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @param \Doctrine\ORM\EntityManagerInterface $entityManager
+     * @param \App\Service\AthleteService $athleteService
      *
      * @return \Symfony\Component\HttpFoundation\Response|\Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function listAction(Request $request, EntityManagerInterface $entityManager)
+    public function listAction(Request $request, EntityManagerInterface $entityManager, AthleteService $athleteService)
     {
         // Add route.
         $routeAddForm = $this->createForm(RouteAddType::class);
@@ -65,6 +67,7 @@ class AthletesController extends Controller
         return $this->render(
             'athletes/list.html.twig',
             [
+                'current_athlete' => $athleteService->getCurrentAthlete(),
                 'data' => $athletes,
                 'per_page' => $perPage,
                 'pages' => $athletes['pages'],

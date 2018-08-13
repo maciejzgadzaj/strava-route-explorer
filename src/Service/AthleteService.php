@@ -3,6 +3,8 @@
 namespace App\Service;
 
 use App\Entity\Athlete;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * Class AthleteService
@@ -22,10 +24,8 @@ class AthleteService extends EntityService
      * @param \Doctrine\ORM\EntityManagerInterface $entityManager
      * @param \Symfony\Component\HttpFoundation\Session\SessionInterface $session
      */
-    public function __construct(
-        \Doctrine\ORM\EntityManagerInterface $entityManager,
-        \Symfony\Component\HttpFoundation\Session\SessionInterface $session
-    ) {
+    public function __construct(EntityManagerInterface $entityManager, SessionInterface $session)
+    {
         parent::__construct($entityManager, $session);
 
         $this->repository = $this->entityManager->getRepository(Athlete::class);
@@ -96,5 +96,33 @@ class AthleteService extends EntityService
 
         $this->entityManager->remove($athlete);
         $this->entityManager->flush();
+    }
+
+    /**
+     * Return athlete currently authorized with Strava.
+     *
+     * @return \App\Entity\Athlete
+     */
+    public function getCurrentAthlete()
+    {
+        if ($athleteId = $this->session->get('strava_athlete')) {
+            return $this->load($athleteId);
+        }
+    }
+
+    /**
+     * Remove old Strava cookies and set one new one.
+     */
+    public function removeOldCookies()
+    {
+        // Set new cookie from old.
+        if ($athleteCookie = $this->session->get('athlete')) {
+            $athlete = $this->load($athleteCookie->id);
+            $this->session->set('strava_athlete', $athlete->getId());
+
+            // Remove old cookies.
+            $this->session->remove('athlete');
+            $this->session->remove('strava_access_token');
+        }
     }
 }

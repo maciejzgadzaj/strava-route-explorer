@@ -3,9 +3,11 @@
 namespace App\Controller;
 
 use App\Service\AthleteService;
+use App\Service\StravaService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -65,11 +67,32 @@ class StravaController extends Controller
         $response = $client->post('/oauth/token', ['form_params' => $params]);
         $content = \GuzzleHttp\json_decode($response->getBody()->getContents());
 
-        $athleteService->save($content->athlete, $content->access_token);
+        $athlete = $athleteService->save($content->athlete, $content->access_token);
 
-        $session->set('athlete', $content->athlete);
-        $session->set('strava_access_token', $content->access_token);
+        $session->set('strava_athlete', $athlete->getId());
 
         return $this->redirectToRoute('routes_sync', ['athlete_id' => $content->athlete->id]);
+    }
+
+    /**
+     * Remove application cookies.
+     *
+     * @Route("/strava/deauth", name="strava_deauth")
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     *
+     * @see https://developers.strava.com/docs/authentication/
+     */
+    public function deauthAction(StravaService $stravaService, SessionInterface $session)
+    {
+        // Current cookie.
+        $session->remove('strava_athlete');
+        // Old cookies.
+        $session->remove('athlete');
+        $session->remove('strava_access_token');
+
+        $this->addFlash('notice', 'Cookies removed.');
+
+        return $this->redirectToRoute('homepage');
     }
 }

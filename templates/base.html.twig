@@ -23,8 +23,8 @@
                     {{ form_end(route_add_form) }}
                 </div>
                 <div class="sync-routes">
-                    {% if (app.session.get('athlete')) %}
-                        <a href="{{ path('routes_sync', { 'athlete_id': app.session.get('athlete').id }) }}">sync my routes</a>
+                    {% if (current_athlete.accessToken is defined and current_athlete.accessToken) %}
+                        <a href="{{ path('routes_sync', { 'athlete_id': current_athlete.id }) }}">sync my routes</a>
                     {% else %}
                         <a href="{{ path('strava_auth') }}">connect with strava</a>
                     {% endif %}
@@ -34,8 +34,8 @@
                 </div>
                 <div class="menu">
                     <a href="{{ path('routes') }}">all routes</a>
-                    {% if (app.session.get('athlete')) %}
-                        <a href="{{ path('routes', { 'filter[athlete]': app.session.get('athlete').id }) }}">my routes</a>
+                    {% if (current_athlete.name is defined) %}
+                        <a href="{{ path('routes', { 'filter[athlete]': current_athlete.name }) }}">my routes</a>
                     {% endif %}
                     <a href="{{ path('athletes') }}">athletes</a>
                 </div>
