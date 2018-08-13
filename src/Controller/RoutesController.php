@@ -275,6 +275,12 @@ class RoutesController extends Controller
                 $content = \GuzzleHttp\json_decode($response->getBody()->getContents());
 
                 foreach ($content as $routeData) {
+                    // Ignore routes created by other athletes, and just starred by user being synchronized.
+                    if ($routeData->athlete->id != $athlete->getId()) {
+                        continue;
+                    }
+
+                    // Save public routes only.
                     if (!$routeData->private) {
                         // Create athlete if it doesn't exist yet.
                         if (!$athleteService->exists($routeData->athlete->id)) {
