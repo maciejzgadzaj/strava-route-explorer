@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @package App\Controller
  */
-class AthletesController extends Controller
+class AthletesController extends ControllerBase
 {
     /**
      * List athletes.

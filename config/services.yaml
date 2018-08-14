@@ -36,7 +36,9 @@ services:
     # as action arguments even if you don't extend any base controller class
     App\Controller\:
         resource: '../src/Controller'
-        tags: ['controller.service_arguments']
+        tags:
+            - 'controller.service_arguments'
+            - { name: monolog.logger, channel: activity}
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

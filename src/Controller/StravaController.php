@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  *
  * @package App\Controller
  */
-class StravaController extends Controller
+class StravaController extends ControllerBase
 {
     /**
      * Initiate Strava OAuth flow.
@@ -71,6 +71,13 @@ class StravaController extends Controller
 
         $session->set('strava_athlete', $athlete->getId());
 
+        $message = 'Authorized with Strava: %athlete_name% (%athlete_id%).';
+        $params = [
+            '%athlete_name%' => $athlete->getName(),
+            '%athlete_id%' => $athlete->getid(),
+        ];
+        $this->logger->info(strtr($message, $params));
+
         return $this->redirectToRoute('routes_sync', ['athlete_id' => $content->athlete->id]);
     }
 
@@ -79,11 +86,13 @@ class StravaController extends Controller
      *
      * @Route("/strava/deauth", name="strava_deauth")
      *
+     * @param \Symfony\Component\HttpFoundation\Session\SessionInterface $session
+     *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      *
      * @see https://developers.strava.com/docs/authentication/
      */
-    public function deauthAction(StravaService $stravaService, SessionInterface $session)
+    public function deauthAction(SessionInterface $session)
     {
         // Current cookie.
         $session->remove('strava_athlete');
@@ -92,6 +101,8 @@ class StravaController extends Controller
         $session->remove('strava_access_token');
 
         $this->addFlash('notice', 'Cookies removed.');
+
+        $this->logger->debug('Removed athlete cookies.');
 
         return $this->redirectToRoute('homepage');
     }

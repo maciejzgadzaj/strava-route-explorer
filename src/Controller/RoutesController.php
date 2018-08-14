@@ -13,7 +13,6 @@ use App\Service\RouteService;
 use App\Service\StravaService;
 use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp\Exception\ClientException;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -23,7 +22,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @package App\Controller
  */
-class RoutesController extends Controller
+class RoutesController extends ControllerBase
 {
     /**
      * List routes.
@@ -126,7 +125,17 @@ class RoutesController extends Controller
     ) {
         $route = $routeService->load($route_id);
 
-        return $mapService->getMap($route);
+        $map = $mapService->getMap($route);
+
+        $message = 'Fetched map thumbnail from MapQuest for route "%route_name%" (%route_id%) by %athlete%.';
+        $params = [
+            '%route_name%' => $route->getName(),
+            '%route_id%' => $route->getId(),
+            '%athlete%' => $route->getAthlete()->getName(),
+        ];
+        $this->logger->debug(strtr($message, $params));
+
+        return $map;
     }
 
     /**
@@ -192,44 +201,41 @@ class RoutesController extends Controller
             // Save route.
             $route = $routeService->save($content);
 
-            $this->addFlash(
-                'notice',
-                strtr(
-                    'Route "%route_name%" (%route_id%) by %athlete% %action%.',
-                    [
-                        '%route_name%' => $content->name,
-                        '%route_id%' => $content->id,
-                        '%athlete%' => $content->athlete->firstname.' '.$content->athlete->lastname,
-                        '%action%' => $route->isNew() ? 'added' : 'updated',
-                    ]
-                )
-            );
+            $message = '%action% route "%route_name%" (%route_id%) by %athlete%.';
+            $params = [
+                '%action%' => $route->isNew() ? 'Added' : 'Updated',
+                '%route_name%' => $content->name,
+                '%route_id%' => $content->id,
+                '%athlete%' => $content->athlete->firstname.' '.$content->athlete->lastname,
+            ];
+            $this->logger->info(strtr($message, $params));
+            $this->addFlash('notice', strtr($message, $params));
 
             $redirectParams = ['filter[name]' => $route->getId()];
         } catch (ClientException $e) {
             $response = $e->getResponse();
             $content = \GuzzleHttp\json_decode($response->getBody()->getContents());
+            $this->logger->error($content->message);
             $this->addFlash('error', $content->message);
 
             // Delete local route if it was not found on Strava.
             if ($localRoute = $routeService->load($route_id)) {
                 $routeService->delete($localRoute->getId());
 
-                $this->addFlash(
-                    'notice',
-                    strtr(
-                        'Deleted route "%route_name%" (%route_id%) by %athlete% not found on Strava.',
-                        [
-                            '%route_name%' => $localRoute->getName(),
-                            '%route_id%' => $localRoute->getId(),
-                            '%athlete%' => $localRoute->getAthlete()->getName(),
-                        ]
-                    )
-                );
+                $message = 'Deleted route "%route_name%" (%route_id%) by %athlete% not found on Strava.';
+                $params = [
+                    '%route_name%' => $localRoute->getName(),
+                    '%route_id%' => $localRoute->getId(),
+                    '%athlete%' => $localRoute->getAthlete()->getName(),
+                ];
+                $this->logger->info(strtr($message, $params));
+                $this->addFlash('notice', strtr($message, $params));
             }
         } catch (NoticeException $e) {
+            $this->logger->warning($e->getMessage());
             $this->addFlash('notice', $e->getMessage());
         } catch (\Exception $e) {
+            $this->logger->error($e->getMessage());
             $this->addFlash('error', $e->getMessage());
         }
 
@@ -336,21 +342,22 @@ class RoutesController extends Controller
             $athlete->setLastSync(new \DateTime());
             $entityManager->flush();
 
-            $this->addFlash(
-                'notice',
-                strtr(
-                    'Routes synchronised: %public_added% new public added, 
-                    %public_updated% updated and %public_deleted% deleted, 
-                    %private_skipped% private skipped and %private_deleted% deleted.',
-                    [
-                        '%public_added%' => $publicAdded,
-                        '%public_updated%' => $publicUpdated,
-                        '%public_deleted%' => $publicDeleted,
-                        '%private_skipped%' => $privateSkipped,
-                        '%private_deleted%' => $privateDeleted,
-                    ]
-                )
-            );
+            $this->logger->info(strtr('Synchronized routes for %athlete% (%athlete_id%).', [
+                '%athlete%' => $athlete->getName(),
+                '%athlete_id%' => $athlete->getId(),
+            ]));
+
+            $message = 'Routes synchronised: %public_added% new public added, %public_updated% updated 
+and %public_deleted% deleted, %private_skipped% private skipped and %private_deleted% deleted.';
+            $params = [
+                '%public_added%' => $publicAdded,
+                '%public_updated%' => $publicUpdated,
+                '%public_deleted%' => $publicDeleted,
+                '%private_skipped%' => $privateSkipped,
+                '%private_deleted%' => $privateDeleted,
+            ];
+            $this->logger->debug(strtr($message, $params));
+            $this->addFlash('notice', strtr($message, $params));
 
             $redirectParams = [
                 'filter[athlete]' => $athlete->getName(),
@@ -358,8 +365,10 @@ class RoutesController extends Controller
             ];
         } catch (ClientException $e) {
             $content = \GuzzleHttp\json_decode($e->getResponse()->getBody()->getContents());
+            $this->logger->error($content->message);
             $this->addFlash('error', $content->message);
         } catch (\Exception $e) {
+            $this->logger->error($e->getMessage());
             $this->addFlash('error', $e->getMessage());
         }
 
@@ -367,7 +376,7 @@ class RoutesController extends Controller
     }
 
     /**
-     * Synchronize all user public routes.
+     * Location autocomplete callback.
      *
      * @Route("/routes/autocomplete/location", name="routes_autocomplete_location")
      *

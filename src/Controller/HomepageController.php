@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @package App\Controller
  */
-class HomepageController extends Controller
+class HomepageController extends ControllerBase
 {
     /**
      * Home page, obviously.

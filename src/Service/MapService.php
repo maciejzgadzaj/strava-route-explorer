@@ -70,8 +70,6 @@ class MapService extends EntityService
             }
 
             $fileSystem->dumpFile($path, $content);
-
-            $this->logger->debug('Fetched map thumbnail from MapQuest for route '.$route->getId());
         }
 
         return new BinaryFileResponse('images/routes/'.$route->getAthlete()->getId().'/'.$route->getId().'.jpg');
