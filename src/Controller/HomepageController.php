@@ -32,7 +32,8 @@ class HomepageController extends Controller
         return $this->render(
             'homepage/index.html.twig',
             [
-                'count' => $routeService->count(),
+                'route_count' => $routeService->count(),
+                'athlete_count' => $athleteService->count(),
             ]
         );
     }

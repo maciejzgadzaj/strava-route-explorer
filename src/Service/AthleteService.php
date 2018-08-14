@@ -32,6 +32,16 @@ class AthleteService extends EntityService
     }
 
     /**
+     * Return total number of athletes.
+     *
+     * @return int
+     */
+    public function count()
+    {
+        return $this->repository->count([]);
+    }
+
+    /**
      * Check if athlete exists.
      *
      * @param int $athleteId
