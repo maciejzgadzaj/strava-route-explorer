@@ -41,6 +41,11 @@ class RoutesController extends Controller
         EntityManagerInterface $entityManager,
         AthleteService $athleteService
     ) {
+        // Allow access only to athletes authorized with Strava.
+        if (!$athleteService->isAuthorized()) {
+            return $this->redirectToRoute('strava_auth');
+        }
+
         // @TODO: Remove in some time.
         $athleteService->removeOldCookies();
 
@@ -145,6 +150,11 @@ class RoutesController extends Controller
         RouteService $routeService,
         AthleteService $athleteService
     ) {
+        // Allow access only to athletes authorized with Strava.
+        if (!$athleteService->isAuthorized()) {
+            return $this->redirectToRoute('strava_auth');
+        }
+
         try {
             // Use generic app access token to fetch single route details.
             $options = [
@@ -249,6 +259,11 @@ class RoutesController extends Controller
         RouteService $routeService,
         AthleteService $athleteService
     ) {
+        // Allow access only to athletes authorized with Strava.
+        if (!$athleteService->isAuthorized()) {
+            return $this->redirectToRoute('strava_auth');
+        }
+
         try {
             if (!$athlete = $athleteService->load($athlete_id)) {
                 throw new \Exception(strtr('Athlete %athlete_id% not found.', [
@@ -355,9 +370,23 @@ class RoutesController extends Controller
      * Synchronize all user public routes.
      *
      * @Route("/routes/autocomplete/location", name="routes_autocomplete_location")
+     *
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \App\Service\AthleteService $athleteService
+     * @param \App\Service\OpenStreetMapService $openStreetMapService
+     *
+     * @return \Symfony\Component\HttpFoundation\JsonResponse|\Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function autocompleteLocationAction(Request $request, OpenStreetMapService $openStreetMapService)
-    {
+    public function autocompleteLocationAction(
+        Request $request,
+        AthleteService $athleteService,
+        OpenStreetMapService $openStreetMapService
+    ) {
+        // Allow access only to athletes authorized with Strava.
+        if (!$athleteService->isAuthorized()) {
+            return $this->redirectToRoute('strava_auth');
+        }
+
         $name = trim(strip_tags($request->get('term')));
 
         $names = $openStreetMapService->getLocationsByName($name);

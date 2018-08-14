@@ -30,6 +30,11 @@ class AthletesController extends Controller
      */
     public function listAction(Request $request, EntityManagerInterface $entityManager, AthleteService $athleteService)
     {
+        // Allow access only to athletes authorized with Strava.
+        if (!$athleteService->isAuthorized()) {
+            return $this->redirectToRoute('strava_auth');
+        }
+
         // Add route.
         $routeAddForm = $this->createForm(RouteAddType::class);
         $routeAddForm->handleRequest($request);

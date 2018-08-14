@@ -99,6 +99,16 @@ class AthleteService extends EntityService
     }
 
     /**
+     * Check if current site user is authorized with Strava.
+     *
+     * @return bool
+     */
+    public function isAuthorized()
+    {
+        return !empty($this->session->get('strava_athlete'));
+    }
+
+    /**
      * Return athlete currently authorized with Strava.
      *
      * @return \App\Entity\Athlete
