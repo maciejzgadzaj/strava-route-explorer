@@ -22,7 +22,10 @@ body {
     position: absolute;
     padding: 2em 3em;
     background-color: #fc4c02;
+    opacity: .9;
     color: #ffffff; }
+    body .step1:hover, body .step2:hover {
+      opacity: 1; }
     body .step1 .step-title, body .step2 .step-title {
       margin: .5em 0 1em;
       line-height: 1.3em;
@@ -31,6 +34,8 @@ body {
     body .step1 .step-desc, body .step2 .step-desc {
       line-height: 1.5em;
       font-size: .8em; }
+    body .step1 a, body .step2 a {
+      color: white; }
     body .step1 a.button, body .step2 a.button {
       display: inline-block;
       border: 1px solid #ffffff;
@@ -46,10 +51,20 @@ body {
         -o-transition: all .1s ease-in;
         transition: all .1s ease-in; }
   body .step1 {
-    bottom: 5%;
+    bottom: 10%;
     left: 0; }
   body .step2 {
-    bottom: 5%;
+    bottom: 10%;
     right: 0; }
+  body .footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: .5em;
+    background-color: black;
+    opacity: .7; }
+    body .footer a:hover {
+      color: white; }
 
 /*# sourceMappingURL=home.css.map */

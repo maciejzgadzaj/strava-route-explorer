@@ -15,7 +15,7 @@
         <div class="step-desc">
             Only your public routes will be synchronised from Strava.
             <br />You can also manually add individual routes by their id,
-            <br />even if they were created by other athletes.
+            <br />even if they were created by other athletes. See <a href="https://github.com/maciejzgadzaj/strava-route-explorer/wiki/FAQ">FAQ</a>.
         </div>
         <a href="{{ path('strava_auth') }}" class="button">Connect with Strava</a>
     </div>
@@ -34,5 +34,3 @@
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('build/home.css') }}" />
 {% endblock %}
-
-{% block footer %}{% endblock %}

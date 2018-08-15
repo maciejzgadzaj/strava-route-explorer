@@ -31,7 +31,11 @@ body {
         position: absolute;
         padding: 2em 3em;
         background-color: $orange;
+        opacity: .9;
         color: $white;
+        &:hover {
+            opacity: 1;
+        }
         .step-title {
             margin: .5em 0 1em;
             line-height: 1.3em;
@@ -41,6 +45,9 @@ body {
         .step-desc {
             line-height: 1.5em;
             font-size: .8em;
+        }
+        a {
+            color: white;
         }
         a.button {
             display: inline-block;
@@ -57,11 +64,25 @@ body {
         }
     }
     .step1 {
-        bottom: 5%;
+        bottom: 10%;
         left: 0;
     }
     .step2 {
-        bottom: 5%;
+        bottom: 10%;
         right: 0;
+    }
+    .footer {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: .5em;
+        background-color: black;
+        opacity: .7;
+        a {
+            &:hover {
+                color: white;
+            }
+        }
     }
 }
