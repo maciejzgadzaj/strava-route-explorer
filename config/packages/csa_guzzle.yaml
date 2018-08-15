@@ -8,6 +8,9 @@ csa_guzzle:
         strava:
             config:
                 base_uri: 'https://www.strava.com'
+        meetup:
+            config:
+                base_uri: 'https://api.meetup.com'
         mapquest:
             config:
                 base_uri: 'https://www.mapquestapi.com'

@@ -4,8 +4,11 @@ namespace App\Service;
 
 use App\Entity\Athlete;
 use App\Entity\Route;
+use App\Exception\NoticeException;
 use CrEOF\Spatial\PHP\Types\Geometry\Point;
 use Doctrine\ORM\EntityManagerInterface;
+use GuzzleHttp\Exception\ClientException;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
@@ -21,26 +24,50 @@ class RouteService extends EntityService
     private $repository;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
+    /**
+     * @var \App\Service\AthleteService
+     */
+    private $athleteService;
+
+    /**
      * @var \App\Service\MapService
      */
     private $mapService;
+
+    /**
+     * @var \App\Service\StravaService
+     */
+    private $stravaService;
 
     /**
      * RouteService constructor.
      *
      * @param \Doctrine\ORM\EntityManagerInterface $entityManager
      * @param \Symfony\Component\HttpFoundation\Session\SessionInterface $session
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param \App\Service\AthleteService $athleteService
      * @param \App\Service\MapService $mapService
+     * @param \App\Service\StravaService $stravaService
      */
     public function __construct(
         EntityManagerInterface $entityManager,
         SessionInterface $session,
-        MapService $mapService
+        LoggerInterface $logger,
+        AthleteService $athleteService,
+        MapService $mapService,
+        StravaService $stravaService
     ) {
         parent::__construct($entityManager, $session);
 
         $this->repository = $this->entityManager->getRepository(Route::class);
+        $this->logger = $logger;
+        $this->athleteService = $athleteService;
         $this->mapService = $mapService;
+        $this->stravaService = $stravaService;
     }
 
     /**
@@ -147,6 +174,77 @@ class RouteService extends EntityService
 
         $this->entityManager->remove($route);
         $this->entityManager->flush();
+    }
+
+    public function syncRoute($routeId)
+    {
+        try {
+            $content = $this->stravaService->getRoute($routeId);
+
+            if (!empty($content->private)) {
+                // If a private route is found in our database, let's delete it.
+                if ($this->exists($content->id)) {
+                    $this->delete($content->id);
+
+                    throw new NoticeException(
+                        strtr(
+                            'Deleted private route "%route_name%" (%route_id%) by %athlete%.',
+                            [
+                                '%route_name%' => $content->name,
+                                '%route_id%' => $content->id,
+                                '%athlete%' => $content->athlete->firstname.' '.$content->athlete->lastname,
+                            ]
+                        )
+                    );
+                }
+
+                throw new \Exception('Cowardly refusing to add a private route.');
+            }
+
+            if (!$this->athleteService->exists($content->athlete->id)) {
+                $this->athleteService->save($content->athlete);
+            }
+
+            // Save route.
+            $route = $this->save($content);
+
+            $message = '%action% route "%route_name%" (%route_id%) by %athlete%.';
+            $params = [
+                '%action%' => $route->isNew() ? 'Added' : 'Updated',
+                '%route_name%' => $content->name,
+                '%route_id%' => $content->id,
+                '%athlete%' => $content->athlete->firstname.' '.$content->athlete->lastname,
+            ];
+            $this->logger->info(strtr($message, $params));
+            $this->session->getFlashBag()->add('notice', strtr($message, $params));
+
+            return $route;
+        } catch (ClientException $e) {
+            $response = $e->getResponse();
+            $content = \GuzzleHttp\json_decode($response->getBody()->getContents());
+            $this->logger->error($content->message);
+            $this->session->getFlashBag()->add('error', $content->message);
+
+            // Delete local route if it was not found on Strava.
+            if ($localRoute = $this->load($routeId)) {
+                $this->delete($localRoute->getId());
+
+                $message = 'Deleted route "%route_name%" (%route_id%) by %athlete% not found on Strava.';
+                $params = [
+                    '%route_name%' => $localRoute->getName(),
+                    '%route_id%' => $localRoute->getId(),
+                    '%athlete%' => $localRoute->getAthlete()->getName(),
+                ];
+                $this->logger->info(strtr($message, $params));
+                $this->session->getFlashBag()->add('notice', strtr($message, $params));
+            }
+        } catch (NoticeException $e) {
+            $this->logger->warning($e->getMessage());
+            $this->session->getFlashBag()->add('notice', $e->getMessage());
+        } catch (\Exception $e) {
+            $this->logger->error($e->getMessage());
+            $this->session->getFlashBag()->add('error', $e->getMessage());
+        }
     }
 
     /**

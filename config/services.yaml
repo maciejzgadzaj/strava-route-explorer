@@ -9,6 +9,9 @@ parameters:
     strava_client_id: '%env(STRAVA_CLIENT_ID)%'
     strava_client_secret: '%env(STRAVA_CLIENT_SECRET)%'
     strava_access_token: '%env(STRAVA_ACCESS_TOKEN)%'
+    # Meetup
+    meetup_api_key: '%env(MEETUP_API_KEY)%'
+    meetup_groups: '%env(json:MEETUP_GROUPS)%'
     # MapQuest
     mapquest_consumer_key: '%env(MAPQUEST_CONSUMER_KEY)%'
     mapquest_consumer_secret: '%env(MAPQUEST_CONSUMER_SECRET)%'
@@ -25,6 +28,8 @@ services:
                             # The best practice is to be explicit about your dependencies anyway.
         bind:
             $mapQuestConsumerKey: "%mapquest_consumer_key%"
+            $stravaAccessToken: "%strava_access_token%"
+            $meetupGroups: "%meetup_groups%"
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -38,6 +43,16 @@ services:
         resource: '../src/Controller'
         tags:
             - 'controller.service_arguments'
+            - { name: monolog.logger, channel: activity}
+
+    App\Service\:
+        resource: '../src/Service'
+        tags:
+            - { name: monolog.logger, channel: activity}
+
+    App\Command\:
+        resource: '../src/Command'
+        tags:
             - { name: monolog.logger, channel: activity}
 
     # add more service definitions when explicit configuration is needed

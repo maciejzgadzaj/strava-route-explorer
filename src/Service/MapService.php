@@ -2,11 +2,8 @@
 
 namespace App\Service;
 
-use App\Entity\Athlete;
 use App\Entity\Map;
 use App\Entity\Route;
-use Psr\Log\LoggerInterface;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -23,28 +20,20 @@ class MapService extends EntityService
     private $mapQuestService;
 
     /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    private $logger;
-
-    /**
      * MapService constructor.
      *
      * @param \Doctrine\ORM\EntityManagerInterface $entityManager
      * @param \Symfony\Component\HttpFoundation\Session\SessionInterface $session
      * @param \App\Service\MapQuestService $mapQuestService
-     * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
         \Doctrine\ORM\EntityManagerInterface $entityManager,
         \Symfony\Component\HttpFoundation\Session\SessionInterface $session,
-        MapQuestService $mapQuestService,
-        LoggerInterface $logger
+        MapQuestService $mapQuestService
     ) {
         parent::__construct($entityManager, $session);
 
         $this->mapQuestService = $mapQuestService;
-        $this->logger = $logger;
     }
 
     /**

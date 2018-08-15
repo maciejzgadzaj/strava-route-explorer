@@ -164,79 +164,8 @@ class RoutesController extends ControllerBase
             return $this->redirectToRoute('strava_auth');
         }
 
-        try {
-            // Use generic app access token to fetch single route details.
-            $options = [
-                'headers' => [
-                    'Authorization' => 'Bearer '.$this->getParameter('strava_access_token'),
-                ],
-            ];
-            $response = $stravaService->apiRequest('get', '/api/v3/routes/'.$route_id, $options);
-            $content = \GuzzleHttp\json_decode($response->getBody()->getContents());
-
-            if (!empty($content->private)) {
-                // If a private route is found in our database, let's delete it.
-                if ($routeService->exists($content->id)) {
-                    $routeService->delete($content->id);
-
-                    throw new NoticeException(
-                        strtr(
-                            'Deleted private route "%route_name%" (%route_id%) by %athlete%.',
-                            [
-                                '%route_name%' => $content->name,
-                                '%route_id%' => $content->id,
-                                '%athlete%' => $content->athlete->firstname.' '.$content->athlete->lastname,
-                            ]
-                        )
-                    );
-                }
-
-                throw new \Exception('Cowardly refusing to add a private route.');
-            }
-
-            if (!$athleteService->exists($content->athlete->id)) {
-                $athleteService->save($content->athlete);
-            }
-
-            // Save route.
-            $route = $routeService->save($content);
-
-            $message = '%action% route "%route_name%" (%route_id%) by %athlete%.';
-            $params = [
-                '%action%' => $route->isNew() ? 'Added' : 'Updated',
-                '%route_name%' => $content->name,
-                '%route_id%' => $content->id,
-                '%athlete%' => $content->athlete->firstname.' '.$content->athlete->lastname,
-            ];
-            $this->logger->info(strtr($message, $params));
-            $this->addFlash('notice', strtr($message, $params));
-
+        if ($route = $routeService->syncRoute($route_id)) {
             $redirectParams = ['filter[name]' => $route->getId()];
-        } catch (ClientException $e) {
-            $response = $e->getResponse();
-            $content = \GuzzleHttp\json_decode($response->getBody()->getContents());
-            $this->logger->error($content->message);
-            $this->addFlash('error', $content->message);
-
-            // Delete local route if it was not found on Strava.
-            if ($localRoute = $routeService->load($route_id)) {
-                $routeService->delete($localRoute->getId());
-
-                $message = 'Deleted route "%route_name%" (%route_id%) by %athlete% not found on Strava.';
-                $params = [
-                    '%route_name%' => $localRoute->getName(),
-                    '%route_id%' => $localRoute->getId(),
-                    '%athlete%' => $localRoute->getAthlete()->getName(),
-                ];
-                $this->logger->info(strtr($message, $params));
-                $this->addFlash('notice', strtr($message, $params));
-            }
-        } catch (NoticeException $e) {
-            $this->logger->warning($e->getMessage());
-            $this->addFlash('notice', $e->getMessage());
-        } catch (\Exception $e) {
-            $this->logger->error($e->getMessage());
-            $this->addFlash('error', $e->getMessage());
         }
 
         return $this->redirectToRoute('routes', $redirectParams ?? []);

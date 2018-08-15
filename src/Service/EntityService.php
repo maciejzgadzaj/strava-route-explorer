@@ -2,7 +2,6 @@
 
 namespace App\Service;
 
-use App\Entity\Athlete;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
