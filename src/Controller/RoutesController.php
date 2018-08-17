@@ -41,7 +41,7 @@ class RoutesController extends ControllerBase
         AthleteService $athleteService
     ) {
         // Allow access only to athletes authorized with Strava.
-        if (!$athleteService->isAuthorized()) {
+        if (empty($this->getParameter('open_access')) && !$athleteService->isAuthorized()) {
             return $this->redirectToRoute('strava_auth');
         }
 
@@ -160,7 +160,7 @@ class RoutesController extends ControllerBase
         AthleteService $athleteService
     ) {
         // Allow access only to athletes authorized with Strava.
-        if (!$athleteService->isAuthorized()) {
+        if (empty($this->getParameter('open_access')) && !$athleteService->isAuthorized()) {
             return $this->redirectToRoute('strava_auth');
         }
 
@@ -195,7 +195,7 @@ class RoutesController extends ControllerBase
         AthleteService $athleteService
     ) {
         // Allow access only to athletes authorized with Strava.
-        if (!$athleteService->isAuthorized()) {
+        if (empty($this->getParameter('open_access')) && !$athleteService->isAuthorized()) {
             return $this->redirectToRoute('strava_auth');
         }
 
@@ -321,7 +321,7 @@ and %public_deleted% deleted, %private_skipped% private skipped and %private_del
         OpenStreetMapService $openStreetMapService
     ) {
         // Allow access only to athletes authorized with Strava.
-        if (!$athleteService->isAuthorized()) {
+        if (empty($this->getParameter('open_access')) && !$athleteService->isAuthorized()) {
             return $this->redirectToRoute('strava_auth');
         }
 
