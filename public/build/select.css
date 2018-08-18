@@ -1,0 +1,47 @@
+.routes {
+  font-size: .9em; }
+  .routes .head, .routes .row {
+    width: 100%;
+    display: flex;
+    justify-content: space-between; }
+    .routes .head .cell, .routes .row .cell {
+      padding: 1em; }
+    .routes .head .number, .routes .row .number {
+      text-align: right; }
+  .routes .head {
+    background-color: #f0f0f0; }
+  .routes .checkbox {
+    width: 2%; }
+  .routes .id {
+    width: 5%; }
+  .routes .name {
+    width: 30%; }
+  .routes .distance {
+    width: 5%; }
+  .routes .elevation {
+    width: 5%; }
+  .routes .athlete {
+    width: 15%; }
+  .routes .created {
+    width: 10%; }
+  .routes .updated {
+    width: 10%; }
+  .routes .submit {
+    margin: 2px 0;
+    padding: 1em;
+    text-align: center; }
+    .routes .submit button {
+      padding: .7em 2em;
+      border: 1px solid #fc4c02;
+      background-color: #fc4c02;
+      font-size: 1em;
+      color: #ffffff; }
+      .routes .submit button:hover {
+        cursor: pointer;
+        background-color: #e34402;
+        -moz-transition: all .1s ease-in;
+        -webkit-transition: all .1s ease-in;
+        -o-transition: all .1s ease-in;
+        transition: all .1s ease-in; }
+
+/*# sourceMappingURL=select.css.map */

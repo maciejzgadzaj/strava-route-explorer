@@ -111,6 +111,13 @@ class Route
     private $polylineSummary;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", options={"default": true})
+     */
+    private $public;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(type="datetime", name="created_at")
@@ -342,6 +349,22 @@ class Route
     public function setPolylineSummary(string $polylineSummary): void
     {
         $this->polylineSummary = $polylineSummary;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPublic(): bool
+    {
+        return $this->public;
+    }
+
+    /**
+     * @param bool $public
+     */
+    public function setPublic(bool $public): void
+    {
+        $this->public = $public;
     }
 
     /**

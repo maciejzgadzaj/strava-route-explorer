@@ -55,6 +55,7 @@ class RouteRepository extends ServiceEntityRepository
         $sqls = $selects = $joins = $wheres = $havings = $orders = $parameters = [];
 
         $selects[] = 'r AS route';
+        $wheres[] = 'r.public = TRUE';
 
         foreach ($criteria as $key => $value) {
             if (empty($value)) {

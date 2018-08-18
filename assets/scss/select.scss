@@ -1,0 +1,61 @@
+@import '_variables';
+@import '_mixins';
+
+.routes {
+    font-size: .9em;
+    .head, .row {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        .cell {
+            padding: 1em;
+        }
+        .number {
+            text-align: right;
+        }
+    }
+    .head {
+        background-color: #f0f0f0;
+    }
+    .checkbox {
+        width: 2%;
+    }
+    .id {
+        width: 5%;
+    }
+    .name {
+        width: 30%;
+    }
+    .distance {
+        width: 5%;
+    }
+    .elevation {
+        width: 5%;
+    }
+    .athlete {
+        width: 15%;
+    }
+    .created {
+        width: 10%;
+    }
+    .updated{
+        width: 10%;
+    }
+    .submit {
+        margin: 2px 0;
+        padding: 1em;
+        text-align: center;
+        button {
+            padding: .7em 2em;
+            border: 1px solid $orange;
+            background-color: $orange;
+            font-size: 1em;
+            color: $white;
+            &:hover {
+                cursor: pointer;
+                background-color: $orangeDark;
+                @include transition;
+            }
+        }
+    }
+}

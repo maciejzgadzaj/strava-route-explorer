@@ -6,6 +6,7 @@ use App\Entity\Route as StravaRoute;
 use App\Exception\NoticeException;
 use App\Form\RouteAddType;
 use App\Form\RouteFilterType;
+use App\Form\PublishType;
 use App\Service\AthleteService;
 use App\Service\MapService;
 use App\Service\OpenStreetMapService;
@@ -172,11 +173,32 @@ class RoutesController extends ControllerBase
     }
 
     /**
+     * Synchronize all currenct user public routes.
+     *
+     * @Route("/routes/sync", name="routes_sync_mine")
+     *
+     * @param \App\Service\AthleteService $athleteService
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function syncMineAction(AthleteService $athleteService)
+    {
+        if (!$athlete = $athleteService->getCurrentAthlete()) {
+            return $this->redirectToRoute('routes');
+        }
+
+        return $this->redirectToRoute('routes_sync', [
+            'athlete_id' => $athlete->getId(),
+        ]);
+    }
+
+    /**
      * Synchronize all user public routes.
      *
      * @Route("/routes/sync/{athlete_id}", name="routes_sync")
      *
      * @param string $athlete_id
+     * @param \Symfony\Component\HttpFoundation\Request $request
      * @param \Doctrine\ORM\EntityManagerInterface $entityManager
      * @param \App\Service\StravaService $stravaService
      * @param \App\Service\RouteService $routeService
@@ -189,6 +211,7 @@ class RoutesController extends ControllerBase
      */
     public function syncAction(
         $athlete_id,
+        Request $request,
         EntityManagerInterface $entityManager,
         StravaService $stravaService,
         RouteService $routeService,
@@ -206,32 +229,26 @@ class RoutesController extends ControllerBase
                 ]));
             }
 
-            // Athlete has not connected his Strava account yet.
-            if (!$athleteAccessToken = $athlete->getAccessToken()) {
-                throw new \Exception(strtr('No token found for athlete %athlete_id%.', [
-                    '%athlete_id%' => $athlete_id,
-                ]));
-            }
-
-            $publicAdded = $publicUpdated = $privateSkipped = $privateDeleted = 0;
+            $publicAdded = $publicUpdated = $published = $privateSkipped = $privateDeleted = 0;
             $syncedIds = [];
-            $page = 1;
 
-            do {
-                // Use athlete-specific access token to fetch their routes.
-                $options = [
-                    'headers' => [
-                        'Authorization' => 'Bearer '.$athleteAccessToken,
-                    ],
-                ];
-                $response = $stravaService->apiRequest(
-                    'get',
-                    '/api/v3/athletes/'.$athlete->getId().'/routes?per_page=200&page='.$page,
-                    $options
-                );
-                $content = \GuzzleHttp\json_decode($response->getBody()->getContents());
+            $stravaRoutes = $stravaService->getAthleteRoutes($athlete);
+            $localRoutes = $routeService->getAthleteRoutes($athlete);
+            $localStarredRoutes = $routeService->getAthleteStarredRoutes($athlete);
 
-                foreach ($content as $routeData) {
+            $publishForm = $this->createForm(PublishType::class, [
+                'local_routes' => $localRoutes,
+                'local_starred_routes' => $localStarredRoutes,
+                'strava_routes' => $stravaRoutes,
+            ]);
+            $publishForm->handleRequest($request);
+
+            if ($publishForm->isSubmitted() && $publishForm->isValid()) {
+                $data = $publishForm->getData();
+
+                foreach ($stravaRoutes as $routeData) {
+                    $public = in_array($routeData->id, $data['route']) ? true : false;
+
                     // Save public routes only.
                     if (!$routeData->private) {
                         // Create athlete if it doesn't exist yet.
@@ -239,11 +256,26 @@ class RoutesController extends ControllerBase
                             $athleteService->save($routeData->athlete);
                         }
 
+                        // If route belongs to current athlete, just use set its public value.
+                        if ($routeData->athlete->id == $athlete->getId()) {
+                            $routeData->public = $public;
+                            $syncedIds[] = $routeData->id;
+
+                            if ($public) {
+                                $published++;
+                            }
+                        } else {
+                            $routeData->public = true;
+                        }
+
                         // Create or update route.
                         $route = $routeService->save($routeData);
 
-                        if ($route->getAthlete()->getId() != $athlete->getId()) {
+                        // If route belongs to a different athlete, and public is set to false
+                        // by current athlete, let's just not add starred_by value.
+                        if ($route->getAthlete()->getId() != $athlete->getId() && $public) {
                             $route->addStarredBy($athlete);
+                            $syncedIds[] = $routeData->id;
                         }
 
                         if ($route->isNew()) {
@@ -251,8 +283,6 @@ class RoutesController extends ControllerBase
                         } else {
                             $publicUpdated++;
                         }
-
-                        $syncedIds[] = $routeData->id;
                     } else {
                         if ($routeService->exists($routeData->id)) {
                             $routeService->delete($routeData->id);
@@ -262,46 +292,57 @@ class RoutesController extends ControllerBase
                     }
                 }
 
-                $page++;
-            } while (!empty($content));
+                $publicDeleted = $routeService->deleteAthleteRoutes($athlete, $syncedIds);
+                $unstarred = $routeService->unstarAthleteRoutes($athlete, $syncedIds);
 
-            $publicDeleted = $routeService->deleteAthleteRoutes($athlete, $syncedIds);
-            $unstarred = $routeService->unstarAthleteRoutes($athlete, $syncedIds);
+                $athlete->setLastSync(new \DateTime());
+                $entityManager->flush();
 
-            $athlete->setLastSync(new \DateTime());
-            $entityManager->flush();
+                $this->logger->info(strtr('Synchronized routes for %athlete% (%athlete_id%).', [
+                    '%athlete%' => $athlete->getName(),
+                    '%athlete_id%' => $athlete->getId(),
+                ]));
 
-            $this->logger->info(strtr('Synchronized routes for %athlete% (%athlete_id%).', [
-                '%athlete%' => $athlete->getName(),
-                '%athlete_id%' => $athlete->getId(),
-            ]));
+                $message = 'Routes synchronised: %public_added% new public added, %public_updated% updated
+and %public_deleted% deleted, %published% published, %private_skipped% private skipped and %private_deleted% deleted.';
+                $params = [
+                    '%public_added%' => $publicAdded,
+                    '%public_updated%' => $publicUpdated,
+                    '%public_deleted%' => $publicDeleted,
+                    '%published%' => $published,
+                    '%private_skipped%' => $privateSkipped,
+                    '%private_deleted%' => $privateDeleted,
+                ];
+                $this->logger->debug(strtr($message, $params));
+                $this->addFlash('notice', 'Routes synchronized.');
 
-            $message = 'Routes synchronised: %public_added% new public added, %public_updated% updated 
-and %public_deleted% deleted, %private_skipped% private skipped and %private_deleted% deleted.';
-            $params = [
-                '%public_added%' => $publicAdded,
-                '%public_updated%' => $publicUpdated,
-                '%public_deleted%' => $publicDeleted,
-                '%private_skipped%' => $privateSkipped,
-                '%private_deleted%' => $privateDeleted,
-            ];
-            $this->logger->debug(strtr($message, $params));
-            $this->addFlash('notice', strtr($message, $params));
+                return $this->redirectToRoute('routes', [
+                    'filter[athlete]' => $athlete->getName(),
+                    'filter[starred]' => true,
+                ]);
+            } else {
+                $this->addFlash('notice', 'Select routes to publish and share with other athletes:');
+            }
 
-            $redirectParams = [
-                'filter[athlete]' => $athlete->getName(),
-                'filter[starred]' => true,
-            ];
+            return $this->render(
+                'routes/select.html.twig',
+                [
+                    'strava_routes' => $stravaRoutes,
+                    'publish_form' => $publishForm->createView(),
+                ]
+            );
         } catch (ClientException $e) {
             $content = \GuzzleHttp\json_decode($e->getResponse()->getBody()->getContents());
             $this->logger->error($content->message);
             $this->addFlash('error', $content->message);
+            return $this->redirectToRoute('routes');
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
             $this->addFlash('error', $e->getMessage());
+            return $this->redirectToRoute('routes');
         }
 
-        return $this->redirectToRoute('routes', $redirectParams ?? []);
+        return $this->render('routes/select.html.twig', ['routes' => []]);
     }
 
     /**

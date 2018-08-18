@@ -24,7 +24,7 @@
                 </div>
                 <div class="sync-routes">
                     {% if (current_athlete.accessToken is defined and current_athlete.accessToken) %}
-                        <a href="{{ path('routes_sync', { 'athlete_id': current_athlete.id }) }}">sync my routes</a>
+                        <a href="{{ path('routes_sync_mine') }}">sync my routes</a>
                     {% else %}
                         <a href="{{ path('strava_auth') }}">connect with strava</a>
                     {% endif %}

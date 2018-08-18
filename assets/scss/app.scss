@@ -65,13 +65,13 @@ body {
             margin: 2px 0;
             padding: 1em;
             text-align: center;
-            &.flash-notice {
-                background-color: lightgreen;
-            }
-            &.flash-error {
-                color: white;
-                background-color: red;
-            }
+        }
+        .flash-notice {
+            background-color: lightgreen;
+        }
+        .flash-error {
+            color: white;
+            background-color: red;
         }
     }
 

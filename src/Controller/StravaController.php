@@ -100,8 +100,6 @@ class StravaController extends ControllerBase
         $session->remove('athlete');
         $session->remove('strava_access_token');
 
-        $this->addFlash('notice', 'Cookies removed.');
-
         $this->logger->debug('Removed athlete cookies.');
 
         return $this->redirectToRoute('homepage');

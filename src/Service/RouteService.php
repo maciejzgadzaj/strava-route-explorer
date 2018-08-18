@@ -127,6 +127,7 @@ class RouteService extends EntityService
         $route->setDescription($routeData->description);
         $route->setDistance($routeData->distance);
         $route->setElevationGain($routeData->elevation_gain);
+        $route->setPublic($routeData->public);
         $route->setCreatedAt(\DateTime::createFromFormat('Y-m-d\TH:i:s\Z', $routeData->created_at));
         $route->setUpdatedAt(\DateTime::createFromFormat('Y-m-d\TH:i:s\Z', $routeData->updated_at));
 
@@ -245,6 +246,51 @@ class RouteService extends EntityService
             $this->logger->error($e->getMessage());
             $this->session->getFlashBag()->add('error', $e->getMessage());
         }
+    }
+
+    /**
+     * Return array of athlete routes keyed by route ID.
+     *
+     * @param \App\Entity\Athlete $athlete
+     *
+     * @return array
+     */
+    public function getAthleteRoutes(Athlete $athlete)
+    {
+        /** @var \App\Entity\Route[] $routes */
+        $routes = $this->repository->findBy(['athlete' => $athlete->getId()]);
+
+        $return = [];
+        foreach ($routes as $route) {
+            $return[$route->getId()] = $route;
+        }
+
+        return $return;
+    }
+
+    /**
+     * Return array of athlete routes keyed by route ID.
+     *
+     * @param \App\Entity\Athlete $athlete
+     *
+     * @return array
+     */
+    public function getAthleteStarredRoutes(Athlete $athlete)
+    {
+        $qb = $this->repository->createQueryBuilder('r');
+
+        /** @var \App\Entity\Route[] $routes */
+        $routes = $qb->join('r.starredBy', 'a')
+            ->where($qb->expr()->eq('a.id', $athlete->getId()))
+            ->getQuery()
+            ->getResult();
+
+        $return = [];
+        foreach ($routes as $route) {
+            $return[$route->getId()] = $route;
+        }
+
+        return $return;
     }
 
     /**

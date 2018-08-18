@@ -43,6 +43,7 @@ class AthleteRepository extends ServiceEntityRepository
             ->addSelect('COUNT(r.id) AS route_count')
             ->addSelect('CASE WHEN a.accessToken IS NOT NULL THEN true ELSE false END AS synchronized')
             ->leftjoin('App:Route', 'r', 'WITH', 'r.athlete = a.id')
+            ->where('r.public = true')
             ->groupBy('a.id');
 
         // Add sorts.

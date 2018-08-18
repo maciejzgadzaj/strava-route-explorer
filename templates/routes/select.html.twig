@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'Select routes to publish'|trans }} - {{ parent() }}{% endblock %}
+
+{% block header %}
+    <div class="header">
+        <div class="logo-title">
+            <a href="{{ path('homepage') }}"><img src="../../../images/logo.png" alt="Strava Route Explorer" title="Strava Route Explorer" width="125" height="35" /></a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+    <div class="routes">
+        <div class="head">
+            <div class="cell checkbox"><input type="checkbox" id="select_all" name="select_all" checked="checked" /></div>
+            <div class="cell id">Id</div>
+            <div class="cell name">Name</div>
+            <div class="cell distance">Distance</div>
+            <div class="cell elevation">Elevation</div>
+            <div class="cell athlete">Author</div>
+            <div class="cell created">Created</div>
+            <div class="cell updated">Updated</div>
+        </div>
+
+        {{ form_start(publish_form) }}
+        {% set delta = 0 %}
+        <div class="rows">
+            {% for route in strava_routes %}
+                {% if not route.private %}
+                    <div class="row">
+                        {# We cannot use loop.index0 instead of delta, as we don't want
+                           increased value in case of private routes. #}
+                        <div class="cell checkbox">{{ form_row(publish_form.route[delta]) }}</div>
+                        <div class="cell id">{{ route.id }}</div>
+                        <div class="cell name">{{ route.name }}</div>
+                        <div class="cell distance number">{{ (route.distance // 1000) | number_format }} km</div>
+                        <div class="cell elevation number">{{ route.elevation_gain | number_format }} m</div>
+                        <div class="cell athlete">{{ route.athlete.firstname }} {{ route.athlete.lastname }}</div>
+                        <div class="cell created">{{ route.created_at | date('Y-m-d') }}</div>
+                        <div class="cell updated">{{ route.updated_at | date('Y-m-d') }}</div>
+                    </div>
+                    {% set delta = delta + 1 %}
+                {% endif %}
+            {% endfor %}
+            <div class="submit">{{ form_widget(publish_form.publish) }}</div>
+        </div>
+        {{ form_end(publish_form) }}
+
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('build/select.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            if ($('input[name="publish[route][]"]:not(:checked)').length > 0) {
+                $('#select_all').removeAttr('checked');
+            }
+            $("#select_all").on('click', function() {
+                var state = this.checked;
+                $('input[name="publish[route][]"]').each(function () {
+                    this.checked = state;
+                });
+            });
+        });
+    </script>
+{% endblock %}

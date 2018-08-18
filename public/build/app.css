@@ -45,11 +45,11 @@ body {
     margin: 2px 0;
     padding: 1em;
     text-align: center; }
-    body .flashes .flash.flash-notice {
-      background-color: lightgreen; }
-    body .flashes .flash.flash-error {
-      color: white;
-      background-color: red; }
+  body .flashes .flash-notice {
+    background-color: lightgreen; }
+  body .flashes .flash-error {
+    color: white;
+    background-color: red; }
   body .footer {
     display: flex;
     justify-content: center;
