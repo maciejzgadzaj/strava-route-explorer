@@ -1,0 +1,335 @@
+@import '_variables';
+@import '_mixins';
+
+@-moz-keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        -moz-transform: translateY(0);
+        transform: translateY(0);
+    }
+    40% {
+        -moz-transform: translateY(-30px);
+        transform: translateY(-30px);
+    }
+    60% {
+        -moz-transform: translateY(-15px);
+        transform: translateY(-15px);
+    }
+}
+@-webkit-keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+    }
+    40% {
+        -webkit-transform: translateY(-30px);
+        transform: translateY(-30px);
+    }
+    60% {
+        -webkit-transform: translateY(-15px);
+        transform: translateY(-15px);
+    }
+}
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        -moz-transform: translateY(0);
+        -ms-transform: translateY(0);
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+    }
+    40% {
+        -moz-transform: translateY(-30px);
+        -ms-transform: translateY(-30px);
+        -webkit-transform: translateY(-30px);
+        transform: translateY(-30px);
+    }
+    60% {
+        -moz-transform: translateY(-15px);
+        -ms-transform: translateY(-15px);
+        -webkit-transform: translateY(-15px);
+        transform: translateY(-15px);
+    }
+}
+
+h1, h2, h3 {
+    font-weight: normal;
+}
+
+body {
+    text-align: center;
+    line-height: 1.5em;
+
+    .immersive {
+        position: relative;
+        width: 100%;
+        height: 100vh;
+        min-height: 500px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        background-color: $almostBlack;
+        background-repeat: no-repeat;
+        background-attachment: scroll;
+        background-position: center center;
+        background-size: cover;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        text-align: center;
+        color: $white;
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: $black;
+            opacity: .5;
+        }
+        &.white {
+            .overlay {
+                background-color: $orange;
+            }
+        }
+        .text {
+            z-index: 10;
+            margin: 0 10%;
+            .small {
+                font-size: .9em;
+                font-weight: bold;
+                text-transform: uppercase;
+                letter-spacing: .2em;
+                line-height: 1.5em;
+            }
+            .title {
+                margin: 1em 0;
+                font-size: 2.5em;
+                line-height: 1.5em;
+            }
+        }
+    }
+
+    a.button {
+        display: inline-block;
+        margin-top: 2em;
+        padding: .5em 1em;
+        border: 1px solid $orange;
+        background-color: $orange;
+        color: $white;
+        text-decoration: none;
+        &:hover {
+            background-color: $orangeDark;
+            cursor: pointer;
+            @include transition;
+        }
+        &.disabled {
+            border-color: #ccc;
+            background-color: $white;
+            color: #ccc;
+        }
+    }
+
+    .splash {
+        background-image: url(../../images/em-mountains.jpg);
+        background-position: center left;
+        .arrow {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            margin-left: -20px;
+            width: 40px;
+            height: 40px;
+        }
+        .bounce {
+            -moz-animation: bounce 3s infinite;
+            -webkit-animation: bounce 3s infinite;
+            animation: bounce 3s infinite;
+        }
+    }
+
+    .remember {
+        position: relative;
+        padding: 4em 10%;
+        background-color: $orange;
+        text-align: center;
+        color: white;
+        .title {
+            margin: 0 0 1.5em;
+            line-height: 1.5em;
+            font-size: 2.2em;
+            font-style: italic;
+        }
+        .description {
+            margin: 1em 0;
+            font-size: 1.2em;
+            line-height: 1.8em;
+        }
+        a {
+            color: white;
+        }
+    }
+
+    .how {
+        padding: 2em;
+        background: url(../../images/isolines.jpg);
+        .title {
+            font-size: 2.3em;
+            font-style: italic;
+            line-height: 1.3em;
+        }
+        .steps {
+            display: flex;
+            //justify-content: center;
+            justify-content: space-around;
+            color: $almostBlack;
+            .step {
+                width: 28%;
+                margin-bottom: 3em;
+                //padding: 2em;
+                text-align: center;
+                .no {
+                    width: 2em;
+                    height: 1.5em;
+                    margin: 0 auto;
+                    padding-top: .5em;
+                    border: 1px solid $orange;
+                    border-radius: 50%;
+                    color: $orange;
+                    text-align: center;
+                    line-height: 1em;
+                }
+                .title {
+                    margin: 1.5em 0;
+                    font-size: .9em;
+                    font-weight: bold;
+                    text-transform: uppercase;
+                    color: $orange;
+                    letter-spacing: .1em;
+                }
+                .description {
+                    line-height: 1.5em;
+                    font-size: 1.2em;
+                }
+            }
+        }
+    }
+
+    .immersive.help {
+        position: relative;
+        background-image: url(../../images/em-distance.jpg);
+        background-position: center right;
+        .text-overlay, .text {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 540px;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        .text-overlay {
+            position: absolute;
+            margin: 0;
+            padding: 0;
+            background-color: $black;
+            opacity: .6;
+            overflow: hidden;
+        }
+        .text {
+        }
+        .item {
+            margin: 3em 4em 2em 3em;
+            padding-left: 2em;
+            text-align: left;
+            .title {
+                margin: 0 0 .5em;
+                font-size: 1.5em;
+                &:before {
+                    content: '>';
+                    margin-left: -1.5em;
+                    width: 1.5em;
+                    display: inline-block;
+                    color: $orange;
+                }
+                a {
+                    color: $orange;
+                    text-decoration: none;
+                    &:hover {
+                        color: $orange;
+                        text-decoration: underline;
+                    }
+                }
+            }
+        }
+    }
+
+    .enjoy {
+        background-image: url(../../images/em-beach.jpg);
+        .no {
+            width: 2em;
+            height: 1.5em;
+            margin: 0 auto;
+            padding-top: .5em;
+            border: 1px solid $white;
+            border-radius: 50%;
+            color: $white;
+            text-align: center;
+            line-height: 1em;
+        }
+        .title {
+            margin-top: .5em !important;
+        }
+    }
+
+    .footer {
+        padding: 1em;
+        background-color: $almostBlack;
+        a {
+            &:hover {
+                color: white;
+            }
+        }
+    }
+}
+
+/* Mobiles */
+@media screen and (max-width: 540px) {
+    body {
+        .how {
+            .steps {
+                flex-direction: column;
+                .step {
+                    width: 100%;
+                }
+            }
+        }
+        .immersive.help {
+            .text-overlay, .text {
+                width: 100%;
+            }
+        }
+    }
+}
+
+/* Tablets */
+@media screen and (min-width: 540px) and (max-width: 780px) {
+    body {
+        .how {
+            .steps {
+                flex-direction: column;
+                .step {
+                    width: 100%;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 780px) and (max-width: 1024px) {
+    body {
+    }
+}
+@media screen and (min-width: 1024px) and (max-width: 1200px) {
+    body {
+    }
+}

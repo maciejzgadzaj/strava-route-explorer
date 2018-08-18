@@ -181,7 +181,7 @@
                             {{ (row.route.distance // 1000)|number_format }} <span class="unit">km</span>
                         </div>
                         <div class="elevation_gain">
-                            {% if row.route.climbCategory > 3 %}
+                            {% if row.route.climbCategory in [5] %}
                                 <div class="climb cat-{{ row.route.climbCategory }}"></div>
                             {% endif %}
                             {{ row.route.elevationGain|number_format }} <span class="unit">m</span>
@@ -215,8 +215,6 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script>
         $(document).ready(function () {
             $("#filter_athlete").keyup(function(){

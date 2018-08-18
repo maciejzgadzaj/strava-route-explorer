@@ -5,32 +5,118 @@
 {% block header %}{% endblock %}
 
 {% block body %}
-    <div class="app">
-        <div class="title">Strava Route Explorer</div>
-        <div class="strapline">Giving you back what Strava has taken away.</div>
-    </div>
-    <div class="step1">
-        <div class="step">Step 1.</div>
-        <div class="step-title">Connect with STRAVA<br />and sync your public routes.</div>
-        <div class="step-desc">
-            Only your public routes will be synchronised from Strava.
-            <br />You can also manually add individual routes by their id,
-            <br />even if they were created by other athletes. See <a href="https://github.com/maciejzgadzaj/strava-route-explorer/wiki/FAQ">FAQ</a>.
+
+    <div class="splash immersive">
+        <div class="overlay"></div>
+        <div class="text">
+            <h1 class="small">Strava Route Explorer</h1>
+            <h2 class="title">Giving you back what Strava has taken away.</h2>
+            <div class="action">
+                {% if current_athlete is defined and current_athlete %}
+                    <a href="{{ path('routes') }}" class="button">Explore routes</a>
+                {% else %}
+                    <a href="{{ path('strava_auth') }}" class="button">Connect with Strava</a>
+                {% endif %}
+            </div>
         </div>
-        <a href="{{ path('strava_auth') }}" class="button">Connect with Strava</a>
+        <div class="arrow bounce"><img width="40" height="40" alt="" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjwhRE9DVFlQRSBzdmcgIFBVQkxJQyAnLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4nICAnaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkJz48c3ZnIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDMyIDMyIiBoZWlnaHQ9IjMycHgiIHZlcnNpb249IjEuMSIgdmlld0JveD0iMCAwIDMyIDMyIiB3aWR0aD0iMzJweCIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+PHBhdGggZD0iTTI0LjI4NSwxMS4yODRMMTYsMTkuNTcxbC04LjI4NS04LjI4OGMtMC4zOTUtMC4zOTUtMS4wMzQtMC4zOTUtMS40MjksMCAgYy0wLjM5NCwwLjM5NS0wLjM5NCwxLjAzNSwwLDEuNDNsOC45OTksOS4wMDJsMCwwbDAsMGMwLjM5NCwwLjM5NSwxLjAzNCwwLjM5NSwxLjQyOCwwbDguOTk5LTkuMDAyICBjMC4zOTQtMC4zOTUsMC4zOTQtMS4wMzYsMC0xLjQzMUMyNS4zMTksMTAuODg5LDI0LjY3OSwxMC44ODksMjQuMjg1LDExLjI4NHoiIGZpbGw9IiNmZmYiIGlkPSJtb3JlIi8+PGcvPjxnLz48Zy8+PGcvPjxnLz48Zy8+PC9zdmc+" /></div>
     </div>
-    <div class="step2">
-        <div class="step">Step 2.</div>
-        <div class="step-title">Browse and search<br />{{ route_count|number_format }} routes from {{ athlete_count|number_format }} athletes.</div>
-        <div class="step-desc">
-            Browse and search our database of bike and run routes.
-            <br />Filter results by name, distance, elevation gain, and more.
+
+    <div class="remember">
+        <h2 class="title">Remember Strava's Route Explore?</h2>
+        <div class="description">That's long gone now. No Clusterer anymore either. Now we have <a href="https://www.strava.com/routes/new">Route Builder</a>, <a href="https://www.strava.com/heatmap">Global Heatmap</a> and <a href="https://www.strava.com/local/">Local City Guides</a> - which are all great, but still there is no way to easily search for interesting routes in the area made and tested by other athletes. Even though <a href="https://support.strava.com/hc/en-us/community/posts/208839377-Search-or-Explore-feature-for-Strava-Routes">everyone and their dog has been asking for it for years now</a>.</div>
+        <div class="description">The times, however, they are a changin'. Say hello to Strava Route Explorer.</div>
+    </div>
+
+    <div class="how">
+        <h2 class="title">Get ready to find your perfect route.</h2>
+        <div class="steps">
+            <div class="step step1">
+                <div class="no">1</div>
+                <h3 class="title">Connect with STRAVA</h3>
+                <div class="description">
+                    This site is free to use for everyone, but for data protection reasons we ask you to connect with your Strava account first before accessing the routes.
+                </div>
+                {% if current_athlete is defined and current_athlete %}
+                    <a class="button disabled">Connect with Strava</a>
+                {% else %}
+                    <a href="{{ path('strava_auth') }}" class="button">Connect with Strava</a>
+                {% endif %}
+            </div>
+            <div class="step step2">
+                <div class="no">2</div>
+                <h3 class="title">Sync your public routes</h3>
+                <div class="description">
+                    Only your public routes will be synchronised from Strava. You can also manually select which routes you want to share with the community.
+                </div>
+                {% if current_athlete is defined and current_athlete %}
+                    <a href="{{ path('routes_sync_mine') }}" class="button">Sync your routes</a>
+                {% else %}
+                    <a class="button disabled" title="Connect with Strava first">Sync your routes</a>
+                {% endif %}
+            </div>
+            <div class="step step2">
+                <div class="no">3</div>
+                <h3 class="title">Find your perfect route</h3>
+                <div class="description">
+                    Browse and search our database of bike and run routes. Filter results by name, distance, elevation gain, athlete, start/end location, and more.
+                </div>
+                {% if current_athlete is defined and current_athlete %}
+                    <a href="{{ path('routes') }}" class="button">Explore all routes</a>
+                {% else %}
+                    <a class="button disabled" title="Connect with Strava first">Explore all routes</a>
+                {% endif %}
+            </div>
         </div>
-        <a href="{{ path('routes') }}" class="button">Explore routes</a>
     </div>
+
+    <div class="enjoy immersive">
+        <div class="overlay"></div>
+        <div class="text">
+            <div class="no">4</div>
+            <div class="title">Enjoy your ride.</div>
+        </div>
+    </div>
+
+    <div class="help immersive white">
+        <div class="overlay"></div>
+        <div class="text-overlay"></div>
+        <div class="text">
+            <div class="item">
+                <div class="title"><a href="https://github.com/maciejzgadzaj/strava-route-explorer/wiki/About">about</a></div>
+                <div class="description">What is this all about.</div>
+            </div>
+            <div class="item">
+                <div class="title"><a href="https://github.com/maciejzgadzaj/strava-route-explorer/wiki/FAQ">faq</a></div>
+                <div class="description">Frequently Asked Questions. Have one which is not covered here? Try our WhatsApp group below.</div>
+            </div>
+            <div class="item">
+                <div class="title"><a href="https://github.com/maciejzgadzaj/strava-route-explorer/issues">issues</a></div>
+                <div class="description">Have a new feature suggestion? Found a bug? This is the official place to report them.</div>
+            </div>
+            <div class="item">
+                <div class="title"><a href="https://chat.whatsapp.com/4JQyW36fqxL3VzFja0115c">whatsapp</a></div>
+                <div class="description">Group for app-related friendly chat. Unofficial feature requests and bug reports might be accepted here too.</div>
+            </div>
+            <div class="item">
+                <div class="title"><a href="https://www.meetup.com/Paris-Cycling-B-Group/">meetup</a></div>
+                <div class="description">Where did it all started, and what it was originally needed for.</div>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('build/home.css') }}" />
+    <link rel="stylesheet" href="{{ asset('build/homepage.css') }}" />
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(window).scroll(function(){
+            $(".arrow").css("opacity", 1 - $(window).scrollTop() / 250);
+        });
+    </script>
 {% endblock %}

@@ -32,6 +32,7 @@ class HomepageController extends ControllerBase
         return $this->render(
             'homepage/index.html.twig',
             [
+                'current_athlete' => $athleteService->getCurrentAthlete(),
                 'route_count' => $routeService->count(),
                 'athlete_count' => $athleteService->count(),
             ]
