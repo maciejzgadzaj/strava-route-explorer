@@ -112,6 +112,9 @@
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none; }
+  .routes .filters select {
+    background: #ffffff url(../../images/icon-caret-down.svg) no-repeat right 0.4em center;
+    background-size: 12px 8px; }
   .routes .filters input:not([type='checkbox']):not(:placeholder-shown) {
     border-color: #fc4c02; }
 .routes .basic_filters {

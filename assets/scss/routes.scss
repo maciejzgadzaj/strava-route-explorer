@@ -157,6 +157,10 @@ $locationWidth: calc(30% - 2em);
             -moz-appearance: none;
             appearance: none;
         }
+        select {
+            background: $white url(../../images/icon-caret-down.svg) no-repeat right .4em center;
+            background-size: 12px 8px;
+        }
         input:not([type='checkbox']) {
             &:not(:placeholder-shown) {
                 border-color: $orange;
