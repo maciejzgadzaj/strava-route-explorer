@@ -38,7 +38,7 @@ class AthleteRepository extends ServiceEntityRepository
     {
         $repository = $this->_em->getRepository(Athlete::class);
 
-        $query = $repository->createQueryBuilder('a')
+        $query = $repository->createQueryBuilder('a', 'a.id')
             ->select('a AS athlete')
             ->addSelect('COUNT(r.id) AS route_count')
             ->addSelect('CASE WHEN a.accessToken IS NOT NULL THEN true ELSE false END AS synchronized')

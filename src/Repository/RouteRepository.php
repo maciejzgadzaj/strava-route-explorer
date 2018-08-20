@@ -189,7 +189,7 @@ class RouteRepository extends ServiceEntityRepository
         }
 
         // Build query SQL.
-        $sqls[] = 'SELECT '.implode(', ', $selects).' FROM App:Route r';
+        $sqls[] = 'SELECT '.implode(', ', $selects).' FROM App:Route r INDEX BY r.id';
         if (!empty($joins)) {
             $sqls[] = implode(' ', $joins);
         }
