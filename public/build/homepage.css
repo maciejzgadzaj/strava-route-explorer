@@ -59,14 +59,18 @@ body {
     -o-background-size: cover;
     text-align: center;
     color: #ffffff; }
-    body .immersive .overlay {
+    body .immersive .big-image, body .immersive .overlay {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
-      height: 100%;
+      height: 100%; }
+    body .immersive .big-image {
+      z-index: 2; }
+    body .immersive .overlay {
       background-color: #000;
-      opacity: .5; }
+      opacity: .5;
+      z-index: 3; }
     body .immersive.white .overlay {
       background-color: #fc4c02; }
     body .immersive .text {
@@ -102,7 +106,7 @@ body {
       background-color: #ffffff;
       color: #ccc; }
   body .splash {
-    background-image: url(../../images/em-mountains.jpg);
+    background-image: url(https://lh3.googleusercontent.com/frxoy1aAnAvJAqfyvN86tm3s8qzlW88YWoNcSVFQaYsK9-_6dG4rXxKkBwcDT7ANSHMHyTaFEHxaiOdiMQs=w1200-no-tmp.jpg);
     background-position: center left; }
     body .splash .arrow {
       position: absolute;
@@ -169,7 +173,7 @@ body {
           font-size: 1.2em; }
   body .immersive.help {
     position: relative;
-    background-image: url(../../images/em-distance.jpg);
+    background-image: url(https://lh3.googleusercontent.com/FXVuv78Ck_BPJqNOI_RXmvpz2EUwG1PmvTCaQqK3qhbNVO8MYwfkgHM46dtb5U57GqHrdrRwzr2uvlFFhkg=w1200-no-tmp.jpg);
     background-position: center right; }
     body .immersive.help .text-overlay, body .immersive.help .text {
       position: absolute;
@@ -206,7 +210,7 @@ body {
             color: #fc4c02;
             text-decoration: underline; }
   body .enjoy {
-    background-image: url(../../images/em-beach.jpg); }
+    background-image: url(https://lh3.googleusercontent.com/Z4AVWAUAR2JjxeVpFZRxZ2MIoXIR4G61jUh8GWbosmIE72t152mH65XRb_D0qTVU_iZh2HAfSG0MldEeMkc=w1200-no-tmp.jpg); }
     body .enjoy .no {
       width: 2em;
       height: 1.5em;
@@ -239,5 +243,8 @@ body {
     flex-direction: column; }
     body .how .steps .step {
       width: 100%; } }
+@media screen and (device-width: 320px) and (device-height: 640px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait) {
+  html {
+    font-size: 16px; } }
 
 /*# sourceMappingURL=homepage.css.map */
