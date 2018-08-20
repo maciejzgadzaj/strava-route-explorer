@@ -127,7 +127,7 @@ class RouteService extends EntityService
         $route->setDescription($routeData->description);
         $route->setDistance($routeData->distance);
         $route->setElevationGain($routeData->elevation_gain);
-        $route->setPublic($routeData->public);
+        $route->setPublic($routeData->public ?? true);
         $route->setCreatedAt(\DateTime::createFromFormat('Y-m-d\TH:i:s\Z', $routeData->created_at));
         $route->setUpdatedAt(\DateTime::createFromFormat('Y-m-d\TH:i:s\Z', $routeData->updated_at));
 
