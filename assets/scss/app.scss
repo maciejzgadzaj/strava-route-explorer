@@ -79,7 +79,7 @@ body {
         display: flex;
         justify-content: center;
         padding: 1em;
-        background-color: #f0f0f0;
+        background-color: $almostBlack;
         a {
             display: block;
             padding: .5em 1em;
@@ -87,7 +87,7 @@ body {
             font-size: .8em;
             color: #aaa;
             &:hover {
-                color: black;
+                color: $white;
             }
         }
     }

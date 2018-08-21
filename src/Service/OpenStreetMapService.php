@@ -29,7 +29,7 @@ class OpenStreetMapService
     private $mapQuestConsumerKey;
 
     /**
-     * StravaService constructor.
+     * OpenStreetMapService constructor.
      *
      * @param \Psr\Container\ContainerInterface $container
      * @param string $mapQuestConsumerKey
@@ -77,7 +77,7 @@ class OpenStreetMapService
     }
 
     /**
-     * Send request to Strava API.
+     * Send request to OpenStreetMap API.
      *
      * @param string $method
      * @param string $uri

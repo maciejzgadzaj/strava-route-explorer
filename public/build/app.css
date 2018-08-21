@@ -54,7 +54,7 @@ body {
     display: flex;
     justify-content: center;
     padding: 1em;
-    background-color: #f0f0f0; }
+    background-color: #222; }
     body .footer a {
       display: block;
       padding: .5em 1em;
@@ -62,7 +62,7 @@ body {
       font-size: .8em;
       color: #aaa; }
       body .footer a:hover {
-        color: black; }
+        color: #ffffff; }
   body a {
     color: black; }
     body a:hover {

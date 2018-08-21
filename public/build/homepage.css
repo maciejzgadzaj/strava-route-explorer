@@ -266,11 +266,6 @@ body {
             padding-left: 24px;
             background: url(../../images/icon-elevation-gain.svg) no-repeat;
             background-size: 16px 16px; }
-  body .footer {
-    padding: 1em;
-    background-color: #222; }
-    body .footer a:hover {
-      color: white; }
 
 /* Mobiles */
 @media screen and (max-width: 540px) {
