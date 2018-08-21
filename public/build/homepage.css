@@ -210,6 +210,7 @@ body {
             color: #fc4c02;
             text-decoration: underline; }
   body .enjoy {
+    position: relative;
     background-image: url(https://lh3.googleusercontent.com/Z4AVWAUAR2JjxeVpFZRxZ2MIoXIR4G61jUh8GWbosmIE72t152mH65XRb_D0qTVU_iZh2HAfSG0MldEeMkc=w1200-no-tmp.jpg); }
     body .enjoy .no {
       width: 2em;
@@ -223,6 +224,48 @@ body {
       line-height: 1em; }
     body .enjoy .title {
       margin-top: .5em !important; }
+    body .enjoy .credits {
+      position: absolute;
+      right: 2em;
+      bottom: 1.5em;
+      z-index: 10;
+      display: flex;
+      text-align: right;
+      color: #ddd;
+      font-size: .8em;
+      line-height: 1.5em; }
+      body .enjoy .credits .avatar img {
+        border: 2px solid #bbb;
+        border-radius: 50%; }
+        body .enjoy .credits .avatar img:hover {
+          border-color: #ffffff; }
+      body .enjoy .credits .ride {
+        margin-right: 1em; }
+        body .enjoy .credits .ride a {
+          text-decoration: none;
+          color: #ddd; }
+          body .enjoy .credits .ride a:hover {
+            text-decoration: underline;
+            color: #ffffff; }
+        body .enjoy .credits .ride .route {
+          margin: .2em 0 .4em;
+          font-size: 1.5em; }
+          body .enjoy .credits .ride .route a {
+            color: #ffffff; }
+        body .enjoy .credits .ride .stats {
+          display: flex;
+          justify-content: flex-end;
+          -webkit-justify-content: flex-end; }
+          body .enjoy .credits .ride .stats .distance {
+            margin-left: 1em;
+            padding-left: 20px;
+            background: url(../../images/icon-distance.svg) no-repeat;
+            background-size: 16px 16px; }
+          body .enjoy .credits .ride .stats .elevation-gain {
+            margin-left: 1em;
+            padding-left: 24px;
+            background: url(../../images/icon-elevation-gain.svg) no-repeat;
+            background-size: 16px 16px; }
   body .footer {
     padding: 1em;
     background-color: #222; }
