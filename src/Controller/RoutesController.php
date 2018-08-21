@@ -14,6 +14,7 @@ use App\Service\RouteService;
 use App\Service\StravaService;
 use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp\Exception\ClientException;
+use Symfony\Component\Cache\Simple\FilesystemCache;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -232,7 +233,19 @@ class RoutesController extends ControllerBase
             $publicAdded = $publicUpdated = $published = $privateSkipped = $privateDeleted = 0;
             $syncedIds = [];
 
-            $stravaRoutes = $stravaService->getAthleteRoutes($athlete);
+            // Fetch athlete routes from Strava and store them temporarily in cache,
+            // so that we don't have to re-fetch them after submitting the form.
+            $cache = new FilesystemCache();
+            $cacheKey = 'strava.routes.'.$athlete->getId();
+
+            if (!$stravaRoutes = $cache->get($cacheKey)) {
+                $stravaRoutes = $stravaService->getAthleteRoutes($athlete);
+                // The cache item should be deleted after submitting the route select form,
+                // but just in case something goes wrong and it doesn't happen,
+                // let's also give it a short TTL.
+                $cache->set($cacheKey, $stravaRoutes, 3600);
+            }
+
             $localRoutes = $routeService->getAthleteRoutes($athlete);
             $localStarredRoutes = $routeService->getAthleteStarredRoutes($athlete);
 
@@ -298,6 +311,8 @@ class RoutesController extends ControllerBase
                 $athlete->setLastSync(new \DateTime());
                 $entityManager->flush();
 
+                $cache->delete($cacheKey);
+
                 $this->logger->info(strtr('Synchronized routes for %athlete% (%athlete_id%).', [
                     '%athlete%' => $athlete->getName(),
                     '%athlete_id%' => $athlete->getId(),
@@ -332,11 +347,13 @@ and %public_deleted% deleted, %published% published, %private_skipped% private s
                 ]
             );
         } catch (ClientException $e) {
+            $cache->delete($cacheKey);
             $content = \GuzzleHttp\json_decode($e->getResponse()->getBody()->getContents());
             $this->logger->error($content->message);
             $this->addFlash('error', $content->message);
             return $this->redirectToRoute('routes');
         } catch (\Exception $e) {
+            $cache->delete($cacheKey);
             $this->logger->error($e->getMessage());
             $this->addFlash('error', $e->getMessage());
             return $this->redirectToRoute('routes');
