@@ -13,7 +13,7 @@
 {% block body %}
     <div class="routes">
         <div class="head">
-            <div class="cell checkbox"><input type="checkbox" id="select_all" name="select_all" checked="checked" /></div>
+            <div class="cell checkbox"><input type="checkbox" id="select_all_header" class="select_all" name="select_all" checked="checked" /></div>
             <div class="cell id">Id</div>
             <div class="cell name">Name</div>
             <div class="cell distance">Distance</div>
@@ -43,7 +43,12 @@
                     {% set delta = delta + 1 %}
                 {% endif %}
             {% endfor %}
-            <div class="submit">{{ form_widget(publish_form.publish) }}</div>
+            <div class="submit">
+                <div class="toggle">
+                    <label for="select_all_header"><input type="checkbox" id="select_all_header" class="select_all" name="select_all" checked="checked" /> Select all/none</label>
+                </div>
+                {{ form_widget(publish_form.publish) }}
+            </div>
         </div>
         {{ form_end(publish_form) }}
 
@@ -60,15 +65,38 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script>
-        $(document).ready(function () {
-            if ($('input[name="publish[route][]"]:not(:checked)').length > 0) {
-                $('#select_all').removeAttr('checked');
+        function setAllCheckboxes(){
+            var total = $('input[name="publish[route][]"]').length;
+            var checked = $('input[name="publish[route][]"]:checked').length;
+            if (checked == total) {
+                $('.select_all').prop("indeterminate", false);
+                $('.select_all').prop("checked", true);
             }
-            $("#select_all").on('click', function() {
+            else if (checked == 0) {
+                $('.select_all').prop("indeterminate", false);
+                $('.select_all').prop("checked", false);
+            }
+            else {
+                $('.select_all').prop("checked", false);
+                $('.select_all').prop("indeterminate", true);
+            }
+        }
+
+        $(document).ready(function () {
+            setAllCheckboxes();
+
+            $(".select_all").on('click', function() {
                 var state = this.checked;
                 $('input[name="publish[route][]"]').each(function () {
                     this.checked = state;
                 });
+                setAllCheckboxes();
+            });
+
+            $(".row").on("click", function(){
+                var checkbox = $(this).find("input");
+                checkbox.prop("checked", !checkbox.prop("checked"));
+                setAllCheckboxes();
             });
         });
     </script>

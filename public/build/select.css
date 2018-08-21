@@ -1,4 +1,5 @@
 .routes {
+  margin-bottom: 1em;
   font-size: .9em; }
   .routes .head, .routes .row {
     width: 100%;
@@ -8,6 +9,9 @@
       padding: 1em; }
     .routes .head .number, .routes .row .number {
       text-align: right; }
+  .routes .row:hover {
+    cursor: pointer;
+    background-color: #f9f9f9; }
   .routes .head {
     background-color: #f0f0f0; }
   .routes .checkbox {
@@ -16,6 +20,10 @@
     width: 5%; }
   .routes .name {
     width: 30%; }
+    .routes .name a {
+      text-decoration: none; }
+      .routes .name a:hover {
+        text-decoration: underline; }
   .routes .distance {
     width: 5%; }
   .routes .elevation {
@@ -27,9 +35,17 @@
   .routes .updated {
     width: 10%; }
   .routes .submit {
-    margin: 2px 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
     padding: 1em;
+    background-color: #f0f0f0;
     text-align: center; }
+    .routes .submit .toggle {
+      position: absolute;
+      left: 1em;
+      z-index: 5;
+      margin-top: .5em; }
     .routes .submit button {
       padding: .7em 2em;
       border: 1px solid #fc4c02;
@@ -43,5 +59,7 @@
         -webkit-transition: all .1s ease-in;
         -o-transition: all .1s ease-in;
         transition: all .1s ease-in; }
+  .routes .checkbox input:hover, .routes .checkbox label:hover, .routes .toggle input:hover, .routes .toggle label:hover {
+    cursor: pointer; }
 
 /*# sourceMappingURL=select.css.map */

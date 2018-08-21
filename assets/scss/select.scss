@@ -2,6 +2,7 @@
 @import '_mixins';
 
 .routes {
+    margin-bottom: 1em;
     font-size: .9em;
     .head, .row {
         width: 100%;
@@ -12,6 +13,12 @@
         }
         .number {
             text-align: right;
+        }
+    }
+    .row {
+        &:hover {
+            cursor: pointer;
+            background-color: #f9f9f9;
         }
     }
     .head {
@@ -25,6 +32,12 @@
     }
     .name {
         width: 30%;
+        a {
+            text-decoration: none;
+            &:hover {
+                text-decoration: underline;
+            }
+        }
     }
     .distance {
         width: 5%;
@@ -42,9 +55,18 @@
         width: 10%;
     }
     .submit {
-        margin: 2px 0;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
         padding: 1em;
+        background-color: #f0f0f0;
         text-align: center;
+        .toggle {
+            position: absolute;
+            left: 1em;
+            z-index: 5;
+            margin-top: .5em;
+        }
         button {
             padding: .7em 2em;
             border: 1px solid $orange;
@@ -55,6 +77,13 @@
                 cursor: pointer;
                 background-color: $orangeDark;
                 @include transition;
+            }
+        }
+    }
+    .checkbox, .toggle {
+        input, label {
+            &:hover {
+                cursor: pointer;
             }
         }
     }
