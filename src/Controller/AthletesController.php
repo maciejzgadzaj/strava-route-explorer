@@ -32,7 +32,7 @@ class AthletesController extends ControllerBase
     {
         // Allow access only to athletes authorized with Strava.
         if (empty($this->getParameter('open_access')) && !$athleteService->isAuthorized()) {
-            return $this->redirectToRoute('strava_auth');
+            return $this->redirectToRoute('homepage');
         }
 
         // Add route.

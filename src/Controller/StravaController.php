@@ -57,6 +57,11 @@ class StravaController extends ControllerBase
     {
         $query = $request->query->all();
 
+        // Redirect back to home page on failed Strava authorization.
+        if (empty($query['code'])) {
+            return $this->redirectToRoute('homepage');
+        }
+
         /** @var \GuzzleHttp\Client $client */
         $client = $this->get('csa_guzzle.client.strava');
         $params = [

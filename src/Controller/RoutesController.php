@@ -44,7 +44,7 @@ class RoutesController extends ControllerBase
     ) {
         // Allow access only to athletes authorized with Strava.
         if (empty($this->getParameter('open_access')) && !$athleteService->isAuthorized()) {
-            return $this->redirectToRoute('strava_auth');
+            return $this->redirectToRoute('homepage');
         }
 
         // @TODO: Remove in some time.
@@ -163,7 +163,7 @@ class RoutesController extends ControllerBase
     ) {
         // Allow access only to athletes authorized with Strava.
         if (empty($this->getParameter('open_access')) && !$athleteService->isAuthorized()) {
-            return $this->redirectToRoute('strava_auth');
+            return $this->redirectToRoute('homepage');
         }
 
         if ($route = $routeService->syncRoute($route_id)) {
@@ -184,6 +184,11 @@ class RoutesController extends ControllerBase
      */
     public function syncMineAction(AthleteService $athleteService)
     {
+        // Allow access only to athletes authorized with Strava.
+        if (empty($this->getParameter('open_access')) && !$athleteService->isAuthorized()) {
+            return $this->redirectToRoute('homepage');
+        }
+
         if (!$athlete = $athleteService->getCurrentAthlete()) {
             return $this->redirectToRoute('routes');
         }
@@ -220,7 +225,7 @@ class RoutesController extends ControllerBase
     ) {
         // Allow access only to athletes authorized with Strava.
         if (empty($this->getParameter('open_access')) && !$athleteService->isAuthorized()) {
-            return $this->redirectToRoute('strava_auth');
+            return $this->redirectToRoute('homepage');
         }
 
         try {
@@ -380,7 +385,7 @@ and %public_deleted% deleted, %published% published, %private_skipped% private s
     ) {
         // Allow access only to athletes authorized with Strava.
         if (empty($this->getParameter('open_access')) && !$athleteService->isAuthorized()) {
-            return $this->redirectToRoute('strava_auth');
+            return $this->redirectToRoute('homepage');
         }
 
         $name = trim(strip_tags($request->get('term')));
