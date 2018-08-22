@@ -245,6 +245,14 @@ class RoutesController extends ControllerBase
 
             if (!$stravaRoutes = $cache->get($cacheKey)) {
                 $stravaRoutes = $stravaService->getAthleteRoutes($athlete);
+
+                // If no routes were fetched from Strava, there is nothing to synchronize,
+                // so redirect back to route listing page.
+                if (empty($stravaRoutes)) {
+                    $this->addFlash('error', 'No routes to synchronize.');
+                    return $this->redirectToRoute('routes');
+                }
+
                 // The cache item should be deleted after submitting the route select form,
                 // but just in case something goes wrong and it doesn't happen,
                 // let's also give it a short TTL.
