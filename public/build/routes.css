@@ -129,6 +129,11 @@
       color: #bbb; }
       .routes .basic_filters .image select option .placeholder {
         color: #bbb; }
+      .routes .basic_filters .image select.not_empty {
+        color: #000;
+        border-color: #fc4c02; }
+        .routes .basic_filters .image select.not_empty .placeholder {
+          color: #000; }
   .routes .basic_filters .name {
     width: calc(40% - 2em); }
   .routes .basic_filters .distance {

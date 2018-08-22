@@ -8,7 +8,9 @@
 
         {% set query = app.request.query.all %}
         <div class="head">
-            <div class="image"></div>
+            <div class="image">
+                <div class="label">Type</div>
+            </div>
             <div class="name">
                 <div class="label">
                     <span class="accesskey">R</span>oute
@@ -216,7 +218,20 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
+        function setTypeFilterClass() {
+            var typeFilter = $("#filter_type");
+            if (typeFilter.val() == 0) {
+                typeFilter.removeClass("not_empty");
+            } else {
+                typeFilter.addClass("not_empty");
+            }
+        }
+
         $(document).ready(function () {
+            setTypeFilterClass()
+            $("#filter_type").on("change", function(){
+                setTypeFilterClass()
+            });
             $("#filter_athlete").keyup(function(){
                 if ($(this).val()) {
                     $(".starred").show();

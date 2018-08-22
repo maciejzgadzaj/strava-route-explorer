@@ -29,20 +29,37 @@ class RouteFilterType extends AbstractType
             ChoiceType::class,
             [
                 'choices' => [
-                    'type' => null,
+                    'all' => null,
                     'bike' => 1,
+                    'bike · road' => '1,1',
+                    'bike · mtb' => '1,2',
+                    'bike · cross' => '1,3',
+                    'bike · mixed' => '1,5',
                     'run' => 2,
+                    'run · road' => '2,1',
+                    'run · trail' => '2,4',
+                    'run · mixed' => '2,5',
                 ],
                 'choice_attr' => [
-                    'type' => [
-                        'class' => 'placeholder',
-                    ],
+                    'type' => ['class' => 'placeholder'],
+                    'bike' => ['class' => 'optionGroup'],
+                    'bike-road' => ['class' => 'optionChild'],
+                    'bike-mountain' => ['class' => 'optionChild'],
+                    'bike-cross' => ['class' => 'optionChild'],
+                    'bike-mixed' => ['class' => 'optionChild'],
+                    'run' => ['class' => 'optionGroup'],
+                    'run-road' => ['class' => 'optionChild'],
+                    'run-trail' => ['class' => 'optionChild'],
+                    'run-mixed' => ['class' => 'optionChild'],
                 ],
+                'choice_label' => function ($choiceValue, $key, $value) {
+                    return preg_replace('/(bike |run )/', '', $key);
+                },
                 'label' => false,
                 'required' => true,
                 'attr' => [
                     'placeholder' => 'type',
-                    'title' => 'Route type',
+                    'title' => 'Filter routes by type',
                 ],
             ]
         );

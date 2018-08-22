@@ -186,6 +186,13 @@ $locationWidth: calc(30% - 2em);
                         color: #bbb;
                     }
                 }
+                &.not_empty {
+                    color: $black;
+                    border-color: $orange;
+                    .placeholder {
+                        color: $black;
+                    }
+                }
             }
         }
         .name {

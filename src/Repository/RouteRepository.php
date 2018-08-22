@@ -64,8 +64,13 @@ class RouteRepository extends ServiceEntityRepository
 
             switch ($key) {
                 case 'type':
+                    $values = explode(',', $value);
                     $wheres[] = 'r.type = :type';
-                    $parameters['type'] = $value;
+                    $parameters['type'] = $values[0];
+                    if (!empty($values[1])) {
+                        $wheres[] = 'r.subType = :sub_type';
+                        $parameters['sub_type'] = $values[1];
+                    }
                     break;
 
                 case 'name':
