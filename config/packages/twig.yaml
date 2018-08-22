@@ -4,3 +4,4 @@ twig:
     strict_variables: '%kernel.debug%'
     globals:
         google_analytics_tag: '%google_analytics_tag%'
+        open_access: '%open_access%'
