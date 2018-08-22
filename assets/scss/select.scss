@@ -79,6 +79,18 @@
                 @include transition;
             }
         }
+        .cancel {
+            position: absolute;
+            right: 4em;
+            top: 1.8em;
+            a {
+                color: #999;
+                text-decoration: none;
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
     }
     .checkbox, .toggle {
         input, label {

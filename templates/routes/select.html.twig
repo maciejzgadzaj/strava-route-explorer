@@ -48,6 +48,9 @@
                     <label for="select_all_header"><input type="checkbox" id="select_all_header" class="select_all" name="select_all" checked="checked" /> Select all/none</label>
                 </div>
                 {{ form_widget(publish_form.publish) }}
+                <div class="cancel">
+                    <a href="{{ path('routes') }}">cancel sync</a>
+                </div>
             </div>
         </div>
         {{ form_end(publish_form) }}

@@ -59,6 +59,15 @@
         -webkit-transition: all .1s ease-in;
         -o-transition: all .1s ease-in;
         transition: all .1s ease-in; }
+    .routes .submit .cancel {
+      position: absolute;
+      right: 4em;
+      top: 1.8em; }
+      .routes .submit .cancel a {
+        color: #999;
+        text-decoration: none; }
+        .routes .submit .cancel a:hover {
+          text-decoration: underline; }
   .routes .checkbox input:hover, .routes .checkbox label:hover, .routes .toggle input:hover, .routes .toggle label:hover {
     cursor: pointer; }
 
