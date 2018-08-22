@@ -6,6 +6,7 @@ use App\Service\MeetupService;
 use App\Service\RouteService;
 use App\Service\StravaService;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -57,6 +58,11 @@ class ExplorerMeetupScrapCommand extends ContainerAwareCommand
     private $output;
 
     /**
+     * @var string
+     */
+    private $meetupApiKey;
+
+    /**
      * @var array
      */
     private $meetupGroups;
@@ -94,6 +100,7 @@ class ExplorerMeetupScrapCommand extends ContainerAwareCommand
         MeetupService $meetupService,
         StravaService $stravaService,
         RouteService $routeService,
+        $meetupApiKey,
         $meetupGroups
     ) {
         parent::__construct($name);
@@ -103,6 +110,7 @@ class ExplorerMeetupScrapCommand extends ContainerAwareCommand
         $this->meetupService = $meetupService;
         $this->stravaService = $stravaService;
         $this->routeService = $routeService;
+        $this->meetupApiKey = $meetupApiKey;
         $this->meetupGroups = $meetupGroups;
     }
 
@@ -183,12 +191,17 @@ class ExplorerMeetupScrapCommand extends ContainerAwareCommand
             if ($status) {
                 $query['status'] = implode(',', $status);
             }
+            $query['key'] = $this->meetupApiKey;
+
             if ($query) {
                 $uri .= '?'.http_build_query($query);
             }
 
             $output->writeln("  - Fetching events...");
             $response = $this->meetupService->apiRequest('get', $uri);
+
+            $this->checkApiLimits($response);
+
             $content = \GuzzleHttp\json_decode($response->getBody()->getContents());
 
             foreach ($content as $event) {
@@ -243,9 +256,12 @@ class ExplorerMeetupScrapCommand extends ContainerAwareCommand
      */
     private function checkEventComments($group, $event)
     {
-        $uri = '/'.$group.'/events/'.$event->id.'/comments';
+        $uri = '/'.$group.'/events/'.$event->id.'/comments?key='.$this->meetupApiKey;
 
         $response = $this->meetupService->apiRequest('get', $uri);
+
+        $this->checkApiLimits($response);
+
         $content = \GuzzleHttp\json_decode($response->getBody()->getContents());
 
         foreach ($content as $comment) {
@@ -303,6 +319,21 @@ class ExplorerMeetupScrapCommand extends ContainerAwareCommand
             $this->addedRoutes++;
 
             return $route;
+        }
+    }
+
+    /**
+     * Check API limits and wait required number of seconds if no quota remaining.
+     *
+     * @param \Psr\Http\Message\ResponseInterface $response
+     */
+    private function checkApiLimits(ResponseInterface $response)
+    {
+        if ($response->getHeaderLine('X-RateLimit-Remaining') == 0) {
+            $this->output->writeln(strtr('  - Wait %seconds% seconds', [
+                '%seconds%' => $response->getHeaderLine('X-RateLimit-Reset')+1,
+            ]));
+            sleep($response->getHeaderLine('X-RateLimit-Reset')+1);
         }
     }
 }
