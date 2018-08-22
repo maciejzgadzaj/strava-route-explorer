@@ -220,55 +220,6 @@ body {
         }
     }
 
-    .immersive.help {
-        position: relative;
-        background-image: url(https://lh3.googleusercontent.com/FXVuv78Ck_BPJqNOI_RXmvpz2EUwG1PmvTCaQqK3qhbNVO8MYwfkgHM46dtb5U57GqHrdrRwzr2uvlFFhkg=w1200-no-tmp.jpg);
-        background-position: center right;
-        .text-overlay, .text {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 540px;
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
-        .text-overlay {
-            position: absolute;
-            margin: 0;
-            padding: 0;
-            background-color: $black;
-            opacity: .6;
-            overflow: hidden;
-        }
-        .text {
-        }
-        .item {
-            margin: 3em 4em 2em 3em;
-            padding-left: 2em;
-            text-align: left;
-            .title {
-                margin: 0 0 .5em;
-                font-size: 1.5em;
-                &:before {
-                    content: '>';
-                    margin-left: -1.5em;
-                    width: 1.5em;
-                    display: inline-block;
-                    color: $orange;
-                }
-                a {
-                    color: $orange;
-                    text-decoration: none;
-                    &:hover {
-                        color: $orange;
-                        text-decoration: underline;
-                    }
-                }
-            }
-        }
-    }
-
     .enjoy {
         position: relative;
         background-image: url(https://lh3.googleusercontent.com/Z4AVWAUAR2JjxeVpFZRxZ2MIoXIR4G61jUh8GWbosmIE72t152mH65XRb_D0qTVU_iZh2HAfSG0MldEeMkc=w1200-no-tmp.jpg);
@@ -343,56 +294,54 @@ body {
             }
         }
     }
-}
 
-/* Mobiles */
-@media screen and (max-width: 540px) {
-    body {
-        .how {
-            .steps {
-                flex-direction: column;
-                .step {
-                    width: 100%;
+    .help {
+        position: relative;
+        background-image: url(https://lh3.googleusercontent.com/FXVuv78Ck_BPJqNOI_RXmvpz2EUwG1PmvTCaQqK3qhbNVO8MYwfkgHM46dtb5U57GqHrdrRwzr2uvlFFhkg=w1200-no-tmp.jpg);
+        background-position: center right;
+        .text-overlay, .text {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 540px;
+            //max-width: 50%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        .text-overlay {
+            position: absolute;
+            margin: 0;
+            padding: 0;
+            background-color: $black;
+            opacity: .6;
+            overflow: hidden;
+        }
+        .text {
+            .item {
+                margin: 3em 4em 2em 3em;
+                padding-left: 2em;
+                text-align: left;
+                .title {
+                    margin: 0 0 .5em;
+                    font-size: 1.5em;
+                    &:before {
+                        content: '>';
+                        margin-left: -1.5em;
+                        width: 1.5em;
+                        display: inline-block;
+                        color: $orange;
+                    }
+                    a {
+                        color: $white;
+                        text-decoration: none;
+                        &:hover {
+                            color: $orange;
+                            text-decoration: underline;
+                        }
+                    }
                 }
             }
         }
-        .immersive.help {
-            .text-overlay, .text {
-                width: 100%;
-            }
-        }
-    }
-}
-
-/* Tablets */
-@media screen and (min-width: 540px) and (max-width: 780px) {
-    body {
-        .how {
-            .steps {
-                flex-direction: column;
-                .step {
-                    width: 100%;
-                }
-            }
-        }
-    }
-}
-
-@media screen and (min-width: 780px) and (max-width: 1024px) {
-    body {
-    }
-}
-@media screen and (min-width: 1024px) and (max-width: 1200px) {
-    body {
-    }
-}
-
-@media screen
-    and (device-width: 320px)
-    and (device-height: 640px)
-    and (-webkit-device-pixel-ratio: 3)
-    and (orientation: portrait) {
-    html {
-        font-size: 16px;
     }
 }

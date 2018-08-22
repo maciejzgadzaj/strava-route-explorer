@@ -1,0 +1,129 @@
+@import '_variables';
+@import '_mixins';
+
+@media screen and (max-width: 760px) {
+    html {
+        body {
+            .splash {
+                background-image: url(https://lh3.googleusercontent.com/frxoy1aAnAvJAqfyvN86tm3s8qzlW88YWoNcSVFQaYsK9-_6dG4rXxKkBwcDT7ANSHMHyTaFEHxaiOdiMQs=w800-no-tmp.jpg);
+                .text {
+                    margin-bottom: 4em;
+                }
+            }
+            .how {
+                .steps {
+                    flex-direction: column;
+                    .step {
+                        width: 100%;
+                    }
+                }
+            }
+            .enjoy {
+                background-image: url(https://lh3.googleusercontent.com/Z4AVWAUAR2JjxeVpFZRxZ2MIoXIR4G61jUh8GWbosmIE72t152mH65XRb_D0qTVU_iZh2HAfSG0MldEeMkc=w800-no-tmp.jpg);
+                .credits {
+                    right: 1em;
+                    bottom: .5em;
+                    font-size: .7em;
+                    img {
+                        width: 50px;
+                        height: 50px;
+                        margin-top: .2em;
+                    }
+                }
+            }
+            .help {
+                background-image: url(https://lh3.googleusercontent.com/FXVuv78Ck_BPJqNOI_RXmvpz2EUwG1PmvTCaQqK3qhbNVO8MYwfkgHM46dtb5U57GqHrdrRwzr2uvlFFhkg=w800-no-tmp.jpg);
+                height: auto;
+                .text-overlay {
+                    height: 100%;
+                }
+                .text {
+                    position: static;
+                    height: auto;
+                    margin-right: auto;
+                    .item {
+                        margin: 2em 4em 2em 2em;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 540px) {
+    html {
+        body {
+            .immersive {
+                .text {
+                    .small {
+                        font-size: .7em;
+                    }
+                    .title {
+                        font-size: 2em;
+                    }
+                }
+            }
+            .splash {
+                background-image: url(https://lh3.googleusercontent.com/frxoy1aAnAvJAqfyvN86tm3s8qzlW88YWoNcSVFQaYsK9-_6dG4rXxKkBwcDT7ANSHMHyTaFEHxaiOdiMQs=w600-no-tmp.jpg);
+            }
+            .enjoy {
+                background-image: url(https://lh3.googleusercontent.com/Z4AVWAUAR2JjxeVpFZRxZ2MIoXIR4G61jUh8GWbosmIE72t152mH65XRb_D0qTVU_iZh2HAfSG0MldEeMkc=w600-no-tmp.jpg);
+            }
+            .help {
+                background-image: url(https://lh3.googleusercontent.com/FXVuv78Ck_BPJqNOI_RXmvpz2EUwG1PmvTCaQqK3qhbNVO8MYwfkgHM46dtb5U57GqHrdrRwzr2uvlFFhkg=w600-no-tmp.jpg);
+            }
+            .remember, .how, .enjoy {
+                .title {
+                    font-size: 2em;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 340px) {
+    html {
+        body {
+            .splash {
+                background-image: url(https://lh3.googleusercontent.com/frxoy1aAnAvJAqfyvN86tm3s8qzlW88YWoNcSVFQaYsK9-_6dG4rXxKkBwcDT7ANSHMHyTaFEHxaiOdiMQs=w400-no-tmp.jpg);
+            }
+            .remember {
+                .description {
+                    font-size: 1em;
+                }
+            }
+            .how {
+                .steps {
+                    .step {
+                        .description {
+                            font-size: 1em;
+                        }
+                    }
+                }
+            }
+            .enjoy {
+                background-image: url(https://lh3.googleusercontent.com/Z4AVWAUAR2JjxeVpFZRxZ2MIoXIR4G61jUh8GWbosmIE72t152mH65XRb_D0qTVU_iZh2HAfSG0MldEeMkc=w400-no-tmp.jpg);
+                .credits {
+                    font-size: .6em;
+                    img {
+                        width: 45px;
+                        height: 45px;
+                    }
+                }
+            }
+            .help {
+                background-image: url(https://lh3.googleusercontent.com/FXVuv78Ck_BPJqNOI_RXmvpz2EUwG1PmvTCaQqK3qhbNVO8MYwfkgHM46dtb5U57GqHrdrRwzr2uvlFFhkg=w400-no-tmp.jpg);
+                .text {
+                    .item {
+                        .description {
+                            font-size: .9em;
+                        }
+                    }
+                }
+            }
+            .footer {
+                padding: 1em;
+            }
+        }
+    }
+}

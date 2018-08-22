@@ -135,6 +135,7 @@
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('build/homepage.css') }}" />
+    <link rel="stylesheet" media='screen and (max-width: 760px)' href="{{ asset('build/homepage-mobile.css') }}" />
 {% endblock %}
 
 {% block javascripts %}

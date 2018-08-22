@@ -171,44 +171,6 @@ body {
         body .how .steps .step .description {
           line-height: 1.5em;
           font-size: 1.2em; }
-  body .immersive.help {
-    position: relative;
-    background-image: url(https://lh3.googleusercontent.com/FXVuv78Ck_BPJqNOI_RXmvpz2EUwG1PmvTCaQqK3qhbNVO8MYwfkgHM46dtb5U57GqHrdrRwzr2uvlFFhkg=w1200-no-tmp.jpg);
-    background-position: center right; }
-    body .immersive.help .text-overlay, body .immersive.help .text {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 540px;
-      height: 100%;
-      margin: 0;
-      padding: 0; }
-    body .immersive.help .text-overlay {
-      position: absolute;
-      margin: 0;
-      padding: 0;
-      background-color: #000;
-      opacity: .6;
-      overflow: hidden; }
-    body .immersive.help .item {
-      margin: 3em 4em 2em 3em;
-      padding-left: 2em;
-      text-align: left; }
-      body .immersive.help .item .title {
-        margin: 0 0 .5em;
-        font-size: 1.5em; }
-        body .immersive.help .item .title:before {
-          content: '>';
-          margin-left: -1.5em;
-          width: 1.5em;
-          display: inline-block;
-          color: #fc4c02; }
-        body .immersive.help .item .title a {
-          color: #fc4c02;
-          text-decoration: none; }
-          body .immersive.help .item .title a:hover {
-            color: #fc4c02;
-            text-decoration: underline; }
   body .enjoy {
     position: relative;
     background-image: url(https://lh3.googleusercontent.com/Z4AVWAUAR2JjxeVpFZRxZ2MIoXIR4G61jUh8GWbosmIE72t152mH65XRb_D0qTVU_iZh2HAfSG0MldEeMkc=w1200-no-tmp.jpg); }
@@ -267,23 +229,43 @@ body {
             padding-left: 24px;
             background: url(../../images/icon-elevation-gain.svg) no-repeat;
             background-size: 16px 16px; }
-
-/* Mobiles */
-@media screen and (max-width: 540px) {
-  body .how .steps {
-    flex-direction: column; }
-    body .how .steps .step {
-      width: 100%; }
-  body .immersive.help .text-overlay, body .immersive.help .text {
-    width: 100%; } }
-/* Tablets */
-@media screen and (min-width: 540px) and (max-width: 780px) {
-  body .how .steps {
-    flex-direction: column; }
-    body .how .steps .step {
-      width: 100%; } }
-@media screen and (device-width: 320px) and (device-height: 640px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait) {
-  html {
-    font-size: 16px; } }
+  body .help {
+    position: relative;
+    background-image: url(https://lh3.googleusercontent.com/FXVuv78Ck_BPJqNOI_RXmvpz2EUwG1PmvTCaQqK3qhbNVO8MYwfkgHM46dtb5U57GqHrdrRwzr2uvlFFhkg=w1200-no-tmp.jpg);
+    background-position: center right; }
+    body .help .text-overlay, body .help .text {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 540px;
+      height: 100%;
+      margin: 0;
+      padding: 0; }
+    body .help .text-overlay {
+      position: absolute;
+      margin: 0;
+      padding: 0;
+      background-color: #000;
+      opacity: .6;
+      overflow: hidden; }
+    body .help .text .item {
+      margin: 3em 4em 2em 3em;
+      padding-left: 2em;
+      text-align: left; }
+      body .help .text .item .title {
+        margin: 0 0 .5em;
+        font-size: 1.5em; }
+        body .help .text .item .title:before {
+          content: '>';
+          margin-left: -1.5em;
+          width: 1.5em;
+          display: inline-block;
+          color: #fc4c02; }
+        body .help .text .item .title a {
+          color: #ffffff;
+          text-decoration: none; }
+          body .help .text .item .title a:hover {
+            color: #fc4c02;
+            text-decoration: underline; }
 
 /*# sourceMappingURL=homepage.css.map */

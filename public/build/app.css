@@ -53,11 +53,14 @@ body {
   body .footer {
     display: flex;
     justify-content: center;
-    padding: 1em;
+    flex-wrap: wrap;
+    -webkit-flex-wrap: wrap;
+    padding: 1em 3em;
+    line-height: 1.5em;
     background-color: #222; }
     body .footer a {
       display: block;
-      padding: .5em 1em;
+      padding: .2em 1em;
       text-decoration: none;
       font-size: .8em;
       color: #aaa; }
