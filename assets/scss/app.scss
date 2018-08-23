@@ -1,61 +1,104 @@
 @import '_variables';
 @import '_mixins';
 
+* {
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
     padding: 0;
     font-family: -apple-system, system-ui, BlinkMacSystemFont, Roboto, "Segoe UI", "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 
+    a {
+        color: $black;
+        &:hover {
+            color: $orange;
+        }
+    }
+
     .header {
-        padding: $padding;
+        display: flex;
+        flex-direction: row;
+        -webkit-flex-direction: row;
+        justify-content: flex-start;
+        -webkit-justify-content: flex-start;
+        padding: 0;
         background-color: $orange;
-        .logo-title, .menu {
-            display: inline-block;
-        }
-        .logo-title {
-            font-size: 25px;
-            color: white;
-        }
-        .menu {
-            margin: .1em 0 0 2em;
-            vertical-align: top;
-            a {
-                display: inline-block;
-                padding: .5em .7em;
-                color: white;
-                text-decoration: none;
-            }
-        }
-        .add-route {
-            float: right;
-            background-color: $orange;
-            color: $white;
-            input {
-                padding: .5em;
-                border: 1px solid #dc3b02;
-                background-color: #f3f3f3;
-                font-size: .9em;
-                &::placeholder {
-                    color: #bbb;
-                    opacity: 1;
-                }
-                &:-ms-input-placeholder {
-                    color: #bbb;
-                }
-                &::-ms-input-placeholder {
-                    color: #bbb;
+
+        .header1 {
+            display: flex;
+            justify-content: space-between;
+            -webkit-justify-content: space-between;
+
+            .logo-title {
+                a {
+                    height: 100%;
+                    display: block;
+                    padding: .5em .5em 0;
+                    img {
+                    }
                 }
             }
         }
-        .sync-routes {
-            float: right;
-            margin: .5em;
-            a {
-                padding: .8em;
-                //border: 1px solid #dc3b02;
-                //background-color: #dc3b02;
-                color: white;
-                text-decoration: none;
+
+        .header2 {
+            display: flex;
+            flex-grow: 1;
+            -webkit-flex-grow: 1;
+            justify-content: space-between;
+            -webkit-justify-content: space-between;
+
+            .menu {
+                margin: 0 1em;
+                ul {
+                    list-style-type: none;
+                    margin: 0;
+                    padding: 0;
+                    li {
+                        display: inline-block;
+                        margin: 0;
+                        padding: 0;
+                        a {
+                            display: block;
+                            padding: 1em;
+                            color: white;
+                            text-decoration: none;
+                            &:hover {
+                                text-decoration: underline;
+                            }
+                        }
+                    }
+                    li.home {
+                        display: none;
+                    }
+                }
+            }
+
+            .sync-menu {
+                margin-left: auto;
+                margin-right: 1em;
+            }
+
+            .add-route {
+                color: $white;
+                padding: .5em .5em 0 0;
+                input {
+                    padding: .5em;
+                    border: 1px solid #dc3b02;
+                    background-color: #f3f3f3;
+                    font-size: .9em;
+                    &::placeholder {
+                        color: #bbb;
+                        opacity: 1;
+                    }
+                    &:-ms-input-placeholder {
+                        color: #bbb;
+                    }
+                    &::-ms-input-placeholder {
+                        color: #bbb;
+                    }
+                }
             }
         }
     }
@@ -91,37 +134,6 @@ body {
             color: #aaa;
             &:hover {
                 color: $white;
-            }
-        }
-    }
-
-    a {
-        color: black;
-        &:hover {
-            color: $orange;
-        }
-    }
-
-    ul.menu {
-        width: 100%;
-        margin: 0;
-        padding: 0;
-        background-color: $orange;
-        list-style-type: none;
-
-        li {
-            display: inline;
-
-            a {
-                display: inline-block;
-                padding: $padding;
-                color: $white;
-                text-decoration: none;
-
-                &:hover {
-                    color: $orange;
-                    background-color: $white;
-                }
             }
         }
     }

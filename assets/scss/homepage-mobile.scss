@@ -13,6 +13,7 @@
             .how {
                 .steps {
                     flex-direction: column;
+                    -webkit-flex-direction: column;
                     .step {
                         width: 100%;
                     }

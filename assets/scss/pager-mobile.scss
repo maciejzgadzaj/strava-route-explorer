@@ -1,0 +1,54 @@
+@import '_variables';
+@import '_mixins';
+
+@media screen and (max-width: 760px) {
+    html {
+        body {
+            .section_pager {
+                .pager {
+                    margin-bottom: 0;
+                    .per_page {
+                        display: none;
+                    }
+                    .results {
+                        width: 100%;
+                    }
+                    .links {
+                        width: 100%;
+                        input {
+                            width: 4em;
+                            padding: 1em !important;
+                        }
+                        .button {
+                            padding: .8em 1.2em .9em;
+                            &.previous, &.next {
+                                padding: .8em 1.3em .9em;
+                            }
+                        }
+                    }
+                }
+            }
+            .section_pager_top {
+                display: none;
+                .pager {
+                    flex-direction: column;
+                    -webkit-flex-direction: column;
+                    padding-bottom: 0;
+                }
+                .results {
+                    margin-bottom: .8em;
+                }
+            }
+            .section_pager_bottom {
+                .pager {
+                    flex-direction: column-reverse;
+                    -webkit-flex-direction: column-reverse;
+                }
+                .results {
+                    margin-top: .8em;
+                }
+            }
+
+        }
+    }
+}

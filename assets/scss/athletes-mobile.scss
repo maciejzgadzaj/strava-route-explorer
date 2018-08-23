@@ -1,0 +1,67 @@
+@import '_variables';
+@import '_mixins';
+
+@media screen and (max-width: 760px) {
+    html {
+        body {
+            .page_athletes {
+                $imageWidth: 70px;
+                $routeCountWidth: 30%;
+                $nameWidth: calc(100% - #{$imageWidth} - #{$routeCountWidth});
+
+                .head {
+                    margin: 0;
+                    padding: .5em 0 .3em;
+                    .last_sync {
+                        display: none;
+                    }
+                }
+                .section_rows {
+                    .row {
+                        .image {
+                            img {
+                                width: 50px;
+                                height: 50px;
+                            }
+                        }
+                        .name {
+                        }
+                        .routes {
+                        }
+                        .last_sync {
+                            display: none;
+                        }
+                    }
+                }
+                .image {
+                    width: $imageWidth !important;
+                }
+                .name {
+                    width: $nameWidth !important;
+                }
+                .routes {
+                    width: $routeCountWidth !important;
+                    text-align: right;
+                }
+                // End .section_rows
+
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 540px) {
+    html {
+        body {
+
+        }
+    }
+}
+
+@media screen and (max-width: 340px) {
+    html {
+        body {
+
+        }
+    }
+}

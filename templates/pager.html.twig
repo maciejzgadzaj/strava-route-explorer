@@ -6,43 +6,50 @@
     {% set max = data.total %}
 {% endif %}
 
-<form method="GET" action="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': null, 'per_page': null})) }}">
-    <div class="pager">
+<div class="section_pager">
+    <form method="GET" action="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': null, 'per_page': null})) }}">
+        <div class="pager">
 
-        <div class="per_page">
-            <input name="per_page" value="{{ per_page }}" /> results per page
-            <input type="submit" style="display:none" />
+            <div class="per_page">
+                <input type="number" name="per_page" value="{{ per_page }}" /> results per page
+                <input type="submit" style="display:none" />
+            </div>
+
+            <div class="results">
+                {% if min <= data.total %}
+                    Results <span class="highlight">{{ min }}-{{ max }}</span> of <span class="highlight">{{ data.total }}</span>
+                {% else %}
+                    <span class="highlight">Whoa, did you get lost? <a class="highlight" href="{{ path(app.request.attributes.get('_route')) }}">Back to the listing</a>.</span>
+                {% endif %}
+            </div>
+
+            <div class="links">
+
+                {% if page > 1 %}
+                    <a class="button first" title="First page" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': 1})) }}">&laquo;</a>
+                    <a class="button previous" title="Previous page" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': page-1})) }}">&lsaquo;</a>
+                {% else %}
+                    <span class="button first disabled">&laquo;</span>
+                    <span class="button previous disabled">&lsaquo;</span>
+                {% endif %}
+
+                <input type="number" name="page" value="{{ page }}" title="Current page" />
+
+                {% if page < pages %}
+                    <a class="button next" title="Next page" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': page+1})) }}">&rsaquo;</a>
+                    <a class="button last" title="Last page" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': pages})) }}">&raquo;</a>
+                {% else %}
+                    <span class="button next disabled">&rsaquo;</span>
+                    <span class="button last disabled">&raquo;</span>
+                {% endif %}
+
+            </div>
+
         </div>
+    </form>
+</div>
 
-        <div class="links">
-
-            {% if page > 1 %}
-                <a class="button first" title="First page" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': 1})) }}">&laquo;</a>
-                <a class="button previous" title="Previous page" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': page-1})) }}">&lsaquo;</a>
-            {% else %}
-                <span class="button first disabled">&laquo;</span>
-                <span class="button previous disabled">&lsaquo;</span>
-            {% endif %}
-
-            <input name="page" value="{{ page }}" title="Current page" />
-
-            {% if page < pages %}
-                <a class="button next" title="Next page" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': page+1})) }}">&rsaquo;</a>
-                <a class="button last" title="Last page" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': pages})) }}">&raquo;</a>
-            {% else %}
-                <span class="button next disabled">&rsaquo;</span>
-                <span class="button last disabled">&raquo;</span>
-            {% endif %}
-
-        </div>
-
-        <div class="results">
-            {% if min <= data.total %}
-                Results <span class="highlight">{{ min }}-{{ max }}</span> of <span class="highlight">{{ data.total }}</span>
-            {% else %}
-                <span class="highlight">Whoa, did you get lost? <a class="highlight" href="{{ path(app.request.attributes.get('_route')) }}">Back to the listing</a>.</span>
-            {% endif %}
-        </div>
-
-    </div>
-</form>
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('build/pager.css') }}">
+    <link rel="stylesheet" media='screen and (max-width: 760px)' href="{{ asset('build/pager-mobile.css') }}" />
+{% endblock %}

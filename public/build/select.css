@@ -17,7 +17,8 @@
   .routes .checkbox {
     width: 2%; }
   .routes .id {
-    width: 5%; }
+    width: 5%;
+    color: #999; }
   .routes .name {
     width: 30%; }
     .routes .name a {
@@ -25,15 +26,21 @@
       .routes .name a:hover {
         text-decoration: underline; }
   .routes .distance {
-    width: 5%; }
+    width: 10%;
+    white-space: nowrap;
+    text-align: right; }
   .routes .elevation {
-    width: 5%; }
+    width: 10%;
+    white-space: nowrap;
+    text-align: right; }
   .routes .athlete {
-    width: 15%; }
+    width: 13%; }
   .routes .created {
-    width: 10%; }
+    width: 10%;
+    color: #999; }
   .routes .updated {
-    width: 10%; }
+    width: 10%;
+    color: #999; }
   .routes .submit {
     position: fixed;
     bottom: 0;

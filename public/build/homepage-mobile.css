@@ -4,7 +4,8 @@
     html body .splash .text {
       margin-bottom: 4em; }
   html body .how .steps {
-    flex-direction: column; }
+    flex-direction: column;
+    -webkit-flex-direction: column; }
     html body .how .steps .step {
       width: 100%; }
   html body .enjoy {

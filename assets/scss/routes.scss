@@ -2,134 +2,206 @@
 @import '_mixins';
 
 $imageWidth: 75px;
-$nameWidth: calc(40% - 2em);
-$distanceWidth: calc(10% - 2em);
-$elevationGainWidth: calc(10% - 2em);
-$athleteWidth: calc(18% - 2em);
-$updatedWidth: calc(12% - 2em);
-$locationWidth: calc(30% - 2em);
 
-.routes {
-    .pager {
-        position: relative;
-        margin: 2px 0;
-        padding: 1em;
-        background-color: #f0f0f0;
-        text-align: center;
-        .per_page {
-            position: absolute;
-            top: .5em;
-            left: 1em;
-            color: #bbb;
-            input {
-                width: 2em;
-                margin: 0;
-                padding: .5em;
-                border: 1px solid #ddd;
-                background-color: white;
-                font-size: .9em;
-                &:hover {
-                    border-color: $orange;
-                }
-            }
-        }
-        .results {
-            color: #bbb;
-            .number {
-                color: #000;
-            }
-        }
-        .links {
-            position: absolute;
-            top: .5em;
-            right: 1em;
-            .button {
-                padding: .4em .7em .5em;
-                border: 1px solid #ddd;
-                color: #f0f0f0;
-                &.previous, &.next {
-                    padding: .4em .8em .5em;
-                }
-            }
-            a.button {
-                text-decoration: none;
-                background-color: white;
-                color: #aaa;
-                &:hover {
-                    border-color: $orange;
-                    background-color: $orange;
-                    color: $white;
-                    @include transition;
-                }
-            }
-            input {
-                width: 2em;
-                margin: 0;
-                padding: .5em;
-                border: 1px solid #ddd;
-                background-color: white;
-                text-align: center;
-                font-size: .9em;
-                &:hover {
-                    border-color: $orange;
-                }
-            }
-        }
-        a {
-            color: #bbb;
-        }
-    }
+$vwExclScrollbar: calc(100vw - (100vw - 100%));
+$typeWidth: calc(#{$imageWidth} + 1em);
+$distanceWidth: 10%;
+$elevationWidth: 10%;
+$athleteWidth: 15%;
+$updatedWidth: 12%;
+$nameWidth: calc(100% - #{$typeWidth} - #{$distanceWidth} - #{$elevationWidth} - #{$athleteWidth} - #{$updatedWidth});
 
-    .head {
+$locationWidth: calc(30vw);
+
+.page_routes {
+
+    .section_filters {
         display: flex;
-        margin: 2px 0 0;
-        padding: 0;
+        flex-wrap: wrap;
+        -webkit-flex-wrap: wrap;
+        margin: 2px 0;
+        padding: 0 0 0 1em;
         background-color: #f0f0f0;
+        border-bottom: 1px solid #e0e0e0;
 
-        & > div {
-            display: flex;
-            padding: .5em 1em 0;
-            .sort {
-                margin: 0 0 0 .3em;
+        .filter {
+            padding: .5em 1em .5em 0;
+            .label {
+                display: flex;
+                .sort {
+                    margin: 0 0 0 .3em;
+                }
+            }
+            .input {
+                input:not([type='checkbox']) {
+                    width: 100%;
+                }
             }
         }
-        &::after {
-            content: "";
-            clear: both;
-            display: table;
+        .filter.type {
+            order: 1;
+            -webkit-order: 1;
+            width: $typeWidth;
+            select {
+                color: #bbb;
+                option {
+                    .placeholder {
+                        color: #bbb;
+                    }
+                }
+                &.not_empty {
+                    color: $black;
+                    border-color: $orange;
+                    .placeholder {
+                        color: $black;
+                    }
+                }
+            }
         }
-        &.even {
-            background-color: #f9f9f9;
-        }
-
-        .image {
-            width: $imageWidth;
-        }
-        .name {
+        .filter.name {
+            order: 2;
+            -webkit-order: 2;
             width: $nameWidth;
         }
-        .distance {
+        .filter.distance {
+            order: 3;
+            -webkit-order: 3;
             width: $distanceWidth;
+            .label {
+                display: flex;
+            }
+            .input {
+                display: flex;
+                justify-content: space-between;
+                -webkit-justify-content: space-between;
+                input {
+                    width: 48%;
+                }
+            }
             .unit {
                 @include unit;
             }
         }
-        .elevation_gain {
-            width: $elevationGainWidth;
+        .filter.elevation {
+            order: 4;
+            -webkit-order: 4;
+            width: $elevationWidth;
+            .label {
+                display: flex;
+            }
+            .input {
+                display: flex;
+                justify-content: space-between;
+                -webkit-justify-content: space-between;
+                input {
+                    width: 48%;
+                }
+            }
             .unit {
                 @include unit;
             }
         }
-        .athlete {
+        .filter.athlete {
+            order: 5;
+            -webkit-order: 6;
             width: $athleteWidth;
+            position: relative;
+            .starred {
+                position: absolute;
+                margin-top: .3em;
+                font-size: .9em;
+            }
         }
-        .updated {
+        .filter.updated {
+            order: 8;
+            -webkit-order: 8;
             width: $updatedWidth;
+            .input {
+                display: flex;
+                button {
+                    margin-right: .5em;
+                    padding: .5em 1em;
+                    &.search {
+                    }
+                    &.reset {
+                        background-color: #f0f0f0;
+                        color: #bbb;
+                    }
+                    &:hover {
+                        cursor: pointer;
+                    }
+                }
+            }
+            &.active {
+                .input {
+                    button.reset {
+                        background-color: white;
+                        color: black;
+                    }
+                }
+            }
         }
-    }
 
-    .filters {
-        background-color: #f0f0f0;
+        .advanced_filters_wrapper {
+            order: 10;
+            -webkit-order: 10;
+            width: 100%;
+            .advanced_filters {
+                .filter {
+                    display: flex;
+                    width: 100%;
+
+                    .location_address {
+                        $locationAddressWidth: calc(#{$typeWidth} + #{$nameWidth} + #{$distanceWidth} + #{$elevationWidth} + 1em);
+                        width: $locationAddressWidth;
+                        .label {
+                            width: $typeWidth;
+                        }
+                        .input {
+                            width: calc(100% - #{$typeWidth} - 1em);
+                            position: relative;
+                            .geolocate {
+                                position: absolute;
+                                top: .9em;
+                                right: .5em;
+                                width: 1.2em;
+                                height: 1.2em;
+                                &:hover {
+                                    cursor: pointer;
+                                }
+                            }
+                        }
+                    }
+                    .location_within {
+                        .label {
+                            padding-right: .5em;
+                        }
+                        .input {
+                            select {
+                                width: auto;
+                            }
+                        }
+                    }
+                    .location_section {
+                        display: flex;
+                        align-items: baseline;
+                    }
+                }
+            }
+            .advanced-filters-links {
+                margin-top: -.25em;
+                padding: 0 1em 1em calc(#{$typeWidth} + .5em);
+                font-size: .8em;
+                color: #999;
+                .advanced-filters-toggle {
+                    &:hover {
+                        cursor: pointer;
+                        color: black;
+                    }
+                }
+            }
+        }
+
         select, input:not([type='checkbox']), button {
             width: 95%;
             margin-top: .5em;
@@ -168,143 +240,23 @@ $locationWidth: calc(30% - 2em);
             }
         }
     }
-    .basic_filters {
-        display: flex;
-        margin: 0;
-        border-bottom: 1px solid #eee;
 
-        .filter {
-            padding: 0 1em .5em;
-        }
-
-        .image {
-            width: $imageWidth;
-            select {
-                color: #bbb;
-                option {
-                    .placeholder {
-                        color: #bbb;
-                    }
-                }
-                &.not_empty {
-                    color: $black;
-                    border-color: $orange;
-                    .placeholder {
-                        color: $black;
-                    }
-                }
-            }
-        }
-        .name {
-            width: $nameWidth;
-        }
-        .distance {
-            width: $distanceWidth;
-            display: flex;
-            input {
-                width: 40%;
-                margin-right: .25em;
-            }
-        }
-        .elevation_gain {
-            width: $elevationGainWidth;
-            display: flex;
-            input {
-                width: 40%;
-                margin-right: .25em;
-            }
-        }
-        .athlete {
-            position: relative;
-            width: $athleteWidth;
-            .starred {
-                position: absolute;
-                margin-top: .3em;
-                font-size: .9em;
-            }
-        }
-        .updated {
-            width: $updatedWidth;
-            display: flex;
-            button {
-                margin-right: .5em;
-                padding: .5em 1em;
-                &.search {
-                }
-                &.reset {
-                    background-color: #f0f0f0;
-                    color: #bbb;
-                }
-                &:hover {
-                    cursor: pointer;
-                }
-            }
-            &.active {
-                .reset {
-                    background-color: white;
-                    color: black;
-                }
-            }
-        }
-    }
-    .advanced_filters {
-        .filter {
-            margin-left: 22px;
-            padding: 0 1em .5em 3em;
-        }
-        .location {
-            display: flex;
-            align-items: baseline;
-            .label {
-                width: 4%;
-            }
-            .address {
-                width: 60%;
-                position: relative;
-                .geolocate {
-                    position: absolute;
-                    top: .9em;
-                    right: 1.9em;
-                    width: 18px;
-                    height: 18px;
-                    &:hover {
-                        cursor: pointer;
-                    }
-                }
-            }
-            .distance {
-                width: 6%;
-            }
-        }
-    }
-    .filter-links {
-        margin-top: -.25em;
-        padding: 0 1em 1em 125px;
-        font-size: .8em;
-        color: #999;
-        .advanced-filters-toggle {
-            &:hover {
-                cursor: pointer;
-                color: black;
-            }
-        }
-    }
-
-    .rows {
+    .section_rows {
         margin: 2px 0;
 
         .row {
+            display: flex;
+            margin: 0;
             border-bottom: 1px solid #eee;
             &.even {
                 background-color: #f9f9f9;
             }
-            & > * {
-                float: left;
+            .cell {
                 margin: 0;
                 padding: $padding;
             }
             .image {
-                width: $imageWidth;
+                width: $typeWidth;
             }
             .name {
                 width: $nameWidth;
@@ -330,12 +282,14 @@ $locationWidth: calc(30% - 2em);
             }
             .distance {
                 width: $distanceWidth;
+                white-space: nowrap;
                 .unit {
                     @include unit;
                 }
             }
-            .elevation_gain {
-                width: $elevationGainWidth;
+            .elevation {
+                width: $elevationWidth;
+                white-space: nowrap;
                 .climb {
                     display: inline-block;
                     width: 17px;
@@ -375,7 +329,7 @@ $locationWidth: calc(30% - 2em);
                 clear: both;
                 display: table;
             }
-            .description {
+            .small {
                 margin-top: .3em;
                 font-size: .6em;
                 color: #aaa;
@@ -412,6 +366,43 @@ ul.ui-autocomplete.ui-menu {
         &:hover {
             background-color: white;
             cursor: pointer;
+        }
+    }
+}
+
+@media screen and (max-width: 1350px) {
+    html {
+        body {
+            .page_routes {
+                .section_filters {
+                    .filter.distance {
+                        .input {
+                            flex-direction: column;
+                            -webkit-flex-direction: column;
+                            input {
+                                width: 100%;
+                                max-width: 5em;
+                            }
+                        }
+                    }
+                    .filter.elevation {
+                        .input {
+                            flex-direction: column;
+                            -webkit-flex-direction: column;
+                            input {
+                                width: 100%;
+                                max-width: 5em;
+                            }
+                        }
+                    }
+                    .filter.updated {
+                        .input {
+                            flex-direction: column;
+                            -webkit-flex-direction: column;
+                        }
+                    }
+                }
+            }
         }
     }
 }

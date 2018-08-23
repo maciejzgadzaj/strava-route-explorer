@@ -1,0 +1,126 @@
+@import '_variables';
+@import '_mixins';
+
+@media screen and (max-width: 760px) {
+    html {
+        body {
+            .header {
+                flex-direction: column;
+                -webkit-flex-direction: column;
+                .header1 {
+                    .logo-title {
+                        display: none;
+                    }
+                    .menu_mobile {
+                        display: flex;
+                        .menu_item {
+                            width: 4em;
+                            height: 4em;
+                            background-repeat: no-repeat;
+                            background-position: center center;
+                            a {
+                                display: block;
+                                width: 100%;
+                                height: 100%;
+                            }
+                            &:hover {
+                                cursor: pointer;
+                            }
+                        }
+                        .menu_item.menu_item_burger {
+                            background-image: url(../../images/icon-menu-burger.svg);
+                            background-size: 1.5em;
+                        }
+                        .menu_item.menu_item_routes {
+                            background-image: url(../../images/icon-menu-routes.svg);
+                            background-size: 2.25em;
+                        }
+                        .menu_item.menu_item_my_routes {
+                            background-image: url(../../images/icon-menu-my-routes.svg);
+                            background-size: 2.15em;
+                        }
+                        .menu_item.menu_item_athletes {
+                            background-image: url(../../images/icon-menu-athletes.svg);
+                            background-size: 2.4em;
+                        }
+                    }
+                }
+                .header2 {
+                    display: none;
+                    flex-direction: column;
+                    -webkit-flex-direction: column;
+                    border-top: 2px solid $white;
+                    padding: 1em 0 2em;
+                    .menu {
+                        margin: 0;
+                        ul {
+                            li {
+                                display: block !important;
+
+                                a {
+                                    padding-left: 3.5em;
+                                    background-repeat: no-repeat;
+                                    background-position: 1.1em center;
+                                    font-size: 1.2em;
+                                    text-decoration: none;
+                                }
+
+
+                            }
+                            li.home a {
+                                background-image: url(../../images/logo-white-bg.svg);
+                                background-size: 1.3em;
+                            }
+                            li.routes a {
+                                background-image: url(../../images/icon-menu-routes.svg);
+                                background-size: 1.5em;
+                            }
+                            li.my_routes a {
+                                background-image: url(../../images/icon-menu-my-routes.svg);
+                                background-size: 1.4em;
+                            }
+                            li.athletes a {
+                                background-image: url(../../images/icon-menu-athletes.svg);
+                                background-size: 1.5em;
+                            }
+                            li.sync-my-routes a {
+                                background-image: url(../../images/icon-menu-sync.svg);
+                                background-size: 1.45em;
+                            }
+                            li.connect-with-strava a {
+                                background-image: url(../../images/icon-strava.svg);
+                                background-size: 1.6em;
+                            }
+                        }
+                    }
+                    .add-route {
+                        padding: 1em 1em 0 4em;
+                        input {
+                            width: 90%;
+                            padding: 1em;
+                        }
+                    }
+                }
+                .menu {
+                    margin: 1em 0;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 540px) {
+    html {
+        body {
+
+        }
+    }
+}
+
+@media screen and (max-width: 340px) {
+    html {
+        body {
+
+        }
+    }
+}

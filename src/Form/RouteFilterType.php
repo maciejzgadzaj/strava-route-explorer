@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -73,7 +74,6 @@ class RouteFilterType extends AbstractType
                 'attr' => [
                     'placeholder' => 'name or id',
                     'title' => 'Filter routes by name or ID',
-                    'accesskey' => 'r',
                     '@focus' => '$event.target.select()',
                 ],
             ]
@@ -81,14 +81,14 @@ class RouteFilterType extends AbstractType
 
         $builder->add(
             'distance_min',
-            TextType::class,
+            IntegerType::class,
             [
                 'label' => false,
                 'required' => false,
                 'attr' => [
+                    'type' => 'number',
                     'placeholder' => 'min',
                     'title' => 'Filter routes by minimum distance',
-                    'accesskey' => 'd',
                     '@focus' => '$event.target.select()',
                 ],
             ]
@@ -96,27 +96,29 @@ class RouteFilterType extends AbstractType
 
         $builder->add(
             'distance_max',
-            TextType::class,
+            IntegerType::class,
             [
                 'label' => false,
                 'required' => false,
                 'attr' => [
+                    'type' => 'number',
                     'placeholder' => 'max',
                     'title' => 'Filter routes by maximum distance',
+                    '@focus' => '$event.target.select()',
                 ],
             ]
         );
 
         $builder->add(
             'elevation_gain_min',
-            TextType::class,
+            IntegerType::class,
             [
                 'label' => false,
                 'required' => false,
                 'attr' => [
+                    'type' => 'number',
                     'placeholder' => 'min',
                     'title' => 'Filter routes by minimum elevation gain',
-                    'accesskey' => 'e',
                     '@focus' => '$event.target.select()',
                 ],
             ]
@@ -124,13 +126,15 @@ class RouteFilterType extends AbstractType
 
         $builder->add(
             'elevation_gain_max',
-            TextType::class,
+            IntegerType::class,
             [
                 'label' => false,
                 'required' => false,
                 'attr' => [
+                    'type' => 'number',
                     'placeholder' => 'max',
                     'title' => 'Filter routes by maximum elevation gain',
+                    '@focus' => '$event.target.select()',
                 ],
             ]
         );
@@ -144,7 +148,6 @@ class RouteFilterType extends AbstractType
                 'attr' => [
                     'placeholder' => 'name or id',
                     'title' => 'Filter routes by athlete name or id',
-                    'accesskey' => 'a',
                     '@focus' => '$event.target.select()',
                 ],
             ]

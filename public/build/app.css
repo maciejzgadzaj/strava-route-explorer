@@ -1,46 +1,73 @@
+* {
+  box-sizing: border-box; }
+
 body {
   margin: 0;
   padding: 0;
   font-family: -apple-system, system-ui, BlinkMacSystemFont, Roboto, "Segoe UI", "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; }
+  body a {
+    color: #000; }
+    body a:hover {
+      color: #fc4c02; }
   body .header {
-    padding: 0.5em 1em;
+    display: flex;
+    flex-direction: row;
+    -webkit-flex-direction: row;
+    justify-content: flex-start;
+    -webkit-justify-content: flex-start;
+    padding: 0;
     background-color: #fc4c02; }
-    body .header .logo-title, body .header .menu {
-      display: inline-block; }
-    body .header .logo-title {
-      font-size: 25px;
-      color: white; }
-    body .header .menu {
-      margin: .1em 0 0 2em;
-      vertical-align: top; }
-      body .header .menu a {
-        display: inline-block;
-        padding: .5em .7em;
-        color: white;
-        text-decoration: none; }
-    body .header .add-route {
-      float: right;
-      background-color: #fc4c02;
-      color: #ffffff; }
-      body .header .add-route input {
-        padding: .5em;
-        border: 1px solid #dc3b02;
-        background-color: #f3f3f3;
-        font-size: .9em; }
-        body .header .add-route input::placeholder {
-          color: #bbb;
-          opacity: 1; }
-        body .header .add-route input:-ms-input-placeholder {
-          color: #bbb; }
-        body .header .add-route input::-ms-input-placeholder {
-          color: #bbb; }
-    body .header .sync-routes {
-      float: right;
-      margin: .5em; }
-      body .header .sync-routes a {
-        padding: .8em;
-        color: white;
-        text-decoration: none; }
+    body .header .header1 {
+      display: flex;
+      justify-content: space-between;
+      -webkit-justify-content: space-between; }
+      body .header .header1 .logo-title a {
+        height: 100%;
+        display: block;
+        padding: .5em .5em 0; }
+    body .header .header2 {
+      display: flex;
+      flex-grow: 1;
+      -webkit-flex-grow: 1;
+      justify-content: space-between;
+      -webkit-justify-content: space-between; }
+      body .header .header2 .menu {
+        margin: 0 1em; }
+        body .header .header2 .menu ul {
+          list-style-type: none;
+          margin: 0;
+          padding: 0; }
+          body .header .header2 .menu ul li {
+            display: inline-block;
+            margin: 0;
+            padding: 0; }
+            body .header .header2 .menu ul li a {
+              display: block;
+              padding: 1em;
+              color: white;
+              text-decoration: none; }
+              body .header .header2 .menu ul li a:hover {
+                text-decoration: underline; }
+          body .header .header2 .menu ul li.home {
+            display: none; }
+      body .header .header2 .sync-menu {
+        margin-left: auto;
+        margin-right: 1em; }
+      body .header .header2 .add-route {
+        color: #ffffff;
+        padding: .5em .5em 0 0; }
+        body .header .header2 .add-route input {
+          padding: .5em;
+          border: 1px solid #dc3b02;
+          background-color: #f3f3f3;
+          font-size: .9em; }
+          body .header .header2 .add-route input::placeholder {
+            color: #bbb;
+            opacity: 1; }
+          body .header .header2 .add-route input:-ms-input-placeholder {
+            color: #bbb; }
+          body .header .header2 .add-route input::-ms-input-placeholder {
+            color: #bbb; }
   body .flashes .flash {
     margin: 2px 0;
     padding: 1em;
@@ -66,25 +93,5 @@ body {
       color: #aaa; }
       body .footer a:hover {
         color: #ffffff; }
-  body a {
-    color: black; }
-    body a:hover {
-      color: #fc4c02; }
-  body ul.menu {
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    background-color: #fc4c02;
-    list-style-type: none; }
-    body ul.menu li {
-      display: inline; }
-      body ul.menu li a {
-        display: inline-block;
-        padding: 0.5em 1em;
-        color: #ffffff;
-        text-decoration: none; }
-        body ul.menu li a:hover {
-          color: #fc4c02;
-          background-color: #ffffff; }
 
 /*# sourceMappingURL=app.css.map */

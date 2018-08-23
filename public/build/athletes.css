@@ -1,76 +1,76 @@
-.athletes .head {
+.page_athletes .head {
   display: flex;
   margin: 2px 0 0;
   padding: 0;
   background-color: #f0f0f0; }
-  .athletes .head > div {
+  .page_athletes .head > div {
     display: flex;
     padding: .5em 1em; }
-    .athletes .head > div .sort {
+    .page_athletes .head > div .sort {
       margin: 0 0 0 .3em; }
-  .athletes .head::after {
+  .page_athletes .head::after {
     content: "";
     clear: both;
     display: table; }
-  .athletes .head.even {
+  .page_athletes .head.even {
     background-color: #f9f9f9; }
-  .athletes .head .image {
+  .page_athletes .head .image {
     width: 75px; }
-  .athletes .head .name {
+  .page_athletes .head .name {
     width: calc(40% - 2em); }
-  .athletes .head .distance {
+  .page_athletes .head .distance {
     width: calc(10% - 2em); }
-    .athletes .head .distance .unit {
+    .page_athletes .head .distance .unit {
       font-size: .8em;
       color: #aaa; }
-  .athletes .head .elevation_gain {
+  .page_athletes .head .elevation_gain {
     width: calc(10% - 2em); }
-    .athletes .head .elevation_gain .unit {
+    .page_athletes .head .elevation_gain .unit {
       font-size: .8em;
       color: #aaa; }
-  .athletes .head .athlete {
+  .page_athletes .head .athlete {
     width: calc(18% - 2em); }
-  .athletes .head .updated {
+  .page_athletes .head .updated {
     width: calc(12% - 2em); }
-.athletes .rows {
+.page_athletes .section_rows {
   margin: 2px 0; }
-  .athletes .rows .row {
+  .page_athletes .section_rows .row {
     border-bottom: 1px solid #eee; }
-    .athletes .rows .row.even {
+    .page_athletes .section_rows .row.even {
       background-color: #f9f9f9; }
-    .athletes .rows .row.synchronised-1 .name {
+    .page_athletes .section_rows .row.synchronised-1 .name {
       font-weight: bold; }
-    .athletes .rows .row > * {
+    .page_athletes .section_rows .row > * {
       float: left;
       margin: 0;
       padding: 0.5em 1em; }
-    .athletes .rows .row .image {
+    .page_athletes .section_rows .row .image {
       width: 75px; }
-      .athletes .rows .row .image img {
+      .page_athletes .section_rows .row .image img {
         border-radius: 50%; }
-    .athletes .rows .row .name {
+    .page_athletes .section_rows .row .name {
       width: calc(40% - 2em); }
-    .athletes .rows .row .routes {
+    .page_athletes .section_rows .row .routes {
       width: calc(10% - 2em); }
-    .athletes .rows .row .last_sync {
+    .page_athletes .section_rows .row .last_sync {
       color: #bbb; }
-    .athletes .rows .row::after {
+    .page_athletes .section_rows .row::after {
       content: "";
       clear: both;
       display: table; }
-    .athletes .rows .row .description {
+    .page_athletes .section_rows .row .description {
       margin-top: .3em;
       font-size: .6em;
       color: #aaa;
       font-weight: normal; }
-      .athletes .rows .row .description a {
+      .page_athletes .section_rows .row .description a {
         text-decoration: none;
         color: #aaa; }
-        .athletes .rows .row .description a:hover {
+        .page_athletes .section_rows .row .description a:hover {
           color: #fc4c02; }
-    .athletes .rows .row .distance {
+    .page_athletes .section_rows .row .distance {
       text-align: right; }
-    .athletes .rows .row .elevation_gain {
+    .page_athletes .section_rows .row .elevation_gain {
       text-align: right; }
 
 /*# sourceMappingURL=athletes.css.map */

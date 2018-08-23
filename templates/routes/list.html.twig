@@ -3,158 +3,219 @@
 {% block title %}{{ 'Routes'|trans }} - {{ parent() }}{% endblock %}
 
 {% block body %}
-    <div class="routes">
-        {% include 'pager.html.twig' %}
-
-        {% set query = app.request.query.all %}
-        <div class="head">
-            <div class="image">
-                <div class="label">Type</div>
-            </div>
-            <div class="name">
-                <div class="label">
-                    <span class="accesskey">R</span>oute
-                </div>
-                {% set dir, direction, icon = 'asc', 'ascending', 'icon-sort.svg' %}
-                {% if query.sort is defined and query.sort == 'name' %}
-                    {% set icon = 'icon-sort-active.svg' %}
-                    {% if query.dir is defined and query.dir == 'asc' %}
-                        {% set dir, direction = 'desc', 'descending' %}
-                    {% endif %}
-                {% endif %}
-                <div class="sort">
-                    <a title="Sort routes by name in {{ direction }} order" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({ 'sort': 'name', 'dir': dir })) }}"><img src="images/{{ icon }}" width="12" height="12" /></a>
-                </div>
-            </div>
-            <div class="distance">
-                <div class="label">
-                    <span class="accesskey">D</span>istance
-                </div>
-                {% set dir, direction, icon = 'asc', 'ascending', 'icon-sort.svg' %}
-                {% if query.sort is defined and query.sort == 'distance' %}
-                    {% set icon = 'icon-sort-active.svg' %}
-                    {% if query.dir is defined and query.dir == 'asc' %}
-                        {% set dir, direction = 'desc', 'descending' %}
-                    {% endif %}
-                {% endif %}
-                <div class="sort">
-                    <a title="Sort routes by distance in {{ direction }} order" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({ 'sort': 'distance', 'dir': dir })) }}"><img src="images/{{ icon }}" width="12" height="12" /></a>
-                </div>
-            </div>
-            <div class="elevation_gain">
-                <div class="label">
-                    <span class="accesskey">E</span>levation
-                </div>
-                {% set dir, direction, icon = 'asc', 'ascending', 'icon-sort.svg' %}
-                {% if query.sort is defined and query.sort == 'elevation' %}
-                    {% set icon = 'icon-sort-active.svg' %}
-                    {% if query.dir is defined and query.dir == 'asc' %}
-                        {% set dir, direction = 'desc', 'descending' %}
-                    {% endif %}
-                {% endif %}
-                <div class="sort">
-                    <a title="Sort routes by elevation gain in {{ direction }} order" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({ 'sort': 'elevation', 'dir': dir })) }}"><img src="images/{{ icon }}" width="12" height="12" /></a>
-                </div>
-            </div>
-            <div class="athlete">
-                <div class="label">
-                    <span class="accesskey">A</span>thlete
-                </div>
-                {% set dir, direction, icon = 'asc', 'ascending', 'icon-sort.svg' %}
-                {% if query.sort is defined and query.sort == 'athlete' %}
-                    {% set icon = 'icon-sort-active.svg' %}
-                    {% if query.dir is defined and query.dir == 'asc' %}
-                        {% set dir, direction = 'desc', 'descending' %}
-                    {% endif %}
-                {% endif %}
-                <div class="sort">
-                    <a title="Sort routes by athlete in {{ direction }} order" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({ 'sort': 'athlete', 'dir': dir })) }}"><img src="images/{{ icon }}" width="12" height="12" /></a>
-                </div>
-            </div>
-            <div class="updated">
-                <div class="label">
-                    Updated
-                </div>
-                {% set dir, direction, icon = 'desc', 'descending', 'icon-sort.svg' %}
-                {% if query.sort is defined and query.sort == 'date' %}
-                    {% set icon = 'icon-sort-active.svg' %}
-                    {% if query.dir is defined and query.dir == 'desc' %}
-                        {% set dir, direction = 'asc', 'ascending' %}
-                    {% endif %}
-                {% endif %}
-                <div class="sort">
-                    <a title="Sort routes by updated date in {{ direction }} order" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({ 'sort': 'date', 'dir': dir })) }}"><img src="images/{{ icon }}" width="12" height="12" /></a>
-                </div>
-            </div>
+    <div class="page page_routes">
+        <div class="section_pager_top">
+            {% include 'pager.html.twig' %}
         </div>
 
+        {# SECTION: FILTERS #}
         {{ form_start(route_filter_form) }}
-        <div class="filters basic_filters">
-            <div class="filter image">
-                {{ form_row(route_filter_form.type) }}
-            </div>
-            <div class="filter name">
-                {{ form_row(route_filter_form.name) }}
-            </div>
-            <div class="filter distance">
-                {{ form_widget(route_filter_form.distance_min) }}
-                {{ form_widget(route_filter_form.distance_max) }}
-            </div>
-            <div class="filter elevation_gain">
-                {{ form_widget(route_filter_form.elevation_gain_min) }}
-                {{ form_widget(route_filter_form.elevation_gain_max) }}
-            </div>
-            <div class="filter athlete">
-                {{ form_row(route_filter_form.athlete) }}
-                {% set display = 'none' %}
-                {% if (app.request.query.get('filter').athlete is defined and app.request.query.get('filter').athlete) %}
-                    {% set display = 'block' %}
-                {% endif %}
-                <div class="starred" style="display:{{ display }}">
-                    {{ form_widget(route_filter_form.starred) }} {{ form_label(route_filter_form.starred) }}
+        {% set query = app.request.query.all %}
+        <div class="filters_toggle{% if app.request.query.get('filter') %} active{% endif %}" style="display:none">filter results</div>
+        <div class="section_filters">
+
+            {# FILTER: TYPE #}
+            <div class="filter type">
+                <div class="label">
+                    <div class="text">Type</div>
+                </div>
+                <div class="input">
+                    {{ form_row(route_filter_form.type) }}
                 </div>
             </div>
-            <div class="filter updated{% if app.request.query.get('filter') %}{{ ' active' }}{% endif %}">
-                {{ form_row(route_filter_form.type) }}
-                {{ form_widget(route_filter_form.search) }}
-                {{ form_widget(route_filter_form.reset) }}
-            </div>
-        </div>
+            {# END FILTER: NAME #}
 
-        {% set advanced_filters_display = 'none' %}
-        {% if app.request.query.get('filter') and (app.request.query.get('filter').start_latlon is defined and app.request.query.get('filter').start_latlon or app.request.query.get('filter').end_latlon is defined and app.request.query.get('filter').end_latlon) %}
-            {% set advanced_filters_display = 'block' %}
-        {% endif %}
+            {# FILTER: NAME #}
+            <div class="filter name">
+                <div class="label">
+                    <div class="text">Route</div>
+                    {% set dir, direction, icon = 'asc', 'ascending', 'icon-sort.svg' %}
+                    {% if query.sort is defined and query.sort == 'name' %}
+                        {% set icon = 'icon-sort-active.svg' %}
+                        {% if query.dir is defined and query.dir == 'asc' %}
+                            {% set dir, direction = 'desc', 'descending' %}
+                        {% endif %}
+                    {% endif %}
+                    <div class="sort">
+                        <a title="Sort routes by name in {{ direction }} order" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({ 'sort': 'name', 'dir': dir })) }}"><img src="images/{{ icon }}" width="12" height="12" /></a>
+                    </div>
+                </div>
+                <div class="input">
+                    {{ form_row(route_filter_form.name) }}
+                </div>
+            </div>
+            {# END FILTER: NAME #}
 
-        <div class="filters advanced_filters" style="display:{{ advanced_filters_display }}">
-            <div class="filter location start">
-                <div class="label">{{ form_label(route_filter_form.start) }}</div>
-                <div class="address">{{ form_widget(route_filter_form.start) }}<img class="geolocate" data-target="start" src="images/icon-geolocate.svg" style="display:none" /></div>
-                <div class="label">{{ form_label(route_filter_form.start_dist) }}</div>
-                <div class="distance">{{ form_widget(route_filter_form.start_dist) }}</div>
-                {{ form_widget(route_filter_form.start_latlon) }}
+            {# FILTER: DISTANCE #}
+            <div class="filter distance">
+                <div class="label">
+                    <div class="text">Distance</div>
+                    {% set dir, direction, icon = 'asc', 'ascending', 'icon-sort.svg' %}
+                    {% if query.sort is defined and query.sort == 'distance' %}
+                        {% set icon = 'icon-sort-active.svg' %}
+                        {% if query.dir is defined and query.dir == 'asc' %}
+                            {% set dir, direction = 'desc', 'descending' %}
+                        {% endif %}
+                    {% endif %}
+                    <div class="sort">
+                        <a title="Sort routes by distance in {{ direction }} order" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({ 'sort': 'distance', 'dir': dir })) }}"><img src="images/{{ icon }}" width="12" height="12" /></a>
+                    </div>
+                </div>
+                <div class="input">
+                    {{ form_widget(route_filter_form.distance_min) }}
+                    {{ form_widget(route_filter_form.distance_max) }}
+                </div>
             </div>
-            <div class="filter location end">
-                <div class="label">{{ form_label(route_filter_form.end) }}</div>
-                <div class="address">{{ form_widget(route_filter_form.end) }}<img class="geolocate" data-target="end" src="images/icon-geolocate.svg" style="display:none" /></div>
-                <div class="label">{{ form_label(route_filter_form.end_dist) }}</div>
-                <div class="distance">{{ form_widget(route_filter_form.end_dist) }}</div>
-                {{ form_widget(route_filter_form.end_latlon) }}
+            {# END FILTER: DISTANCE #}
+
+            {# FILTER: ELEVATION GAIN #}
+            <div class="filter elevation">
+                <div class="label">
+                    <div class="text">Elevation</div>
+                    {% set dir, direction, icon = 'asc', 'ascending', 'icon-sort.svg' %}
+                    {% if query.sort is defined and query.sort == 'elevation' %}
+                        {% set icon = 'icon-sort-active.svg' %}
+                        {% if query.dir is defined and query.dir == 'asc' %}
+                            {% set dir, direction = 'desc', 'descending' %}
+                        {% endif %}
+                    {% endif %}
+                    <div class="sort">
+                        <a title="Sort routes by elevation gain in {{ direction }} order" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({ 'sort': 'elevation', 'dir': dir })) }}"><img src="images/{{ icon }}" width="12" height="12" /></a>
+                    </div>
+                </div>
+                <div class="input">
+                    {{ form_widget(route_filter_form.elevation_gain_min) }}
+                    {{ form_widget(route_filter_form.elevation_gain_max) }}
+                </div>
             </div>
+            {# END FILTER: ELEVATION GAIN #}
+
+            {# FILTER: ATHLETE #}
+            <div class="filter athlete">
+                <div class="label">
+                    <div class="text">Athlete</div>
+                    {% set dir, direction, icon = 'asc', 'ascending', 'icon-sort.svg' %}
+                    {% if query.sort is defined and query.sort == 'athlete' %}
+                        {% set icon = 'icon-sort-active.svg' %}
+                        {% if query.dir is defined and query.dir == 'asc' %}
+                            {% set dir, direction = 'desc', 'descending' %}
+                        {% endif %}
+                    {% endif %}
+                    <div class="sort">
+                        <a title="Sort routes by athlete in {{ direction }} order" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({ 'sort': 'athlete', 'dir': dir })) }}"><img src="images/{{ icon }}" width="12" height="12" /></a>
+                    </div>
+                </div>
+                <div class="input">
+                    {{ form_row(route_filter_form.athlete) }}
+                    {% set display = 'none' %}
+                    {% if (app.request.query.get('filter').athlete is defined and app.request.query.get('filter').athlete) %}
+                        {% set display = 'block' %}
+                    {% endif %}
+                    <div class="starred" style="display:{{ display }}">
+                        {{ form_widget(route_filter_form.starred) }} {{ form_label(route_filter_form.starred) }}
+                    </div>
+                </div>
+            </div>
+            {# END FILTER: ATHLETE #}
+
+            {# ADVANCED FILTERS WRAPPER #}
+            <div class="advanced_filters_wrapper">
+                {% set advanced_filters_display = 'none' %}
+                {% if app.request.query.get('filter') and (app.request.query.get('filter').start_latlon is defined and app.request.query.get('filter').start_latlon or app.request.query.get('filter').end_latlon is defined and app.request.query.get('filter').end_latlon) %}
+                    {% set advanced_filters_display = 'block' %}
+                {% endif %}
+                {# ADVANCED FILTERS #}
+                <div class="advanced_filters" style="display:{{ advanced_filters_display }}">
+
+                    {# ADVANCED FILTER: START LOCATION #}
+                    <div class="filter location location_start">
+                        <div class="location_section location_address">
+                            <div class="label">
+                                <div class="text">{{ form_label(route_filter_form.start) }}</div>
+                            </div>
+                            <div class="input address">
+                                {{ form_widget(route_filter_form.start) }}
+                                <img class="geolocate" data-target="start" src="images/icon-geolocate.svg" style="display:none" />
+                            </div>
+                        </div>
+                        <div class="location_section location_within">
+                            <div class="label">
+                                <div class="text">{{ form_label(route_filter_form.start_dist) }}</div>
+                            </div>
+                            <div class="input distance">
+                                {{ form_widget(route_filter_form.start_dist) }}
+                            </div>
+                        </div>
+                        {{ form_widget(route_filter_form.start_latlon) }}
+                    </div>
+                    {# END ADVANCED FILTER: START LOCATION #}
+
+                    {# ADVANCED FILTER: END LOCATION #}
+                    <div class="filter location location_end">
+                        <div class="location_section location_address">
+                            <div class="label">
+                                <div class="text">{{ form_label(route_filter_form.end) }}</div>
+                            </div>
+                            <div class="input address">
+                                {{ form_widget(route_filter_form.end) }}
+                                <img class="geolocate" data-target="end" src="images/icon-geolocate.svg" style="display:none" />
+                            </div>
+                        </div>
+                        <div class="location_section location_within">
+                            <div class="label">
+                                <div class="text">{{ form_label(route_filter_form.end_dist) }}</div>
+                            </div>
+                            <div class="input distance">
+                                {{ form_widget(route_filter_form.end_dist) }}
+                            </div>
+                        </div>
+                        {{ form_widget(route_filter_form.end_latlon) }}
+                    </div>
+                    {# END ADVANCED FILTER: END LOCATION #}
+
+                </div>
+                {# END ADVANCED FILTERS #}
+                <div class="filters advanced-filters-links">
+                    <span class="advanced-filters-toggle">+ more filters</span>
+                </div>
+            </div>
+            {# END ADVANCED FILTERS WRAPPER #}
+
+            {# FILTER: UPDATED #}
+            <div class="filter updated{% if app.request.query.get('filter') %} active{% endif %}">
+                <div class="label">
+                    <div class="text">Updated</div>
+                    {% set dir, direction, icon = 'desc', 'descending', 'icon-sort.svg' %}
+                    {% if query.sort is defined and query.sort == 'date' %}
+                        {% set icon = 'icon-sort-active.svg' %}
+                        {% if query.dir is defined and query.dir == 'desc' %}
+                            {% set dir, direction = 'asc', 'ascending' %}
+                        {% endif %}
+                    {% endif %}
+                    <div class="sort">
+                        <a title="Sort routes by updated date in {{ direction }} order" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({ 'sort': 'date', 'dir': dir })) }}"><img src="images/{{ icon }}" width="12" height="12" /></a>
+                    </div>
+                </div>
+                <div class="input">
+                    {{ form_widget(route_filter_form.search) }}
+                    {{ form_widget(route_filter_form.reset) }}
+                </div>
+            </div>
+            {# END FILTER: UPDATED #}
+
         </div>
         {{ form_end(route_filter_form) }}
-        <div class="filters filter-links">
-            <span class="advanced-filters-toggle">+ more filters</span>
-        </div>
+        {# END SECTION: FILTERS #}
 
-        <div class="rows">
+        {# SECTION: ROWS #}
+        <div class="section_rows">
             {% if data.results|length > 0 %}
                 {% for row in data.results %}
                     <div class="row type-{{ row.route.type }} {{ cycle(['odd', 'even'], loop.index0) }}">
-                        <div class="image">
+                        <div class="cell image">
                             <a href="https://www.strava.com/routes/{{ row.route.id }}"><img src="images/routes/{{ row.route.athlete.id }}/{{ row.route.id }}.jpg" width="75" height="50" /></a>
                         </div>
-                        <div class="name">
+                        <div class="cell name">
                             {% set starred_by = null %}
                             {% if (row.starred_by_current_athlete is defined and row.starred_by_current_athlete) %}
                                 {% set starred_by = 'current' %}
@@ -166,8 +227,8 @@
                             {% endif %}
                             <a title="See route on Strava.com" href="https://www.strava.com/routes/{{ row.route.id }}">{{ row.route.name }}</a>
                             <a title="See route on VeloViewer.com" class="veloviewer" href="https://veloviewer.com/routes/{{ row.route.id }}">vv</a>
-                            <div class="description">{{ row.route.id }}</div>
-                            <div class="description">{{ row.route.description }}</div>
+                            <div class="route-id small">{{ row.route.id }}</div>
+                            <div class="description small">{{ row.route.description }}</div>
                             {% if row.route.start_dist is defined or row.route.end_dist is defined %}
                                 <div class="distances">
                                     {% if row.start_dist is defined %}
@@ -179,22 +240,24 @@
                                 </div>
                             {% endif %}
                         </div>
-                        <div class="distance">
+                        <div class="flex-line-break"></div>
+                        <div class="cell distance">
                             {{ (row.route.distance // 1000)|number_format }} <span class="unit">km</span>
                         </div>
-                        <div class="elevation_gain">
+                        <div class="cell elevation">
                             {% if row.route.climbCategory in [5] %}
                                 <div class="climb cat-{{ row.route.climbCategory }}"></div>
                             {% endif %}
                             {{ row.route.elevationGain|number_format }} <span class="unit">m</span>
                         </div>
-                        <div class="athlete">
+                        <div class="flex-line-break"></div>
+                        <div class="cell athlete">
                             <a title="See all routes by {{ row.route.athlete.name }}" href="{{ path('routes', { 'filter[athlete]': row.route.athlete.name, 'filter[starred]': true }) }}">{{ row.route.athlete.name}}</a>
-                            <div class="description"><a class="description" title="See athlete profile on Strava.com" href="https://www.strava.com/athletes/{{ row.route.athlete.id }}">{{ row.route.athlete.id }}</a></div>
+                            <div class="small"><a class="small" title="See athlete profile on Strava.com" href="https://www.strava.com/athletes/{{ row.route.athlete.id }}">{{ row.route.athlete.id }}</a></div>
                         </div>
-                        <div class="updated">
+                        <div class="cell updated">
                             {{ row.route.updatedAt|date('Y-m-d') }}
-                            <div class="description" title="Created">{{ row.route.createdAt|date('Y-m-d') }}</div>
+                            <div class="small" title="Created">{{ row.route.createdAt|date('Y-m-d') }}</div>
                         </div>
                     </div>
                 {% endfor %}
@@ -204,15 +267,19 @@
                 </div>
             {% endif %}
         </div>
+        {# END SECTION: ROWS #}
 
-        {% include 'pager.html.twig' %}
+        <div class="section_pager_bottom">
+            {% include 'pager.html.twig' %}
+        </div>
+
     </div>
 {% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('build/routes.css') }}">
-    <link rel="stylesheet" href="{{ asset('build/pager.css') }}">
+    <link rel="stylesheet" media='screen and (max-width: 760px)' href="{{ asset('build/routes-mobile.css') }}" />
 {% endblock %}
 
 {% block javascripts %}
@@ -229,6 +296,16 @@
 
         $(document).ready(function () {
             setTypeFilterClass()
+            $(".filters_toggle").on("click", function(){
+                $(".section_filters").slideToggle("fast", function(){
+                    if ($(this).is(":visible")) {
+                        $(".filters_toggle").text('hide filters');
+                    } else {
+                        $(".filters_toggle").text('filter results');
+                    }
+
+                });
+            });
             $("#filter_type").on("change", function(){
                 setTypeFilterClass()
             });

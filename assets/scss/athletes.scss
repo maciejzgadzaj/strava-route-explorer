@@ -9,7 +9,7 @@ $athleteWidth: calc(18% - 2em);
 $updatedWidth: calc(12% - 2em);
 $locationWidth: calc(30% - 2em);
 
-.athletes {
+.page_athletes {
     .head {
         display: flex;
         margin: 2px 0 0;
@@ -58,7 +58,7 @@ $locationWidth: calc(30% - 2em);
         }
     }
 
-    .rows {
+    .section_rows {
         margin: 2px 0;
 
         .row {

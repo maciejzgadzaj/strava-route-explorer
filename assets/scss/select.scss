@@ -29,6 +29,7 @@
     }
     .id {
         width: 5%;
+        color: #999;
     }
     .name {
         width: 30%;
@@ -40,19 +41,25 @@
         }
     }
     .distance {
-        width: 5%;
+        width: 10%;
+        white-space: nowrap;
+        text-align: right;
     }
     .elevation {
-        width: 5%;
+        width: 10%;
+        white-space: nowrap;
+        text-align: right;
     }
     .athlete {
-        width: 15%;
+        width: 13%;
     }
     .created {
         width: 10%;
+        color: #999;
     }
     .updated{
         width: 10%;
+        color: #999;
     }
     .submit {
         position: fixed;

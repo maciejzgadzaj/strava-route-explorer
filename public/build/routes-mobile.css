@@ -1,0 +1,122 @@
+@media screen and (max-width: 760px) {
+  html body .page_routes .filters_toggle {
+    display: block !important;
+    margin: 0;
+    padding: 1.2em;
+    background-color: #f0f0f0;
+    text-align: center;
+    color: #888; }
+    html body .page_routes .filters_toggle:hover {
+      cursor: pointer; }
+    html body .page_routes .filters_toggle.active {
+      color: #000;
+      font-weight: bold; }
+  html body .page_routes .section_filters {
+    display: none;
+    flex-direction: column;
+    -webkit-flex-direction: column;
+    margin-top: 0;
+    padding-bottom: .5em; }
+    html body .page_routes .section_filters .filter {
+      width: 100% !important;
+      display: flex;
+      flex-direction: row;
+      -webkit-flex-direction: row;
+      align-items: baseline;
+      padding: 0 1em 0 0; }
+      html body .page_routes .section_filters .filter .label {
+        width: 6em; }
+      html body .page_routes .section_filters .filter .input {
+        width: calc(100% - 6em); }
+    html body .page_routes .section_filters .filter.type .input select {
+      width: auto; }
+    html body .page_routes .section_filters .filter.distance .input, html body .page_routes .section_filters .filter.elevation .input {
+      justify-content: flex-start;
+      -webkit-justify-content: flex-start;
+      flex-direction: row;
+      -webkit-flex-direction: row; }
+      html body .page_routes .section_filters .filter.distance .input input, html body .page_routes .section_filters .filter.elevation .input input {
+        width: 5em;
+        margin-right: .5em; }
+    html body .page_routes .section_filters .filter.updated .label {
+      display: none; }
+    html body .page_routes .section_filters .filter.updated .input {
+      flex-direction: row;
+      -webkit-flex-direction: row;
+      margin-left: 6em; }
+      html body .page_routes .section_filters .filter.updated .input button {
+        width: calc(50% - .5em); }
+    html body .page_routes .section_filters .advanced_filters_wrapper {
+      order: 7;
+      -webkit-order: 7; }
+      html body .page_routes .section_filters .advanced_filters_wrapper .advanced_filters {
+        display: block !important; }
+        html body .page_routes .section_filters .advanced_filters_wrapper .advanced_filters .filter.location {
+          flex-direction: column;
+          -webkit-flex-direction: column; }
+          html body .page_routes .section_filters .advanced_filters_wrapper .advanced_filters .filter.location .location_section {
+            width: 100%; }
+          html body .page_routes .section_filters .advanced_filters_wrapper .advanced_filters .filter.location .location_address .input .geolocate {
+            top: 1.3em;
+            right: .8em; }
+        html body .page_routes .section_filters .advanced_filters_wrapper .advanced_filters .label {
+          width: 6em !important; }
+        html body .page_routes .section_filters .advanced_filters_wrapper .advanced_filters .input {
+          width: calc(100% - 6em) !important; }
+      html body .page_routes .section_filters .advanced_filters_wrapper .advanced-filters-links {
+        display: none; }
+    html body .page_routes .section_filters select, html body .page_routes .section_filters input:not([type='checkbox']), html body .page_routes .section_filters button {
+      padding: 1em !important; }
+  html body .page_routes .section_rows .row {
+    flex-wrap: wrap;
+    -webkit-flex-wrap: wrap;
+    justify-content: space-around;
+    -webkit-justify-content: space-around;
+    padding: .5em .3em; }
+    html body .page_routes .section_rows .row .cell {
+      margin: .2em 0;
+      padding: 0; }
+    html body .page_routes .section_rows .row .flex-line-break {
+      width: 100%; }
+    html body .page_routes .section_rows .row .image {
+      width: calc(15vw);
+      margin: 0; }
+      html body .page_routes .section_rows .row .image img {
+        width: 15vw;
+        height: 10vw; }
+    html body .page_routes .section_rows .row .name {
+      width: calc(85vw - 1.6em); }
+      html body .page_routes .section_rows .row .name .description {
+        display: none; }
+    html body .page_routes .section_rows .row .distance {
+      width: calc(30vw - 1.6em);
+      margin-left: calc(15vw + .8em);
+      padding-left: 1.6em;
+      background: url(../../images/icon-distance-grey.svg) no-repeat;
+      background-size: 1.3em 1.3em;
+      text-align: left;
+      font-size: .9em;
+      color: #aaa; }
+    html body .page_routes .section_rows .row .elevation {
+      width: calc(55vw - 3.2em);
+      padding-left: 1.6em;
+      background: url(../../images/icon-elevation-gain-grey.svg) no-repeat;
+      background-size: 1.15em 1.15em;
+      text-align: left;
+      font-size: .9em;
+      color: #aaa; }
+    html body .page_routes .section_rows .row .athlete {
+      display: none;
+      width: calc(30vw);
+      margin-left: calc(15vw + .8em);
+      font-size: .9em;
+      color: #aaa; }
+      html body .page_routes .section_rows .row .athlete a {
+        color: #aaa; }
+    html body .page_routes .section_rows .row .updated {
+      display: none;
+      width: calc(55vw - 4.8em);
+      font-size: .9em;
+      color: #999; } }
+
+/*# sourceMappingURL=routes-mobile.css.map */

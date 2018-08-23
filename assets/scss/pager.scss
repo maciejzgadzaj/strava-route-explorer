@@ -1,72 +1,72 @@
 @import '_variables';
 @import '_mixins';
 
-.pager {
-    position: relative;
-    margin: 2px 0;
-    padding: 1em;
-    background-color: #f0f0f0;
-    text-align: center;
-    .per_page {
-        position: absolute;
-        top: .5em;
-        left: 1em;
-        color: #bbb;
-        input {
-            width: 2em;
-            margin: 0;
-            padding: .5em;
-            border: 1px solid #ddd;
-            background-color: white;
-            font-size: .9em;
-            &:hover {
-                border-color: $orange;
+.section_pager {
+    .pager {
+        display: flex;
+        justify-content: space-between;
+        -webkit-justify-content: space-between;
+        align-items: baseline;
+        -webkit-align-items: baseline;
+        margin: 2px 0;
+        padding: 1em;
+        background-color: #f0f0f0;
+        text-align: center;
+        .per_page {
+            color: #bbb;
+            input {
+                width: 3.2em;
+                margin: 0;
+                padding: .5em;
+                border: 1px solid #ddd;
+                background-color: white;
+                font-size: .9em;
+                &:hover {
+                    border-color: $orange;
+                }
             }
         }
-    }
-    .results {
-        color: #bbb;
-        .highlight {
-            color: #000;
-        }
-    }
-    .links {
-        position: absolute;
-        top: .5em;
-        right: 1em;
-        .button {
-            padding: .4em .7em .5em;
-            border: 1px solid #ddd;
-            color: #f0f0f0;
-            &.previous, &.next {
-                padding: .4em .8em .5em;
+        .results {
+            color: #bbb;
+            .highlight {
+                color: #000;
             }
         }
-        a.button {
-            text-decoration: none;
-            background-color: white;
-            color: #aaa;
-            &:hover {
-                border-color: $orange;
-                background-color: $orange;
-                color: $white;
-                @include transition;
+        .links {
+            .button {
+                padding: .4em .7em .5em;
+                border: 1px solid #ddd;
+                color: #f0f0f0;
+                &.previous, &.next {
+                    padding: .4em .8em .5em;
+                }
+            }
+            a.button {
+                text-decoration: none;
+                background-color: white;
+                color: #aaa;
+                &:hover {
+                    border-color: $orange;
+                    background-color: $orange;
+                    color: $white;
+                    @include transition;
+                }
+            }
+            input {
+                width: 3.2em;
+                margin: 0;
+                padding: .5em;
+                border: 1px solid #ddd;
+                background-color: white;
+                text-align: center;
+                font-size: .9em;
+                &:hover {
+                    border-color: $orange;
+                }
             }
         }
-        input {
-            width: 2em;
-            margin: 0;
-            padding: .5em;
-            border: 1px solid #ddd;
-            background-color: white;
-            text-align: center;
-            font-size: .9em;
-            &:hover {
-                border-color: $orange;
-            }
+        a {
+            color: #bbb;
         }
-    }
-    a {
-        color: #bbb;
     }
 }

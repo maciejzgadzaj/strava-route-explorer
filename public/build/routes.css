@@ -1,239 +1,193 @@
-.routes .pager {
-  position: relative;
-  margin: 2px 0;
-  padding: 1em;
-  background-color: #f0f0f0;
-  text-align: center; }
-  .routes .pager .per_page {
-    position: absolute;
-    top: .5em;
-    left: 1em;
-    color: #bbb; }
-    .routes .pager .per_page input {
-      width: 2em;
-      margin: 0;
-      padding: .5em;
-      border: 1px solid #ddd;
-      background-color: white;
-      font-size: .9em; }
-      .routes .pager .per_page input:hover {
-        border-color: #fc4c02; }
-  .routes .pager .results {
-    color: #bbb; }
-    .routes .pager .results .number {
-      color: #000; }
-  .routes .pager .links {
-    position: absolute;
-    top: .5em;
-    right: 1em; }
-    .routes .pager .links .button {
-      padding: .4em .7em .5em;
-      border: 1px solid #ddd;
-      color: #f0f0f0; }
-      .routes .pager .links .button.previous, .routes .pager .links .button.next {
-        padding: .4em .8em .5em; }
-    .routes .pager .links a.button {
-      text-decoration: none;
-      background-color: white;
-      color: #aaa; }
-      .routes .pager .links a.button:hover {
-        border-color: #fc4c02;
-        background-color: #fc4c02;
-        color: #ffffff;
-        -moz-transition: all .1s ease-in;
-        -webkit-transition: all .1s ease-in;
-        -o-transition: all .1s ease-in;
-        transition: all .1s ease-in; }
-    .routes .pager .links input {
-      width: 2em;
-      margin: 0;
-      padding: .5em;
-      border: 1px solid #ddd;
-      background-color: white;
-      text-align: center;
-      font-size: .9em; }
-      .routes .pager .links input:hover {
-        border-color: #fc4c02; }
-  .routes .pager a {
-    color: #bbb; }
-.routes .head {
+.page_routes .section_filters {
   display: flex;
-  margin: 2px 0 0;
-  padding: 0;
-  background-color: #f0f0f0; }
-  .routes .head > div {
-    display: flex;
-    padding: .5em 1em 0; }
-    .routes .head > div .sort {
-      margin: 0 0 0 .3em; }
-  .routes .head::after {
-    content: "";
-    clear: both;
-    display: table; }
-  .routes .head.even {
-    background-color: #f9f9f9; }
-  .routes .head .image {
-    width: 75px; }
-  .routes .head .name {
-    width: calc(40% - 2em); }
-  .routes .head .distance {
-    width: calc(10% - 2em); }
-    .routes .head .distance .unit {
+  flex-wrap: wrap;
+  -webkit-flex-wrap: wrap;
+  margin: 2px 0;
+  padding: 0 0 0 1em;
+  background-color: #f0f0f0;
+  border-bottom: 1px solid #e0e0e0; }
+  .page_routes .section_filters .filter {
+    padding: .5em 1em .5em 0; }
+    .page_routes .section_filters .filter .label {
+      display: flex; }
+      .page_routes .section_filters .filter .label .sort {
+        margin: 0 0 0 .3em; }
+    .page_routes .section_filters .filter .input input:not([type='checkbox']) {
+      width: 100%; }
+  .page_routes .section_filters .filter.type {
+    order: 1;
+    -webkit-order: 1;
+    width: calc(75px + 1em); }
+    .page_routes .section_filters .filter.type select {
+      color: #bbb; }
+      .page_routes .section_filters .filter.type select option .placeholder {
+        color: #bbb; }
+      .page_routes .section_filters .filter.type select.not_empty {
+        color: #000;
+        border-color: #fc4c02; }
+        .page_routes .section_filters .filter.type select.not_empty .placeholder {
+          color: #000; }
+  .page_routes .section_filters .filter.name {
+    order: 2;
+    -webkit-order: 2;
+    width: calc(100% - calc(75px + 1em) - 10% - 10% - 15% - 12%); }
+  .page_routes .section_filters .filter.distance {
+    order: 3;
+    -webkit-order: 3;
+    width: 10%; }
+    .page_routes .section_filters .filter.distance .label {
+      display: flex; }
+    .page_routes .section_filters .filter.distance .input {
+      display: flex;
+      justify-content: space-between;
+      -webkit-justify-content: space-between; }
+      .page_routes .section_filters .filter.distance .input input {
+        width: 48%; }
+    .page_routes .section_filters .filter.distance .unit {
       font-size: .8em;
       color: #aaa; }
-  .routes .head .elevation_gain {
-    width: calc(10% - 2em); }
-    .routes .head .elevation_gain .unit {
+  .page_routes .section_filters .filter.elevation {
+    order: 4;
+    -webkit-order: 4;
+    width: 10%; }
+    .page_routes .section_filters .filter.elevation .label {
+      display: flex; }
+    .page_routes .section_filters .filter.elevation .input {
+      display: flex;
+      justify-content: space-between;
+      -webkit-justify-content: space-between; }
+      .page_routes .section_filters .filter.elevation .input input {
+        width: 48%; }
+    .page_routes .section_filters .filter.elevation .unit {
       font-size: .8em;
       color: #aaa; }
-  .routes .head .athlete {
-    width: calc(18% - 2em); }
-  .routes .head .updated {
-    width: calc(12% - 2em); }
-.routes .filters {
-  background-color: #f0f0f0; }
-  .routes .filters select, .routes .filters input:not([type='checkbox']), .routes .filters button {
+  .page_routes .section_filters .filter.athlete {
+    order: 5;
+    -webkit-order: 6;
+    width: 15%;
+    position: relative; }
+    .page_routes .section_filters .filter.athlete .starred {
+      position: absolute;
+      margin-top: .3em;
+      font-size: .9em; }
+  .page_routes .section_filters .filter.updated {
+    order: 8;
+    -webkit-order: 8;
+    width: 12%; }
+    .page_routes .section_filters .filter.updated .input {
+      display: flex; }
+      .page_routes .section_filters .filter.updated .input button {
+        margin-right: .5em;
+        padding: .5em 1em; }
+        .page_routes .section_filters .filter.updated .input button.reset {
+          background-color: #f0f0f0;
+          color: #bbb; }
+        .page_routes .section_filters .filter.updated .input button:hover {
+          cursor: pointer; }
+    .page_routes .section_filters .filter.updated.active .input button.reset {
+      background-color: white;
+      color: black; }
+  .page_routes .section_filters .advanced_filters_wrapper {
+    order: 10;
+    -webkit-order: 10;
+    width: 100%; }
+    .page_routes .section_filters .advanced_filters_wrapper .advanced_filters .filter {
+      display: flex;
+      width: 100%; }
+      .page_routes .section_filters .advanced_filters_wrapper .advanced_filters .filter .location_address {
+        width: calc(calc(75px + 1em) + calc(100% - calc(75px + 1em) - 10% - 10% - 15% - 12%) + 10% + 10% + 1em); }
+        .page_routes .section_filters .advanced_filters_wrapper .advanced_filters .filter .location_address .label {
+          width: calc(75px + 1em); }
+        .page_routes .section_filters .advanced_filters_wrapper .advanced_filters .filter .location_address .input {
+          width: calc(100% - calc(75px + 1em) - 1em);
+          position: relative; }
+          .page_routes .section_filters .advanced_filters_wrapper .advanced_filters .filter .location_address .input .geolocate {
+            position: absolute;
+            top: .9em;
+            right: .5em;
+            width: 1.2em;
+            height: 1.2em; }
+            .page_routes .section_filters .advanced_filters_wrapper .advanced_filters .filter .location_address .input .geolocate:hover {
+              cursor: pointer; }
+      .page_routes .section_filters .advanced_filters_wrapper .advanced_filters .filter .location_within .label {
+        padding-right: .5em; }
+      .page_routes .section_filters .advanced_filters_wrapper .advanced_filters .filter .location_within .input select {
+        width: auto; }
+      .page_routes .section_filters .advanced_filters_wrapper .advanced_filters .filter .location_section {
+        display: flex;
+        align-items: baseline; }
+    .page_routes .section_filters .advanced_filters_wrapper .advanced-filters-links {
+      margin-top: -.25em;
+      padding: 0 1em 1em calc(calc(75px + 1em) + .5em);
+      font-size: .8em;
+      color: #999; }
+      .page_routes .section_filters .advanced_filters_wrapper .advanced-filters-links .advanced-filters-toggle:hover {
+        cursor: pointer;
+        color: black; }
+  .page_routes .section_filters select, .page_routes .section_filters input:not([type='checkbox']), .page_routes .section_filters button {
     width: 95%;
     margin-top: .5em;
     padding: .5em;
     border: 1px solid #ddd;
     background-color: white;
     font-size: .9em; }
-    .routes .filters select::placeholder, .routes .filters input:not([type='checkbox'])::placeholder, .routes .filters button::placeholder {
+    .page_routes .section_filters select::placeholder, .page_routes .section_filters input:not([type='checkbox'])::placeholder, .page_routes .section_filters button::placeholder {
       color: #ccc;
       opacity: 1; }
-    .routes .filters select:-ms-input-placeholder, .routes .filters input:not([type='checkbox']):-ms-input-placeholder, .routes .filters button:-ms-input-placeholder {
+    .page_routes .section_filters select:-ms-input-placeholder, .page_routes .section_filters input:not([type='checkbox']):-ms-input-placeholder, .page_routes .section_filters button:-ms-input-placeholder {
       color: #ccc; }
-    .routes .filters select::-ms-input-placeholder, .routes .filters input:not([type='checkbox'])::-ms-input-placeholder, .routes .filters button::-ms-input-placeholder {
+    .page_routes .section_filters select::-ms-input-placeholder, .page_routes .section_filters input:not([type='checkbox'])::-ms-input-placeholder, .page_routes .section_filters button::-ms-input-placeholder {
       color: #ccc; }
-    .routes .filters select:hover, .routes .filters input:not([type='checkbox']):hover, .routes .filters button:hover {
+    .page_routes .section_filters select:hover, .page_routes .section_filters input:not([type='checkbox']):hover, .page_routes .section_filters button:hover {
       border-color: #fc4c02; }
-  .routes .filters input:not([type='checkbox']), .routes .filters select, .routes .filters button {
+  .page_routes .section_filters input:not([type='checkbox']), .page_routes .section_filters select, .page_routes .section_filters button {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none; }
-  .routes .filters select {
+  .page_routes .section_filters select {
     background: #ffffff url(../../images/icon-caret-down.svg) no-repeat right 0.4em center;
     background-size: 12px 8px; }
-  .routes .filters input:not([type='checkbox']):not(:placeholder-shown) {
+  .page_routes .section_filters input:not([type='checkbox']):not(:placeholder-shown) {
     border-color: #fc4c02; }
-.routes .basic_filters {
-  display: flex;
-  margin: 0;
-  border-bottom: 1px solid #eee; }
-  .routes .basic_filters .filter {
-    padding: 0 1em .5em; }
-  .routes .basic_filters .image {
-    width: 75px; }
-    .routes .basic_filters .image select {
-      color: #bbb; }
-      .routes .basic_filters .image select option .placeholder {
-        color: #bbb; }
-      .routes .basic_filters .image select.not_empty {
-        color: #000;
-        border-color: #fc4c02; }
-        .routes .basic_filters .image select.not_empty .placeholder {
-          color: #000; }
-  .routes .basic_filters .name {
-    width: calc(40% - 2em); }
-  .routes .basic_filters .distance {
-    width: calc(10% - 2em);
-    display: flex; }
-    .routes .basic_filters .distance input {
-      width: 40%;
-      margin-right: .25em; }
-  .routes .basic_filters .elevation_gain {
-    width: calc(10% - 2em);
-    display: flex; }
-    .routes .basic_filters .elevation_gain input {
-      width: 40%;
-      margin-right: .25em; }
-  .routes .basic_filters .athlete {
-    position: relative;
-    width: calc(18% - 2em); }
-    .routes .basic_filters .athlete .starred {
-      position: absolute;
-      margin-top: .3em;
-      font-size: .9em; }
-  .routes .basic_filters .updated {
-    width: calc(12% - 2em);
-    display: flex; }
-    .routes .basic_filters .updated button {
-      margin-right: .5em;
-      padding: .5em 1em; }
-      .routes .basic_filters .updated button.reset {
-        background-color: #f0f0f0;
-        color: #bbb; }
-      .routes .basic_filters .updated button:hover {
-        cursor: pointer; }
-    .routes .basic_filters .updated.active .reset {
-      background-color: white;
-      color: black; }
-.routes .advanced_filters .filter {
-  margin-left: 22px;
-  padding: 0 1em .5em 3em; }
-.routes .advanced_filters .location {
-  display: flex;
-  align-items: baseline; }
-  .routes .advanced_filters .location .label {
-    width: 4%; }
-  .routes .advanced_filters .location .address {
-    width: 60%;
-    position: relative; }
-    .routes .advanced_filters .location .address .geolocate {
-      position: absolute;
-      top: .9em;
-      right: 1.9em;
-      width: 18px;
-      height: 18px; }
-      .routes .advanced_filters .location .address .geolocate:hover {
-        cursor: pointer; }
-  .routes .advanced_filters .location .distance {
-    width: 6%; }
-.routes .filter-links {
-  margin-top: -.25em;
-  padding: 0 1em 1em 125px;
-  font-size: .8em;
-  color: #999; }
-  .routes .filter-links .advanced-filters-toggle:hover {
-    cursor: pointer;
-    color: black; }
-.routes .rows {
+.page_routes .section_rows {
   margin: 2px 0; }
-  .routes .rows .row {
+  .page_routes .section_rows .row {
+    display: flex;
+    margin: 0;
     border-bottom: 1px solid #eee; }
-    .routes .rows .row.even {
+    .page_routes .section_rows .row.even {
       background-color: #f9f9f9; }
-    .routes .rows .row > * {
-      float: left;
+    .page_routes .section_rows .row .cell {
       margin: 0;
       padding: 0.5em 1em; }
-    .routes .rows .row .image {
-      width: 75px; }
-    .routes .rows .row .name {
-      width: calc(40% - 2em); }
-      .routes .rows .row .name .starred {
+    .page_routes .section_rows .row .image {
+      width: calc(75px + 1em); }
+    .page_routes .section_rows .row .name {
+      width: calc(100% - calc(75px + 1em) - 10% - 10% - 15% - 12%); }
+      .page_routes .section_rows .row .name .starred {
         color: #fc4c02; }
-      .routes .rows .row .name .veloviewer {
+      .page_routes .section_rows .row .name .veloviewer {
         text-decoration: none;
         color: #bbb; }
-        .routes .rows .row .name .veloviewer:hover {
+        .page_routes .section_rows .row .name .veloviewer:hover {
           color: #fc4c02; }
-      .routes .rows .row .name .distances {
+      .page_routes .section_rows .row .name .distances {
         margin-top: .5em;
         font-size: .8em;
         color: #aaa; }
-        .routes .rows .row .name .distances .distance {
+        .page_routes .section_rows .row .name .distances .distance {
           margin-right: 1em;
           color: #333; }
-    .routes .rows .row .distance {
-      width: calc(10% - 2em); }
-      .routes .rows .row .distance .unit {
+    .page_routes .section_rows .row .distance {
+      width: 10%;
+      white-space: nowrap; }
+      .page_routes .section_rows .row .distance .unit {
         font-size: .8em;
         color: #aaa; }
-    .routes .rows .row .elevation_gain {
-      width: calc(10% - 2em); }
-      .routes .rows .row .elevation_gain .climb {
+    .page_routes .section_rows .row .elevation {
+      width: 10%;
+      white-space: nowrap; }
+      .page_routes .section_rows .row .elevation .climb {
         display: inline-block;
         width: 17px;
         height: 17px;
@@ -241,38 +195,38 @@
         vertical-align: bottom;
         margin-right: .3em;
         background-image: url(../../images/sprites-category.png); }
-        .routes .rows .row .elevation_gain .climb.cat-1 {
+        .page_routes .section_rows .row .elevation .climb.cat-1 {
           background-position: 0 -19px; }
-        .routes .rows .row .elevation_gain .climb.cat-2 {
+        .page_routes .section_rows .row .elevation .climb.cat-2 {
           background-position: 0 -38px; }
-        .routes .rows .row .elevation_gain .climb.cat-3 {
+        .page_routes .section_rows .row .elevation .climb.cat-3 {
           background-position: 0 -57px; }
-        .routes .rows .row .elevation_gain .climb.cat-4 {
+        .page_routes .section_rows .row .elevation .climb.cat-4 {
           background-position: 0 -76px; }
-        .routes .rows .row .elevation_gain .climb.cat-5 {
+        .page_routes .section_rows .row .elevation .climb.cat-5 {
           background-position: 0 -95px; }
-      .routes .rows .row .elevation_gain .unit {
+      .page_routes .section_rows .row .elevation .unit {
         font-size: .8em;
         color: #aaa; }
-    .routes .rows .row .athlete {
-      width: calc(18% - 2em); }
-    .routes .rows .row .updated {
-      width: calc(12% - 2em); }
-    .routes .rows .row::after {
+    .page_routes .section_rows .row .athlete {
+      width: 15%; }
+    .page_routes .section_rows .row .updated {
+      width: 12%; }
+    .page_routes .section_rows .row::after {
       content: "";
       clear: both;
       display: table; }
-    .routes .rows .row .description {
+    .page_routes .section_rows .row .small {
       margin-top: .3em;
       font-size: .6em;
       color: #aaa; }
-      .routes .rows .row .description a {
+      .page_routes .section_rows .row .small a {
         text-decoration: none; }
-        .routes .rows .row .description a:hover {
+        .page_routes .section_rows .row .small a:hover {
           color: #fc4c02; }
-    .routes .rows .row .distance {
+    .page_routes .section_rows .row .distance {
       text-align: right; }
-    .routes .rows .row .elevation_gain {
+    .page_routes .section_rows .row .elevation_gain {
       text-align: right; }
 
 .autocomplete-search-string {
@@ -291,5 +245,22 @@ ul.ui-autocomplete.ui-menu {
     ul.ui-autocomplete.ui-menu li:hover {
       background-color: white;
       cursor: pointer; }
+
+@media screen and (max-width: 1350px) {
+  html body .page_routes .section_filters .filter.distance .input {
+    flex-direction: column;
+    -webkit-flex-direction: column; }
+    html body .page_routes .section_filters .filter.distance .input input {
+      width: 100%;
+      max-width: 5em; }
+  html body .page_routes .section_filters .filter.elevation .input {
+    flex-direction: column;
+    -webkit-flex-direction: column; }
+    html body .page_routes .section_filters .filter.elevation .input input {
+      width: 100%;
+      max-width: 5em; }
+  html body .page_routes .section_filters .filter.updated .input {
+    flex-direction: column;
+    -webkit-flex-direction: column; } }
 
 /*# sourceMappingURL=routes.css.map */
