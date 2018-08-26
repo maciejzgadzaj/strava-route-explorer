@@ -181,7 +181,7 @@ class ExplorerMeetupScrapCommand extends ContainerAwareCommand
                     $status[] = 'past';
                 }
             }
-            if ($this->startDate) {
+            if ($this->endDate) {
                 $endTime = strtotime($this->endDate.' + 1 day');
                 $query['no_later_than'] = date('Y-m-d', $endTime);
                 if ($endTime > time()) {
