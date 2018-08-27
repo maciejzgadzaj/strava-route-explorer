@@ -15,6 +15,9 @@ $locationWidth: calc(30vw);
 
 .page_routes {
 
+    .filters_toggle {
+        display: none;
+    }
     .section_filters {
         display: flex;
         flex-wrap: wrap;
@@ -42,21 +45,6 @@ $locationWidth: calc(30vw);
             order: 1;
             -webkit-order: 1;
             width: $typeWidth;
-            select {
-                color: #bbb;
-                option {
-                    .placeholder {
-                        color: #bbb;
-                    }
-                }
-                &.not_empty {
-                    color: $black;
-                    border-color: $orange;
-                    .placeholder {
-                        color: $black;
-                    }
-                }
-            }
         }
         .filter.name {
             order: 2;
@@ -232,6 +220,19 @@ $locationWidth: calc(30vw);
         select {
             background: $white url(../../images/icon-caret-down.svg) no-repeat right .4em center;
             background-size: 12px 8px;
+            color: #bbb;
+            option {
+                .placeholder {
+                    color: #bbb;
+                }
+            }
+            &.not_empty {
+                color: $black;
+                border-color: $orange;
+                .placeholder {
+                    color: $black;
+                }
+            }
         }
         input:not([type='checkbox']) {
             &:not(:placeholder-shown) {
@@ -256,9 +257,13 @@ $locationWidth: calc(30vw);
                 padding: $padding;
             }
             .image {
+                order: 1;
+                -webkit-order: 1;
                 width: $typeWidth;
             }
             .name {
+                order: 2;
+                -webkit-order: 2;
                 width: $nameWidth;
                 .starred {
                     color: $orange;
@@ -281,6 +286,8 @@ $locationWidth: calc(30vw);
                 }
             }
             .distance {
+                order: 5;
+                -webkit-order: 5;
                 width: $distanceWidth;
                 white-space: nowrap;
                 .unit {
@@ -288,6 +295,8 @@ $locationWidth: calc(30vw);
                 }
             }
             .elevation {
+                order: 6;
+                -webkit-order: 6;
                 width: $elevationWidth;
                 white-space: nowrap;
                 .climb {
@@ -319,9 +328,13 @@ $locationWidth: calc(30vw);
                 }
             }
             .athlete {
+                order: 7;
+                -webkit-order: 7;
                 width: $athleteWidth;
             }
             .updated {
+                order: 8;
+                -webkit-order: 8;
                 width: $updatedWidth;
             }
             &::after {
@@ -346,6 +359,11 @@ $locationWidth: calc(30vw);
             .elevation_gain {
                 text-align: right;
             }
+        }
+        .empty {
+            width: 100%;
+            padding: 4em;
+            text-align: center;
         }
     }
 }

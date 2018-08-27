@@ -31,6 +31,10 @@
                             background-image: url(../../images/icon-menu-burger.svg);
                             background-size: 1.5em;
                         }
+                        .menu_item.menu_item_burger.open {
+                            background-image: url(../../images/icon-menu-close.svg);
+                            background-size: 1.3em;
+                        }
                         .menu_item.menu_item_routes {
                             background-image: url(../../images/icon-menu-routes.svg);
                             background-size: 2.25em;
@@ -69,7 +73,7 @@
                             }
                             li.home a {
                                 background-image: url(../../images/logo-white-bg.svg);
-                                background-size: 1.3em;
+                                background-size: 1.2em;
                             }
                             li.routes a {
                                 background-image: url(../../images/icon-menu-routes.svg);
@@ -103,6 +107,12 @@
                 }
                 .menu {
                     margin: 1em 0;
+                }
+            }
+            .flashes {
+                .flash {
+                    padding: .8em 1em;
+                    line-height: 1.5em;
                 }
             }
         }

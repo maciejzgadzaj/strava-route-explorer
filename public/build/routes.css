@@ -1,3 +1,5 @@
+.page_routes .filters_toggle {
+  display: none; }
 .page_routes .section_filters {
   display: flex;
   flex-wrap: wrap;
@@ -18,15 +20,6 @@
     order: 1;
     -webkit-order: 1;
     width: calc(75px + 1em); }
-    .page_routes .section_filters .filter.type select {
-      color: #bbb; }
-      .page_routes .section_filters .filter.type select option .placeholder {
-        color: #bbb; }
-      .page_routes .section_filters .filter.type select.not_empty {
-        color: #000;
-        border-color: #fc4c02; }
-        .page_routes .section_filters .filter.type select.not_empty .placeholder {
-          color: #000; }
   .page_routes .section_filters .filter.name {
     order: 2;
     -webkit-order: 2;
@@ -146,7 +139,15 @@
     appearance: none; }
   .page_routes .section_filters select {
     background: #ffffff url(../../images/icon-caret-down.svg) no-repeat right 0.4em center;
-    background-size: 12px 8px; }
+    background-size: 12px 8px;
+    color: #bbb; }
+    .page_routes .section_filters select option .placeholder {
+      color: #bbb; }
+    .page_routes .section_filters select.not_empty {
+      color: #000;
+      border-color: #fc4c02; }
+      .page_routes .section_filters select.not_empty .placeholder {
+        color: #000; }
   .page_routes .section_filters input:not([type='checkbox']):not(:placeholder-shown) {
     border-color: #fc4c02; }
 .page_routes .section_rows {
@@ -161,8 +162,12 @@
       margin: 0;
       padding: 0.5em 1em; }
     .page_routes .section_rows .row .image {
+      order: 1;
+      -webkit-order: 1;
       width: calc(75px + 1em); }
     .page_routes .section_rows .row .name {
+      order: 2;
+      -webkit-order: 2;
       width: calc(100% - calc(75px + 1em) - 10% - 10% - 15% - 12%); }
       .page_routes .section_rows .row .name .starred {
         color: #fc4c02; }
@@ -179,12 +184,16 @@
           margin-right: 1em;
           color: #333; }
     .page_routes .section_rows .row .distance {
+      order: 5;
+      -webkit-order: 5;
       width: 10%;
       white-space: nowrap; }
       .page_routes .section_rows .row .distance .unit {
         font-size: .8em;
         color: #aaa; }
     .page_routes .section_rows .row .elevation {
+      order: 6;
+      -webkit-order: 6;
       width: 10%;
       white-space: nowrap; }
       .page_routes .section_rows .row .elevation .climb {
@@ -209,8 +218,12 @@
         font-size: .8em;
         color: #aaa; }
     .page_routes .section_rows .row .athlete {
+      order: 7;
+      -webkit-order: 7;
       width: 15%; }
     .page_routes .section_rows .row .updated {
+      order: 8;
+      -webkit-order: 8;
       width: 12%; }
     .page_routes .section_rows .row::after {
       content: "";
@@ -228,6 +241,10 @@
       text-align: right; }
     .page_routes .section_rows .row .elevation_gain {
       text-align: right; }
+  .page_routes .section_rows .empty {
+    width: 100%;
+    padding: 4em;
+    text-align: center; }
 
 .autocomplete-search-string {
   font-weight: bold; }

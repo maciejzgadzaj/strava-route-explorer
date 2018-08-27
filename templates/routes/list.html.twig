@@ -4,14 +4,25 @@
 
 {% block body %}
     <div class="page page_routes">
-        <div class="section_pager_top">
-            {% include 'pager.html.twig' %}
-        </div>
+        {% if data.results|length > 0 %}
+            <div class="section_pager_top">
+                {% include 'pager.html.twig' %}
+            </div>
+        {% endif %}
 
         {# SECTION: FILTERS #}
         {{ form_start(route_filter_form) }}
         {% set query = app.request.query.all %}
-        <div class="filters_toggle{% if app.request.query.get('filter') %} active{% endif %}" style="display:none">filter results</div>
+        <div class="filters_toggle">
+            <div class="label">filter results</div>
+            {% if filter_values %}
+                <div class="filter_values">
+                    {% for key, value in filter_values %}
+                        <div class="filter_value">{{ key }}: {{ value }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
         <div class="section_filters">
 
             {# FILTER: TYPE #}
@@ -71,7 +82,7 @@
             {# FILTER: ELEVATION GAIN #}
             <div class="filter elevation">
                 <div class="label">
-                    <div class="text">Elevation</div>
+                    <div class="text">Ascent</div>
                     {% set dir, direction, icon = 'asc', 'ascending', 'icon-sort.svg' %}
                     {% if query.sort is defined and query.sort == 'elevation' %}
                         {% set icon = 'icon-sort-active.svg' %}
@@ -227,7 +238,7 @@
                             {% endif %}
                             <a title="See route on Strava.com" href="https://www.strava.com/routes/{{ row.route.id }}">{{ row.route.name }}</a>
                             <a title="See route on VeloViewer.com" class="veloviewer" href="https://veloviewer.com/routes/{{ row.route.id }}">vv</a>
-                            <div class="route-id small">{{ row.route.id }}</div>
+                            <div class="route_id small">{{ row.route.id }}</div>
                             <div class="description small">{{ row.route.description }}</div>
                             {% if row.route.start_dist is defined or row.route.end_dist is defined %}
                                 <div class="distances">
@@ -240,7 +251,6 @@
                                 </div>
                             {% endif %}
                         </div>
-                        <div class="flex-line-break"></div>
                         <div class="cell distance">
                             {{ (row.route.distance // 1000)|number_format }} <span class="unit">km</span>
                         </div>
@@ -253,25 +263,27 @@
                         <div class="flex-line-break"></div>
                         <div class="cell athlete">
                             <a title="See all routes by {{ row.route.athlete.name }}" href="{{ path('routes', { 'filter[athlete]': row.route.athlete.name, 'filter[starred]': true }) }}">{{ row.route.athlete.name}}</a>
-                            <div class="small"><a class="small" title="See athlete profile on Strava.com" href="https://www.strava.com/athletes/{{ row.route.athlete.id }}">{{ row.route.athlete.id }}</a></div>
+                            <div class="athlete_id small"><a class="small" title="See athlete profile on Strava.com" href="https://www.strava.com/athletes/{{ row.route.athlete.id }}">{{ row.route.athlete.id }}</a></div>
                         </div>
                         <div class="cell updated">
                             {{ row.route.updatedAt|date('Y-m-d') }}
-                            <div class="small" title="Created">{{ row.route.createdAt|date('Y-m-d') }}</div>
+                            <div class="created small" title="Created">{{ row.route.createdAt|date('Y-m-d') }}</div>
                         </div>
                     </div>
                 {% endfor %}
             {% else %}
                 <div class="row">
-                    <div class="name">No routes found matching your criteria.</div>
+                    <div class="empty">No routes found matching your criteria.</div>
                 </div>
             {% endif %}
         </div>
         {# END SECTION: ROWS #}
 
-        <div class="section_pager_bottom">
-            {% include 'pager.html.twig' %}
-        </div>
+        {% if data.results|length > 0 %}
+            <div class="section_pager_bottom">
+                {% include 'pager.html.twig' %}
+            </div>
+        {% endif %}
 
     </div>
 {% endblock %}
@@ -285,29 +297,32 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
-        function setTypeFilterClass() {
-            var typeFilter = $("#filter_type");
-            if (typeFilter.val() == 0) {
-                typeFilter.removeClass("not_empty");
+        function setSelectClass(element) {
+            if (element.val() == 0) {
+                element.removeClass("not_empty");
             } else {
-                typeFilter.addClass("not_empty");
+                element.addClass("not_empty");
             }
         }
 
-        $(document).ready(function () {
-            setTypeFilterClass()
+        $(document).ready(function(){
+            $("#filter_type, #filter_start_dist, #filter_end_dist").each(function(){
+                setSelectClass($(this));
+            }).on("change", function(){
+                setSelectClass($(this));
+            });
             $(".filters_toggle").on("click", function(){
                 $(".section_filters").slideToggle("fast", function(){
                     if ($(this).is(":visible")) {
-                        $(".filters_toggle").text('hide filters');
+                        $(".filters_toggle .filter_values").hide();
+                        $(".filters_toggle .label").text('hide filters');
+                        $(".filters_toggle").addClass("open");
                     } else {
-                        $(".filters_toggle").text('filter results');
+                        $(".filters_toggle .label").text('filter results');
+                        $(".filters_toggle .filter_values").show();
+                        $(".filters_toggle").removeClass("open");
                     }
-
                 });
-            });
-            $("#filter_type").on("change", function(){
-                setTypeFilterClass()
             });
             $("#filter_athlete").keyup(function(){
                 if ($(this).val()) {
@@ -318,7 +333,6 @@
             });
             $(".advanced-filters-toggle").on("click", function(){
                 $(".advanced_filters").slideToggle("fast", function(){
-                    console.log($(this).is(":visible"));
                     if ($(this).is(":visible")) {
                         $(".advanced-filters-toggle").text('- less filters');
                     } else {

@@ -23,24 +23,15 @@ class RouteFilterType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $routeService = $builder->getData()['route_service'];
+
         $builder->setMethod('GET');
 
         $builder->add(
             'type',
             ChoiceType::class,
             [
-                'choices' => [
-                    'all' => null,
-                    'bike' => 1,
-                    'bike · road' => '1,1',
-                    'bike · mtb' => '1,2',
-                    'bike · cross' => '1,3',
-                    'bike · mixed' => '1,5',
-                    'run' => 2,
-                    'run · road' => '2,1',
-                    'run · trail' => '2,4',
-                    'run · mixed' => '2,5',
-                ],
+                'choices' => array_merge(['all' => null], array_flip($routeService->getRouteTypes())),
                 'choice_attr' => [
                     'type' => ['class' => 'placeholder'],
                     'bike' => ['class' => 'optionGroup'],
@@ -186,16 +177,7 @@ class RouteFilterType extends AbstractType
             ChoiceType::class,
             [
                 'label' => 'within',
-                'choices' => [
-                    '100 m' => 0.1,
-                    '500 m' => 0.5,
-                    '1 km' => 1,
-                    '5 km' => 5,
-                    '10 km' => 10,
-                    '20 km' => 20,
-                    '50 km' => 50,
-                    '100 km' => 100,
-                ],
+                'choices' => array_flip($routeService->getLocationDistances()),
                 'required' => false,
                 'attr' => [
                     '@focus' => '$event.target.select()',
@@ -228,16 +210,7 @@ class RouteFilterType extends AbstractType
             ChoiceType::class,
             [
                 'label' => 'within',
-                'choices' => [
-                    '100 m' => 0.1,
-                    '500 m' => 0.5,
-                    '1 km' => 1,
-                    '5 km' => 5,
-                    '10 km' => 10,
-                    '20 km' => 20,
-                    '50 km' => 50,
-                    '100 km' => 100,
-                ],
+                'choices' => array_flip($routeService->getLocationDistances()),
                 'required' => false,
                 'attr' => [
                     '@focus' => '$event.target.select()',

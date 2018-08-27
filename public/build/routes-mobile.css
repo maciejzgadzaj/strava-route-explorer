@@ -1,16 +1,23 @@
 @media screen and (max-width: 760px) {
   html body .page_routes .filters_toggle {
-    display: block !important;
+    display: block;
     margin: 0;
-    padding: 1.2em;
-    background-color: #f0f0f0;
+    padding: 1em;
+    background: #f0f0f0 url(../../images/icon-caret-down.svg) no-repeat right 1.2em top 1.3em;
+    background-size: .5em;
     text-align: center;
     color: #888; }
+    html body .page_routes .filters_toggle .filter_values {
+      margin-top: .8em;
+      font-size: .8em; }
+      html body .page_routes .filters_toggle .filter_values .filter_value {
+        display: inline-block;
+        margin: .3em;
+        padding: 0 .3em; }
     html body .page_routes .filters_toggle:hover {
       cursor: pointer; }
-    html body .page_routes .filters_toggle.active {
-      color: #000;
-      font-weight: bold; }
+    html body .page_routes .filters_toggle.open {
+      background-image: url(../../images/icon-caret-up.svg); }
   html body .page_routes .section_filters {
     display: none;
     flex-direction: column;
@@ -38,6 +45,8 @@
       html body .page_routes .section_filters .filter.distance .input input, html body .page_routes .section_filters .filter.elevation .input input {
         width: 5em;
         margin-right: .5em; }
+    html body .page_routes .section_filters .filter.athlete .starred {
+      position: static; }
     html body .page_routes .section_filters .filter.updated .label {
       display: none; }
     html body .page_routes .section_filters .filter.updated .input {
@@ -80,16 +89,40 @@
       width: 100%; }
     html body .page_routes .section_rows .row .image {
       width: calc(15vw);
-      margin: 0; }
+      margin: 0;
+      margin-bottom: -10vw; }
       html body .page_routes .section_rows .row .image img {
         width: 15vw;
         height: 10vw; }
     html body .page_routes .section_rows .row .name {
       width: calc(85vw - 1.6em); }
-      html body .page_routes .section_rows .row .name .description {
+      html body .page_routes .section_rows .row .name .route_id, html body .page_routes .section_rows .row .name .description {
+        display: none; }
+    html body .page_routes .section_rows .row .athlete {
+      order: 3;
+      -webkit-order: 3;
+      align-self: baseline;
+      -webkit-align-self: baseline;
+      width: calc(55vw - 1em);
+      margin: 0.5em 0 0.5em calc(15vw + .8em);
+      font-size: .9em;
+      color: #aaa; }
+      html body .page_routes .section_rows .row .athlete a {
+        color: #aaa; }
+      html body .page_routes .section_rows .row .athlete .athlete_id {
+        display: none; }
+    html body .page_routes .section_rows .row .updated {
+      order: 4;
+      -webkit-order: 4;
+      align-self: baseline;
+      -webkit-align-self: baseline;
+      width: calc(30vw - 1em);
+      font-size: .7em;
+      color: #bbb; }
+      html body .page_routes .section_rows .row .updated .created {
         display: none; }
     html body .page_routes .section_rows .row .distance {
-      width: calc(30vw - 1.6em);
+      width: calc(35vw - .8em);
       margin-left: calc(15vw + .8em);
       padding-left: 1.6em;
       background: url(../../images/icon-distance-grey.svg) no-repeat;
@@ -98,25 +131,12 @@
       font-size: .9em;
       color: #aaa; }
     html body .page_routes .section_rows .row .elevation {
-      width: calc(55vw - 3.2em);
+      width: calc(50vw - .8em);
       padding-left: 1.6em;
       background: url(../../images/icon-elevation-gain-grey.svg) no-repeat;
       background-size: 1.15em 1.15em;
       text-align: left;
       font-size: .9em;
-      color: #aaa; }
-    html body .page_routes .section_rows .row .athlete {
-      display: none;
-      width: calc(30vw);
-      margin-left: calc(15vw + .8em);
-      font-size: .9em;
-      color: #aaa; }
-      html body .page_routes .section_rows .row .athlete a {
-        color: #aaa; }
-    html body .page_routes .section_rows .row .updated {
-      display: none;
-      width: calc(55vw - 4.8em);
-      font-size: .9em;
-      color: #999; } }
+      color: #aaa; } }
 
 /*# sourceMappingURL=routes-mobile.css.map */

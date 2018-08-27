@@ -350,4 +350,113 @@ class RouteService extends EntityService
 
         return $unstarred;
     }
+
+    public function getRouteTypes($type = null)
+    {
+        $types = [
+            '1' => 'bike',
+            '1,1' => 'bike · road',
+            '1,2' => 'bike · mtb',
+            '1,3' => 'bike · cross',
+            '1,5' => 'bike · mixed',
+            '2' => 'run',
+            '2,1' => 'run · road',
+            '2,4' => 'run · trail',
+            '2,5' => 'run · mixed',
+        ];
+
+        if (isset($type)) {
+            return $types[$type] ?? null;
+        }
+
+        return $types;
+    }
+
+    public function getLocationDistances($distance = null)
+    {
+        $distances = [
+            '0.1' => '100 m',
+            '0.5' => '500 m',
+            '1' => '1 km',
+            '5' => '5 km',
+            '10' => '10 km',
+            '20' => '20 km',
+            '50' => '50 km',
+            '100' => '100 km',
+        ];
+
+        if (isset($distance)) {
+            return $distances[$distance] ?? null;
+        }
+
+        return $distances;
+    }
+
+    public function getFiltersForDisplay($filters)
+    {
+        $return = [];
+
+        $nameMap = [
+            'type' => [
+                'label' => 'type',
+                'values' => $this->getRouteTypes(),
+            ],
+            'name' => [
+                'label' => 'name',
+            ],
+            'distance_min' => [
+                'label' => 'min distance',
+                'suffix' => ' km',
+            ],
+            'distance_max' => [
+                'label' => 'max distance',
+                'suffix' => ' km',
+            ],
+            'elevation_gain_min' => [
+                'label' => 'min ascent',
+                'suffix' => ' m',
+            ],
+            'elevation_gain_max' => [
+                'label' => 'max ascent',
+                'suffix' => ' m',
+            ],
+            'athlete' => [
+                'label' => 'athlete',
+            ],
+            'start' => [
+                'label' => 'start',
+            ],
+            'end' => [
+                'label' => 'end',
+            ],
+        ];
+
+        foreach ($filters as $key => $value) {
+            if (in_array($key, array_keys($nameMap))) {
+                if (!empty($nameMap[$key]['values'][$value])) {
+                    $value = $nameMap[$key]['values'][$value];
+                }
+                if ($key == 'type') {
+                    $value = preg_replace('/(bike · |run · )/', '', $value);
+                }
+                if ($key == 'start') {
+                    $value_parts = explode(', ', $value);
+                    $value = $value_parts[0];
+                    if (!empty($filters['start_dist'])) {
+                        $value = 'within '.($this->getLocationDistances($filters['start_dist']) ? $this->getLocationDistances($filters['start_dist']) : $filters['start_dist']).' from '.$value;
+                    }
+                }
+                if ($key == 'end') {
+                    $value_parts = explode(', ', $value);
+                    $value = $value_parts[0];
+                    if (!empty($filters['end_dist'])) {
+                        $value = 'within '.($this->getLocationDistances($filters['end_dist']) ? $this->getLocationDistances($filters['end_dist']) : $filters['end_dist']).' from '.$value;
+                    }
+                }
+                $return[$nameMap[$key]['label']] = $value . ($nameMap[$key]['suffix'] ?? '');
+            }
+        }
+
+        return $return;
+    }
 }

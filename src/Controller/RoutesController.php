@@ -33,6 +33,7 @@ class RoutesController extends ControllerBase
      *
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @param \Doctrine\ORM\EntityManagerInterface $entityManager
+     * @param \App\Service\RouteService $routeService
      * @param \App\Service\AthleteService $athleteService
      *
      * @return \Symfony\Component\HttpFoundation\Response|\Symfony\Component\HttpFoundation\RedirectResponse
@@ -40,6 +41,7 @@ class RoutesController extends ControllerBase
     public function listAction(
         Request $request,
         EntityManagerInterface $entityManager,
+        RouteService $routeService,
         AthleteService $athleteService
     ) {
         // Allow access only to athletes authorized with Strava.
@@ -62,7 +64,9 @@ class RoutesController extends ControllerBase
         }
 
         // Filters.
-        $routeFilterForm = $this->createForm(RouteFilterType::class, null, ['csrf_protection' => false]);
+        $routeFilterForm = $this->createForm(RouteFilterType::class, [
+            'route_service' => $routeService,
+        ], ['csrf_protection' => false]);
         $routeFilterForm->handleRequest($request);
 
         $filters = [];
@@ -102,6 +106,7 @@ class RoutesController extends ControllerBase
                 'pages' => $routes['pages'],
                 'route_add_form' => $routeAddForm->createView(),
                 'route_filter_form' => $routeFilterForm->createView(),
+                'filter_values' => $routeService->getFiltersForDisplay(array_filter($request->query->get('filter', []))),
             ]
         );
     }
@@ -349,7 +354,7 @@ and %public_deleted% deleted, %published% published, %private_skipped% private s
                     'filter[starred]' => true,
                 ]);
             } else {
-                $this->addFlash('notice', 'Select routes to publish and share with other athletes:');
+                $this->addFlash('orange', 'Select routes to publish and share with other athletes:');
             }
 
             return $this->render(

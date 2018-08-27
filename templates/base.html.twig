@@ -97,9 +97,9 @@
                 $(document).ready(function(){
                     $(".menu_item_burger").on("click", function(){
                         if ($(".header2").is(':visible')) {
-                            $(".menu_item_burger").css('background-image', 'url(../../images/icon-menu-burger.svg)');
+                            $(".menu_item_burger").removeClass('open');
                         } else {
-                            $(".menu_item_burger").css('background-image', 'url(../../images/icon-menu-close.svg)');
+                            $(".menu_item_burger").addClass('open');
                         }
                         $(".header2").slideToggle("fast");
                     });

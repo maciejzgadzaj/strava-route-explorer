@@ -3,21 +3,21 @@
 {% block title %}{{ 'Select routes to publish'|trans }} - {{ parent() }}{% endblock %}
 
 {% block header %}
-    <div class="header">
-        <div class="logo-title">
-            <a href="{{ path('homepage') }}"><img src="../../../images/logo.png" alt="Strava Route Explorer" title="Strava Route Explorer" width="125" height="35" /></a>
-        </div>
-    </div>
+    {#<div class="header">#}
+        {#<div class="logo-title">#}
+            {#<a href="{{ path('homepage') }}"><img src="../../../images/logo.png" alt="Strava Route Explorer" title="Strava Route Explorer" width="125" height="35" /></a>#}
+        {#</div>#}
+    {#</div>#}
 {% endblock %}
 
 {% block body %}
-    <div class="routes">
+    <div class="page page_routes">
         <div class="head">
             <div class="cell checkbox"><input type="checkbox" id="select_all_header" class="select_all" name="select_all" checked="checked" /></div>
             <div class="cell id">Id</div>
             <div class="cell name">Name</div>
             <div class="cell distance">Distance</div>
-            <div class="cell elevation">Elevation</div>
+            <div class="cell ascent">Elevation</div>
             <div class="cell athlete">Author</div>
             <div class="cell created">Created</div>
             <div class="cell updated">Updated</div>
@@ -28,14 +28,14 @@
         <div class="rows">
             {% for route in strava_routes %}
                 {% if not route.private %}
-                    <div class="row">
+                    <div class="row {{ cycle(['odd', 'even'], delta) }}">
                         {# We cannot use loop.index0 instead of delta, as we don't want
                            increased value in case of private routes. #}
                         <div class="cell checkbox">{{ form_row(publish_form.route[delta]) }}</div>
                         <div class="cell id">{{ route.id }}</div>
                         <div class="cell name">{{ route.name }}</div>
                         <div class="cell distance number">{{ (route.distance // 1000) | number_format }} km</div>
-                        <div class="cell elevation number">{{ route.elevation_gain | number_format }} m</div>
+                        <div class="cell ascent number">{{ route.elevation_gain | number_format }} m</div>
                         <div class="cell athlete">{{ route.athlete.firstname }} {{ route.athlete.lastname }}</div>
                         <div class="cell created">{{ route.created_at | date('Y-m-d') }}</div>
                         <div class="cell updated">{{ route.updated_at | date('Y-m-d') }}</div>
@@ -61,6 +61,7 @@
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('build/select.css') }}">
+    <link rel="stylesheet" media='screen and (max-width: 760px)' href="{{ asset('build/select-mobile.css') }}" />
 {% endblock %}
 
 {% block javascripts %}

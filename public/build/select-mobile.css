@@ -1,0 +1,54 @@
+@media screen and (max-width: 760px) {
+  html body .flashes {
+    line-height: 1.4em; }
+    html body .flashes .flash {
+      margin-top: 0; }
+  html body .page_routes {
+    margin-bottom: 0; }
+    html body .page_routes .checkbox {
+      width: 10%; }
+    html body .page_routes .id {
+      display: none; }
+    html body .page_routes .name {
+      width: 50%;
+      color: #000 !important; }
+    html body .page_routes .distance {
+      width: 25%;
+      margin-left: 10%;
+      text-align: left;
+      font-size: .9em; }
+    html body .page_routes .ascent {
+      width: 25%;
+      text-align: left;
+      font-size: .9em; }
+    html body .page_routes .athlete {
+      order: 4;
+      -webkit-order: 4;
+      width: 40%;
+      font-size: .9em; }
+    html body .page_routes .created {
+      display: none; }
+    html body .page_routes .updated {
+      width: 40%;
+      font-size: .9em; }
+    html body .page_routes .head, html body .page_routes .row {
+      flex-wrap: wrap;
+      -webkit-flex-wrap: wrap;
+      padding: .7em 0; }
+      html body .page_routes .head .cell, html body .page_routes .row .cell {
+        padding: .3em .5em;
+        color: #999; }
+      html body .page_routes .head .number, html body .page_routes .row .number {
+        text-align: left; }
+    html body .page_routes .submit {
+      position: relative;
+      padding: .5em .5em 2em; }
+      html body .page_routes .submit .toggle {
+        left: .5em; }
+      html body .page_routes .submit button {
+        margin-top: 3.5em; }
+      html body .page_routes .submit .cancel {
+        right: 1em;
+        top: 1.1em; } }
+
+/*# sourceMappingURL=select-mobile.css.map */

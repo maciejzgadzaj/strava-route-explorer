@@ -1,81 +1,104 @@
-.routes {
+.page_routes {
   margin-bottom: 1em;
   font-size: .9em; }
-  .routes .head, .routes .row {
+  .page_routes .head, .page_routes .row {
     width: 100%;
     display: flex;
     justify-content: space-between; }
-    .routes .head .cell, .routes .row .cell {
+    .page_routes .head .cell, .page_routes .row .cell {
       padding: 1em; }
-    .routes .head .number, .routes .row .number {
+    .page_routes .head .number, .page_routes .row .number {
       text-align: right; }
-  .routes .row:hover {
+  .page_routes .row.even {
+    background-color: #f9f9f9; }
+  .page_routes .row:hover {
     cursor: pointer;
     background-color: #f9f9f9; }
-  .routes .head {
-    background-color: #f0f0f0; }
-  .routes .checkbox {
+  .page_routes .head {
+    background-color: #f0f0f0;
+    border-bottom: 1px solid #e0e0e0; }
+  .page_routes .checkbox {
+    order: 1;
+    -webkit-order: 1;
     width: 2%; }
-  .routes .id {
+  .page_routes .id {
+    order: 2;
+    -webkit-order: 2;
     width: 5%;
     color: #999; }
-  .routes .name {
+  .page_routes .name {
+    order: 3;
+    -webkit-order: 3;
     width: 30%; }
-    .routes .name a {
+    .page_routes .name a {
       text-decoration: none; }
-      .routes .name a:hover {
+      .page_routes .name a:hover {
         text-decoration: underline; }
-  .routes .distance {
-    width: 10%;
+  .page_routes .distance {
+    order: 5;
+    -webkit-order: 5;
+    width: 8%;
     white-space: nowrap;
     text-align: right; }
-  .routes .elevation {
-    width: 10%;
+  .page_routes .ascent {
+    order: 6;
+    -webkit-order: 6;
+    width: 8%;
     white-space: nowrap;
     text-align: right; }
-  .routes .athlete {
+  .page_routes .athlete {
+    order: 7;
+    -webkit-order: 7;
     width: 13%; }
-  .routes .created {
-    width: 10%;
+  .page_routes .created {
+    order: 8;
+    -webkit-order: 8;
+    width: 12%;
     color: #999; }
-  .routes .updated {
-    width: 10%;
+  .page_routes .updated {
+    order: 9;
+    -webkit-order: 9;
+    width: 12%;
     color: #999; }
-  .routes .submit {
+  .page_routes .submit {
     position: fixed;
     bottom: 0;
     width: 100%;
     padding: 1em;
     background-color: #f0f0f0;
     text-align: center; }
-    .routes .submit .toggle {
+    .page_routes .submit .toggle {
       position: absolute;
       left: 1em;
       z-index: 5;
       margin-top: .5em; }
-    .routes .submit button {
+    .page_routes .submit button {
       padding: .7em 2em;
       border: 1px solid #fc4c02;
       background-color: #fc4c02;
       font-size: 1em;
       color: #ffffff; }
-      .routes .submit button:hover {
+      .page_routes .submit button:hover {
         cursor: pointer;
         background-color: #e34402;
         -moz-transition: all .1s ease-in;
         -webkit-transition: all .1s ease-in;
         -o-transition: all .1s ease-in;
         transition: all .1s ease-in; }
-    .routes .submit .cancel {
+    .page_routes .submit .cancel {
       position: absolute;
       right: 4em;
       top: 1.8em; }
-      .routes .submit .cancel a {
+      .page_routes .submit .cancel a {
         color: #999;
         text-decoration: none; }
-        .routes .submit .cancel a:hover {
+        .page_routes .submit .cancel a:hover {
           text-decoration: underline; }
-  .routes .checkbox input:hover, .routes .checkbox label:hover, .routes .toggle input:hover, .routes .toggle label:hover {
+  .page_routes .checkbox input:hover, .page_routes .checkbox label:hover, .page_routes .toggle input:hover, .page_routes .toggle label:hover {
     cursor: pointer; }
+
+@media screen and (max-width: 1350px) {
+  html body .page_routes .id {
+    display: none; } }
 
 /*# sourceMappingURL=select.css.map */

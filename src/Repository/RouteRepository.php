@@ -118,7 +118,9 @@ class RouteRepository extends ServiceEntityRepository
                     break;
 
                 case 'start_dist':
-                    if (!empty($criteria['start_latlon'])) {
+                    // Even if a user removes "start" filter value, "start_latlon" is still kept,
+                    // as it is hidden - but we don't want to use it anymore for search.
+                    if (!empty($criteria['start_latlon']) && !empty($criteria['start'])) {
                         $start = new Point(array_reverse(explode(',', $criteria['start_latlon'])));
                         $selects['start_dist'] = '
                             ( 3959 * acos(cos(radians('.$start->getLatitude().'))
@@ -150,7 +152,9 @@ class RouteRepository extends ServiceEntityRepository
                     break;
 
                 case 'end_dist':
-                    if (!empty($criteria['end_latlon'])) {
+                    // Even if a user removes "end" filter value, "end_latlon" is still kept,
+                    // as it is hidden - but we don't want to use it anymore for search.
+                    if (!empty($criteria['end_latlon']) && !empty($criteria['end'])) {
                         $end = new Point(array_reverse(explode(',', $criteria['end_latlon'])));
                         $selects['end_dist'] = '
                             ( 3959 * acos(cos(radians('.$end->getLatitude().'))

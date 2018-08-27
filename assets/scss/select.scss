@@ -1,7 +1,7 @@
 @import '_variables';
 @import '_mixins';
 
-.routes {
+.page_routes {
     margin-bottom: 1em;
     font-size: .9em;
     .head, .row {
@@ -16,6 +16,9 @@
         }
     }
     .row {
+        &.even {
+            background-color: #f9f9f9;
+        }
         &:hover {
             cursor: pointer;
             background-color: #f9f9f9;
@@ -23,15 +26,23 @@
     }
     .head {
         background-color: #f0f0f0;
+        border-bottom: 1px solid #e0e0e0;
     }
     .checkbox {
+        order: 1;
+        -webkit-order: 1;
         width: 2%;
     }
     .id {
+        order: 2;
+        -webkit-order: 2;
         width: 5%;
         color: #999;
     }
     .name {
+        order: 3;
+        -webkit-order: 3;
+
         width: 30%;
         a {
             text-decoration: none;
@@ -41,24 +52,34 @@
         }
     }
     .distance {
-        width: 10%;
+        order: 5;
+        -webkit-order: 5;
+        width: 8%;
         white-space: nowrap;
         text-align: right;
     }
-    .elevation {
-        width: 10%;
+    .ascent {
+        order: 6;
+        -webkit-order: 6;
+        width: 8%;
         white-space: nowrap;
         text-align: right;
     }
     .athlete {
+        order: 7;
+        -webkit-order: 7;
         width: 13%;
     }
     .created {
-        width: 10%;
+        order: 8;
+        -webkit-order: 8;
+        width: 12%;
         color: #999;
     }
     .updated{
-        width: 10%;
+        order: 9;
+        -webkit-order: 9;
+        width: 12%;
         color: #999;
     }
     .submit {
@@ -103,6 +124,18 @@
         input, label {
             &:hover {
                 cursor: pointer;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 1350px) {
+    html {
+        body {
+            .page_routes {
+                .id {
+                    display: none;
+                }
             }
         }
     }

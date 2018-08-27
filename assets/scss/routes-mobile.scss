@@ -8,29 +8,38 @@
     // Rows.
     $mobileImageWidth: calc(15vw);
     $mobileNameWidth: calc(85vw - 1.6em);
+    $mobileAthleteWidth: calc(55vw - 1em);
+    $mobileDateWidth: calc(30vw - 1em);
     $mobileDistanceLeftMargin: calc(15vw + .8em);
-    $mobileDistanceWidth: calc(30vw - 1.6em);
-    $mobileElevationGainWidth: calc(55vw - 3.2em);
-    $mobileAthleteWidth: calc(30vw);
-    $mobileDateWidth: calc(55vw - 4.8em);
+    $mobileDistanceWidth: calc(35vw - .8em);
+    $mobileElevationGainWidth: calc(50vw - .8em);
 
     html {
         body {
             .page_routes {
 
                 .filters_toggle {
-                    display: block !important;
+                    display: block;
                     margin: 0;
-                    padding: 1.2em;
-                    background-color: #f0f0f0;
+                    padding: 1em;
+                    background: #f0f0f0 url(../../images/icon-caret-down.svg) no-repeat right 1.2em top 1.3em;
+                    background-size: .5em;
                     text-align: center;
                     color: #888;
+                    .filter_values {
+                        margin-top: .8em;
+                        font-size: .8em;
+                        .filter_value {
+                            display: inline-block;
+                            margin: .3em;
+                            padding: 0 .3em;
+                        }
+                    }
                     &:hover {
                         cursor: pointer;
                     }
-                    &.active {
-                        color: $black;
-                        font-weight: bold;
+                    &.open {
+                        background-image: url(../../images/icon-caret-up.svg);
                     }
                 }
 
@@ -73,6 +82,11 @@
                                 width: 5em;
                                 margin-right: .5em;
                             }
+                        }
+                    }
+                    .filter.athlete {
+                        .starred {
+                            position: static;
                         }
                     }
                     .filter.updated {
@@ -146,6 +160,7 @@
                         .image {
                             width: $mobileImageWidth;
                             margin: 0;
+                            margin-bottom: -10vw;
                             img {
                                 width: 15vw;
                                 height: 10vw;
@@ -154,7 +169,35 @@
                         .name {
                             width: $mobileNameWidth;
                             //font-size: 1.1em;
-                            .description {
+                            .route_id, .description {
+                                display: none;
+                            }
+                        }
+                        .athlete {
+                            order: 3;
+                            -webkit-order: 3;
+                            align-self: baseline;
+                            -webkit-align-self: baseline;
+                            width: $mobileAthleteWidth;
+                            margin: .5em 0 .5em $mobileDistanceLeftMargin;
+                            font-size: .9em;
+                            color: #aaa;
+                            a {
+                                color: #aaa;
+                            }
+                            .athlete_id {
+                                display: none;
+                            }
+                        }
+                        .updated {
+                            order: 4;
+                            -webkit-order: 4;
+                            align-self: baseline;
+                            -webkit-align-self: baseline;
+                            width: $mobileDateWidth;
+                            font-size: .7em;
+                            color: #bbb;
+                            .created {
                                 display: none;
                             }
                         }
@@ -176,22 +219,6 @@
                             text-align: left;
                             font-size: .9em;
                             color: #aaa;
-                        }
-                        .athlete {
-                            display: none;
-                            width: $mobileAthleteWidth;
-                            margin-left: $mobileDistanceLeftMargin;
-                            font-size: .9em;
-                            color: #aaa;
-                            a {
-                                color: #aaa;
-                            }
-                        }
-                        .updated {
-                            display: none;
-                            width: $mobileDateWidth;
-                            font-size: .9em;
-                            color: #999;
                         }
                     }
                 }
