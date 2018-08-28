@@ -90,8 +90,9 @@ class StravaService
 
         // Athlete has not connected his Strava account yet.
         if (!$athleteAccessToken = $athlete->getAccessToken()) {
-            throw new \Exception(strtr('No token found for athlete %athlete_id%.', [
-                '%athlete_id%' => $athleteId,
+            throw new \Exception(strtr('No token found for %athlete_name% (%athlete_id%).', [
+                '%athlete_name%' => $athlete->getName(),
+                '%athlete_id%' => $athlete->getId(),
             ]));
         }
 

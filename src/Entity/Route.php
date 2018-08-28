@@ -440,6 +440,14 @@ class Route
     }
 
     /**
+     * @param \App\Entity\Athlete $athlete
+     */
+    public function isStarredBy(Athlete $athlete): bool
+    {
+        return $this->starredBy->contains($athlete);
+    }
+
+    /**
      * @return bool
      */
     public function isNew(): bool

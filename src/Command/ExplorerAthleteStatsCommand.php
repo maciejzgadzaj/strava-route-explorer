@@ -52,7 +52,7 @@ class ExplorerAthleteStatsCommand extends ContainerAwareCommand
     private $athleteId;
 
     /**
-     * ExplorerDoCommand constructor.
+     * ExplorerAthleteStatsCommand constructor.
      *
      * @param string|null $name
      * @param \Doctrine\ORM\EntityManagerInterface $entityManager

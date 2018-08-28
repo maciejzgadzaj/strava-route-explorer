@@ -131,6 +131,19 @@ class AthleteService extends EntityService
     }
 
     /**
+     * Return an array of athletes authorized with Strava.
+     *
+     * @return Athlete[]
+     */
+    public function getAuthorizedWithStrava()
+    {
+        $qb = $this->repository->createQueryBuilder('a');
+        return $qb->where($qb->expr()->isNotNull('a.accessToken'))
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
      * Remove old Strava cookies and set one new one.
      */
     public function removeOldCookies()

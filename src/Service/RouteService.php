@@ -303,13 +303,17 @@ class RouteService extends EntityService
     {
         $qb = $this->repository->createQueryBuilder('r');
 
+        if (!empty($excludeIds)) {
+            $where = $qb->expr()->andX(
+                $qb->expr()->eq('r.athlete', $athlete->getId()),
+                $qb->expr()->notIn('r.id', $excludeIds)
+            );
+        } else {
+            $where = $qb->expr()->eq('r.athlete', $athlete->getId());
+        }
+
         $routesToDelete = $qb
-            ->where(
-                $qb->expr()->andX(
-                    $qb->expr()->eq('r.athlete', $athlete->getId()),
-                    $qb->expr()->notIn('r.id', $excludeIds)
-                )
-            )
+            ->where($where)
             ->getQuery()
             ->getResult();
 
