@@ -87,6 +87,12 @@ $locationWidth: calc(30% - 2em);
             }
             .routes {
                 width: $distanceWidth;
+                a {
+                    text-decoration: none;
+                }
+                .starred {
+                    color: #bbb;
+                }
             }
             .last_sync {
                 color: #bbb;

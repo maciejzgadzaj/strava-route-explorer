@@ -77,6 +77,13 @@ class Athlete
     private $isNew = false;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection|\App\Entity\Route[]
+     *
+     * @ORM\ManyToMany(targetEntity="Route", mappedBy="starredBy")
+     */
+    private $starredRoutes;
+
+    /**
      * Athlete constructor.
      */
     public function __construct()
@@ -219,5 +226,21 @@ class Athlete
     public function isNew(): bool
     {
         return $this->isNew;
+    }
+
+    /**
+     * @return \App\Entity\Route[]|\Doctrine\Common\Collections\Collection
+     */
+    public function getStarredRoutes()
+    {
+        return $this->starredRoutes;
+    }
+
+    /**
+     * @param \App\Entity\Route[]|\Doctrine\Common\Collections\Collection $starredRoutes
+     */
+    public function setStarredRoutes($starredRoutes): void
+    {
+        $this->starredRoutes = $starredRoutes;
     }
 }

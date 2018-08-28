@@ -134,7 +134,7 @@ class Route
     /**
      * @var \Doctrine\Common\Collections\Collection|\App\Entity\Athlete[]
      *
-     * @ORM\ManyToMany(targetEntity="Athlete")
+     * @ORM\ManyToMany(targetEntity="Athlete", inversedBy="starredRoutes")
      * @ORM\JoinTable(
      *     name="route_starred_by",
      *     joinColumns={@ORM\JoinColumn(name="route_id", referencedColumnName="id")},

@@ -68,7 +68,11 @@
                             <div class="description"><a title="See athlete on Strava.com" href="https://www.strava.com/athletes/{{ row.athlete.id }}">{{ row.athlete.id }}</a></div>
                         </div>
                         <div class="cell routes">
-                            <a href="{{ path('routes', { 'filter[athlete]': row.athlete.name, 'filter[starred]': true }) }}">{{ row.route_count }}</a>
+                            <a href="{{ path('routes', { 'filter[athlete]': row.athlete.name, 'filter[starred]': true }) }}">{{ row.route_count }}
+                                {% if row.starred_count > 0 %}
+                                    <span class="starred"> + {{ row.starred_count }}</span>
+                                {% endif %}
+                            </a>
                         </div>
                         <div class="cell last_sync">
                             {% if row.athlete.lastSync %}

@@ -52,6 +52,10 @@
       width: calc(40% - 2em); }
     .page_athletes .section_rows .row .routes {
       width: calc(10% - 2em); }
+      .page_athletes .section_rows .row .routes a {
+        text-decoration: none; }
+      .page_athletes .section_rows .row .routes .starred {
+        color: #bbb; }
     .page_athletes .section_rows .row .last_sync {
       color: #bbb; }
     .page_athletes .section_rows .row::after {
