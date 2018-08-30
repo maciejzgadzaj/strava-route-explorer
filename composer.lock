@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c351273d0459bddda29129a824b527b4",
+    "content-hash": "0318022b34455ed1a6fa8e63843216eb",
     "packages": [
         {
             "name": "beberlei/DoctrineExtensions",
@@ -59,6 +59,53 @@
                 "orm"
             ],
             "time": "2018-07-14T09:31:10+00:00"
+        },
+        {
+            "name": "corley/maintenance-bundle",
+            "version": "0.2.3",
+            "target-dir": "Corley/MaintenanceBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wdalmut/CorleyMaintenanceBundle.git",
+                "reference": "4d510a163de62dc0f6e17d3187c75317b8fe7110"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wdalmut/CorleyMaintenanceBundle/zipball/4d510a163de62dc0f6e17d3187c75317b8fe7110",
+                "reference": "4d510a163de62dc0f6e17d3187c75317b8fe7110",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2",
+                "symfony/console": ">=2.6",
+                "symfony/dependency-injection": ">=2.6",
+                "symfony/framework-bundle": ">=2.6",
+                "symfony/security-bundle": ">=2.6"
+            },
+            "require-dev": {
+                "mikey179/vfsstream": "1.*",
+                "phpunit/phpunit": "4.0.*"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "Corley\\MaintenanceBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Corley Maintenance Bundle",
+            "keywords": [
+                "503",
+                "Maintenance management",
+                "apache",
+                "apache2",
+                "maintenance",
+                "nginx"
+            ],
+            "time": "2016-06-12T11:19:45+00:00"
         },
         {
             "name": "creof/doctrine2-spatial",
@@ -2146,67 +2193,6 @@
                 "time"
             ],
             "time": "2017-12-26T03:59:33+00:00"
-        },
-        {
-            "name": "lexik/maintenance-bundle",
-            "version": "v2.1.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/lexik/LexikMaintenanceBundle.git",
-                "reference": "3a3e916776934a95834235e4a1d71e4595d515f5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/lexik/LexikMaintenanceBundle/zipball/3a3e916776934a95834235e4a1d71e4595d515f5",
-                "reference": "3a3e916776934a95834235e4a1d71e4595d515f5",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.9",
-                "symfony/framework-bundle": "~2.7|~3.0|^4.0",
-                "symfony/translation": "~2.7|~3.0|^4.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~4.8|~5.7.11",
-                "symfony/phpunit-bridge": "~2.7|~3.0|^4.0"
-            },
-            "type": "symfony-bundle",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Lexik\\Bundle\\MaintenanceBundle\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Dev Lexik",
-                    "email": "dev@lexik.fr"
-                },
-                {
-                    "name": "Gilles Gauthier",
-                    "email": "g.gauthier@lexik.fr"
-                },
-                {
-                    "name": "Djuri Baars",
-                    "email": "info@djurict.nl"
-                }
-            ],
-            "description": "This bundle allows you to place your website in maintenance mode by calling two commands from your console.",
-            "homepage": "https://github.com/lexik/LexikMaintenanceBundle",
-            "keywords": [
-                "Symfony2",
-                "bundle",
-                "maintenance"
-            ],
-            "time": "2018-02-14T10:18:33+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -5426,16 +5412,16 @@
         },
         {
             "name": "symfony/translation",
-            "version": "v4.1.3",
+            "version": "v4.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/translation.git",
-                "reference": "6fcd1bd44fd6d7181e6ea57a6f4e08a09b29ef65"
+                "reference": "fa2182669f7983b7aa5f1a770d053f79f0ef144f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/translation/zipball/6fcd1bd44fd6d7181e6ea57a6f4e08a09b29ef65",
-                "reference": "6fcd1bd44fd6d7181e6ea57a6f4e08a09b29ef65",
+                "url": "https://api.github.com/repos/symfony/translation/zipball/fa2182669f7983b7aa5f1a770d053f79f0ef144f",
+                "reference": "fa2182669f7983b7aa5f1a770d053f79f0ef144f",
                 "shasum": ""
             },
             "require": {
@@ -5491,7 +5477,7 @@
             ],
             "description": "Symfony Translation Component",
             "homepage": "https://symfony.com",
-            "time": "2018-07-26T11:24:31+00:00"
+            "time": "2018-08-07T12:45:11+00:00"
         },
         {
             "name": "symfony/twig-bridge",

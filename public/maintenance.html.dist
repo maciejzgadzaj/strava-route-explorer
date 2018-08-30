@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+        <title>Maintenance - Strava Route Explorer</title>
+        <meta name="description" content="Browse and search our database of bike and run routes. Filter results by name, distance, elevation gain, athlete, start/end location, and more.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noindex" />
+        <style type="text/css">
+            * { box-sizing: border-box; }
+            body { width: 100vw; height: 100vh; margin: 0; padding: 0; font-family: -apple-system, system-ui, BlinkMacSystemFont, Roboto, "Segoe UI", "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; color: #fff; line-height: 1.8em; background: #222 url(https://lh3.googleusercontent.com/frxoy1aAnAvJAqfyvN86tm3s8qzlW88YWoNcSVFQaYsK9-_6dG4rXxKkBwcDT7ANSHMHyTaFEHxaiOdiMQs=w1200-no-tmp.jpg) no-repeat center left; background-attachment: scroll; background-size: cover; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; }
+            body .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #000; opacity: .5; }
+            body .maintenance { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; padding: 4em; display: flex; flex-direction: column; -webkit-flex-direction: column; justify-content: center; -webkit-justify-content: center; text-align: center; }
+            body .maintenance h1 { margin-top: 0; line-height: 1.4em; }
+            @media screen and (max-width: 760px) {
+                html body { background-image: url(https://lh3.googleusercontent.com/frxoy1aAnAvJAqfyvN86tm3s8qzlW88YWoNcSVFQaYsK9-_6dG4rXxKkBwcDT7ANSHMHyTaFEHxaiOdiMQs=w800-no-tmp.jpg); }
+            }
+            @media screen and (max-width: 540px) {
+                html body { background-image: url(https://lh3.googleusercontent.com/frxoy1aAnAvJAqfyvN86tm3s8qzlW88YWoNcSVFQaYsK9-_6dG4rXxKkBwcDT7ANSHMHyTaFEHxaiOdiMQs=w600-no-tmp.jpg); }
+            }
+            @media screen and (max-width: 340px) {
+                html body { background-image: url(https://lh3.googleusercontent.com/frxoy1aAnAvJAqfyvN86tm3s8qzlW88YWoNcSVFQaYsK9-_6dG4rXxKkBwcDT7ANSHMHyTaFEHxaiOdiMQs=w400-no-tmp.jpg); }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="overlay"></div>
+        <div class="maintenance">
+            <h1>Temporarily down for maintenance.</h1>
+            <p>We are performing scheduled maintenance. We should be back online shortly.</p>
+        </div>
+    </body>
+</html>
