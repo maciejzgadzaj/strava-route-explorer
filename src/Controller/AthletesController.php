@@ -32,8 +32,14 @@ class AthletesController extends ControllerBase
     {
         // Allow access only to athletes authorized with Strava.
         if (empty($this->getParameter('open_access')) && !$athleteService->isAuthorized()) {
+            $this->addFlash('error', 'Please connect with Strava first to be able to access athlete listing.');
+            $this->container->get('session')->set('strava_redirect_destination', [
+                'route' => $request->get('_route'),
+                'query' => $request->query->all(),
+            ]);
             return $this->redirectToRoute('homepage');
         }
+        $this->container->get('session')->remove('strava_redirect_destination');
 
         // Add route.
         $routeAddForm = $this->createForm(RouteAddType::class);

@@ -46,8 +46,14 @@ class RoutesController extends ControllerBase
     ) {
         // Allow access only to athletes authorized with Strava.
         if (empty($this->getParameter('open_access')) && !$athleteService->isAuthorized()) {
+            $this->addFlash('error', 'Please connect with Strava first to be able to access route listing.');
+            $this->container->get('session')->set('strava_redirect_destination', [
+                'route' => $request->get('_route'),
+                'query' => $request->query->all(),
+            ]);
             return $this->redirectToRoute('homepage');
         }
+        $this->container->get('session')->remove('strava_redirect_destination');
 
         // @TODO: Remove in some time.
         $athleteService->removeOldCookies();
@@ -349,10 +355,16 @@ and %public_deleted% deleted, %published% published, %private_skipped% private s
                 $this->logger->debug(strtr($message, $params));
                 $this->addFlash('notice', 'Routes synchronized.');
 
-                return $this->redirectToRoute('routes', [
-                    'filter[athlete]' => $athlete->getName(),
-                    'filter[starred]' => true,
-                ]);
+                if ($destination = $this->container->get('session')->get('strava_redirect_destination')) {
+                    $this->container->get('session')->remove('strava_redirect_destination');
+                    return $this->redirectToRoute($destination['route'], $destination['query']);
+                } else {
+                    return $this->redirectToRoute('routes', [
+                        'filter[athlete]' => $athlete->getName(),
+                        'filter[starred]' => true,
+                    ]);
+
+                }
             } else {
                 $this->addFlash('orange', 'Select routes to publish and share with other athletes:');
             }

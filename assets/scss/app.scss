@@ -113,8 +113,11 @@ body {
             background-color: lightgreen;
         }
         .flash-error {
-            color: white;
+            color: $white;
             background-color: red;
+            a {
+                color: $white;
+            }
         }
         .flash-orange {
             color: white;

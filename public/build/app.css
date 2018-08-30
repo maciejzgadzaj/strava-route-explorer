@@ -75,8 +75,10 @@ body {
   body .flashes .flash-notice {
     background-color: lightgreen; }
   body .flashes .flash-error {
-    color: white;
+    color: #ffffff;
     background-color: red; }
+    body .flashes .flash-error a {
+      color: #ffffff; }
   body .flashes .flash-orange {
     color: white;
     background-color: #fc4c02; }

@@ -40,6 +40,8 @@ h1, h2, h3 {
 body {
   text-align: center;
   line-height: 1.5em; }
+  body .flashes .flash {
+    margin: 0; }
   body .immersive {
     position: relative;
     width: 100%;

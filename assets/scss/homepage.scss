@@ -58,6 +58,12 @@ body {
     text-align: center;
     line-height: 1.5em;
 
+    .flashes {
+        .flash {
+            margin: 0;
+        }
+    }
+
     .immersive {
         position: relative;
         width: 100%;
