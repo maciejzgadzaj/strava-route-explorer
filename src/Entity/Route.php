@@ -9,7 +9,22 @@ use Doctrine\ORM\Mapping as ORM;
  * Class Route
  *
  * @ORM\Entity(repositoryClass="App\Repository\RouteRepository")
- * @ORM\Table(name="route")
+ * @ORM\Table(
+ *     name="route",
+ *     indexes={
+ *         @ORM\Index(name="IDX_TYPE", columns={"type"}),
+ *         @ORM\Index(name="IDX_SUB_TYPE", columns={"sub_type"}),
+ *         @ORM\Index(name="IDX_NAME", columns={"name"}),
+ *         @ORM\Index(name="IDX_DISTANCE", columns={"distance"}),
+ *         @ORM\Index(name="IDX_ASCENT", columns={"ascent"}),
+ *         @ORM\Index(name="IDX_PUBLIC", columns={"public"}),
+ *         @ORM\Index(name="IDX_FULLTEXT_NAME", columns={"name"}, flags={"fulltext"}),
+ *         @ORM\Index(name="IDX_FULLTEXT_DESC", columns={"description"}, flags={"fulltext"}),
+ *         @ORM\Index(name="IDX_FULLTEXT_SEGMENTS", columns={"segments"}, flags={"fulltext"}),
+ *         @ORM\Index(name="IDX_FULLTEXT_TAGS", columns={"tags"}, flags={"fulltext"}),
+ *         @ORM\Index(name="IDX_FULLTEXT_NAME_DESC_SEGMENTS_TAGS", columns={"name", "description", "segments", "tags"}, flags={"fulltext"})
+ *     }
+ * )
  *
  * @package App\Entity
  */
@@ -109,6 +124,20 @@ class Route
      * @ORM\Column(type="text", name="polyline_summary")
      */
     private $polylineSummary;
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(type="json", nullable=true)
+     */
+    private $segments;
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(type="json", nullable=true)
+     */
+    private $tags;
 
     /**
      * @var bool
@@ -349,6 +378,38 @@ class Route
     public function setPolylineSummary(string $polylineSummary): void
     {
         $this->polylineSummary = $polylineSummary;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSegments(): array
+    {
+        return $this->segments;
+    }
+
+    /**
+     * @param array $segments
+     */
+    public function setSegments(array $segments): void
+    {
+        $this->segments = $segments;
+    }
+
+    /**
+     * @return array
+     */
+    public function getTags(): array
+    {
+        return $this->tags;
+    }
+
+    /**
+     * @param array $tags
+     */
+    public function setTags(array $tags): void
+    {
+        $this->tags = $tags;
     }
 
     /**

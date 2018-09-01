@@ -63,8 +63,8 @@ class RouteFilterType extends AbstractType
                 'label' => false,
                 'required' => false,
                 'attr' => [
-                    'placeholder' => 'name or id',
-                    'title' => 'Filter routes by name or ID',
+                    'placeholder' => 'route name, id, town or segment name',
+                    'title' => 'Filter routes by name, ID, town or segment name',
                     '@focus' => '$event.target.select()',
                 ],
             ]

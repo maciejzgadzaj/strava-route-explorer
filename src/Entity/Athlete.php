@@ -8,7 +8,13 @@ use Doctrine\ORM\Mapping as ORM;
  * Class Athlete
  *
  * @ORM\Entity(repositoryClass="App\Repository\AthleteRepository")
- * @ORM\Table(name="athlete")
+ * @ORM\Table(
+ *     name="athlete",
+ *     indexes={
+ *         @ORM\Index(name="IDX_USERNAME", columns={"username"}),
+ *         @ORM\Index(name="IDX_NAME", columns={"name"})
+ *     }
+ * )
  *
  * @package App\Entity
  */

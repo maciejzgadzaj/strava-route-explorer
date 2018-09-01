@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Entity\Athlete;
 use App\Entity\Route;
 use Doctrine\ORM\EntityManagerInterface;
+use GuzzleHttp\RequestOptions;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -113,6 +114,31 @@ class MapQuestService
         }
 
         return $return;
+    }
+
+    /**
+     * @param $locations
+     *
+     * @see https://developer.mapquest.com/documentation/open/geocoding-api/batch/post/
+     */
+    public function batchGeocode($locations)
+    {
+        $queryData = [
+            'key' => $this->mapQuestConsumerKey,
+        ];
+
+        $uri = '/geocoding/v1/batch?'.http_build_query($queryData);
+
+        $options = [
+            RequestOptions::JSON => [
+                'locations' => $locations,
+            ],
+        ];
+
+        $response = $this->apiRequest('post', $uri, $options);
+        $content = \GuzzleHttp\json_decode($response->getBody()->getContents());
+
+        return $content;
     }
 
     /**

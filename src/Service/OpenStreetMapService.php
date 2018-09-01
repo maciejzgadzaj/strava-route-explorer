@@ -77,6 +77,31 @@ class OpenStreetMapService
     }
 
     /**
+     * Reverse geocode.
+     *
+     * @param float $lat
+     * @param float $lon
+     *
+     * @return array
+     *
+     * @see https://nominatim.org/release-docs/develop/api/Reverse/
+     * @see https://wiki.openstreetmap.org/wiki/Nominatim
+     */
+    public function reverseGeocode($lat, $lon)
+    {
+        $queryParams = [
+            'lat' => $lat,
+            'lon' => $lon,
+            'format' => 'json',
+        ];
+
+        $uri = '/reverse?'.http_build_query($queryParams);
+
+        $response = $this->apiRequest('get', $uri);
+        return \GuzzleHttp\json_decode($response->getBody()->getContents());
+    }
+
+    /**
      * Send request to OpenStreetMap API.
      *
      * @param string $method

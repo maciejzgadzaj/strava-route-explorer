@@ -74,9 +74,18 @@ class RouteRepository extends ServiceEntityRepository
                     break;
 
                 case 'name':
-                    $wheres[] = '(r.name LIKE :name OR r.id = :id)';
-                    $parameters['name'] = '%'.$value.'%';
+                    $selects[] = 'MATCH (r.name) AGAINST (:name BOOLEAN) AS name_score';
+                    $selects[] = 'MATCH (r.description) AGAINST (:name BOOLEAN) AS description_score';
+                    $selects[] = 'MATCH (r.segments) AGAINST (:name BOOLEAN) AS segments_score';
+                    $selects[] = 'MATCH (r.tags) AGAINST (:name BOOLEAN) AS tags_score';
+                    $wheres[] = '(r.id = :id OR MATCH (r.name, r.description, r.segments, r.tags) AGAINST (:name BOOLEAN) > 0)';
                     $parameters['id'] = $value;
+                    $parameters['name'] = $value;
+                    if (empty($orderBy)) {
+                        $orderBy = [
+                            'name_score * 100 + segments_score * 10 + tags_score * 10 + description_score' => 'DESC',
+                        ];
+                    }
                     break;
 
                 case 'distance_min':
@@ -234,5 +243,33 @@ class RouteRepository extends ServiceEntityRepository
                 ->setMaxResults($limit)
                 ->getResult(),
         ];
+    }
+
+    /**
+     * Find all routes without segments fetched.
+     *
+     * @return \App\Entity\Route[]
+     */
+    public function findAllWithoutSegments()
+    {
+        return $this->createQueryBuilder('r')
+            ->select('r')
+            ->where('r.segments IS NULL')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Find all not tagged routes.
+     *
+     * @return \App\Entity\Route[]
+     */
+    public function findAllNotTagged()
+    {
+        return $this->createQueryBuilder('r')
+            ->select('r')
+            ->where('r.tags IS NULL')
+            ->getQuery()
+            ->getResult();
     }
 }
