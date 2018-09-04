@@ -53,5 +53,11 @@
       border-color: #fc4c02; }
   .section_pager .pager a {
     color: #bbb; }
+  .section_pager .pager input[type=number]::-webkit-inner-spin-button,
+  .section_pager .pager input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0; }
+  .section_pager .pager input[type=number] {
+    -moz-appearance: textfield; }
 
 /*# sourceMappingURL=pager.css.map */

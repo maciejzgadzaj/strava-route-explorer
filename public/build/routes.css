@@ -137,6 +137,12 @@
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none; }
+  .page_routes .section_filters input[type=number]::-webkit-inner-spin-button,
+  .page_routes .section_filters input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0; }
+  .page_routes .section_filters input[type=number] {
+    -moz-appearance: textfield; }
   .page_routes .section_filters select {
     background: #ffffff url(../../images/icon-caret-down.svg) no-repeat right 0.4em center;
     background-size: 12px 8px;

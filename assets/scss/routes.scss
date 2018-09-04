@@ -217,6 +217,14 @@ $locationWidth: calc(30vw);
             -moz-appearance: none;
             appearance: none;
         }
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
         select {
             background: $white url(../../images/icon-caret-down.svg) no-repeat right .4em center;
             background-size: 12px 8px;
