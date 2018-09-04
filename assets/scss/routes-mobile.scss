@@ -12,7 +12,7 @@
     $mobileDateWidth: calc(30vw - 1em);
     $mobileDistanceLeftMargin: calc(15vw + .8em);
     $mobileDistanceWidth: calc(35vw - .8em);
-    $mobileElevationGainWidth: calc(50vw - .8em);
+    $mobileAscentWidth: calc(50vw - .8em);
 
     html {
         body {
@@ -72,7 +72,7 @@
                             }
                         }
                     }
-                    .filter.distance, .filter.elevation {
+                    .filter.distance, .filter.ascent {
                         .input {
                             justify-content: flex-start;
                             -webkit-justify-content: flex-start;
@@ -211,10 +211,10 @@
                             font-size: .9em;
                             color: #aaa;
                         }
-                        .elevation {
-                            width: $mobileElevationGainWidth;
+                        .ascent {
+                            width: $mobileAscentWidth;
                             padding-left: 1.6em;
-                            background: url(../../images/icon-elevation-gain-grey.svg) no-repeat;
+                            background: url(../../images/icon-ascent-grey.svg) no-repeat;
                             background-size: 1.15em 1.15em;
                             text-align: left;
                             font-size: .9em;

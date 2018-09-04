@@ -226,10 +226,10 @@ body {
             padding-left: 20px;
             background: url(../../images/icon-distance.svg) no-repeat;
             background-size: 16px 16px; }
-          body .enjoy .credits .ride .stats .elevation-gain {
+          body .enjoy .credits .ride .stats .ascent {
             margin-left: 1em;
             padding-left: 24px;
-            background: url(../../images/icon-elevation-gain.svg) no-repeat;
+            background: url(../../images/icon-ascent.svg) no-repeat;
             background-size: 16px 16px; }
   body .help {
     position: relative;

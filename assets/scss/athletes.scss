@@ -4,7 +4,7 @@
 $imageWidth: 75px;
 $nameWidth: calc(40% - 2em);
 $distanceWidth: calc(10% - 2em);
-$elevationGainWidth: calc(10% - 2em);
+$ascentWidth: calc(10% - 2em);
 $athleteWidth: calc(18% - 2em);
 $updatedWidth: calc(12% - 2em);
 $locationWidth: calc(30% - 2em);
@@ -44,8 +44,8 @@ $locationWidth: calc(30% - 2em);
                 @include unit;
             }
         }
-        .elevation_gain {
-            width: $elevationGainWidth;
+        .ascent {
+            width: $ascentWidth;
             .unit {
                 @include unit;
             }
@@ -118,7 +118,7 @@ $locationWidth: calc(30% - 2em);
             .distance {
                 text-align: right;
             }
-            .elevation_gain {
+            .ascent {
                 text-align: right;
             }
         }

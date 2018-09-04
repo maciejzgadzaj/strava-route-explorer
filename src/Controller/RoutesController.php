@@ -93,7 +93,7 @@ class RoutesController extends ControllerBase
         $map = [
             'name' => 'r.name',
             'distance' => 'r.distance',
-            'elevation' => 'r.elevationGain',
+            'ascent' => 'r.ascent',
             'athlete' => 'a.name',
             'date' => 'r.updatedAt',
         ];

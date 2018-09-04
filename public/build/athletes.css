@@ -23,9 +23,9 @@
     .page_athletes .head .distance .unit {
       font-size: .8em;
       color: #aaa; }
-  .page_athletes .head .elevation_gain {
+  .page_athletes .head .ascent {
     width: calc(10% - 2em); }
-    .page_athletes .head .elevation_gain .unit {
+    .page_athletes .head .ascent .unit {
       font-size: .8em;
       color: #aaa; }
   .page_athletes .head .athlete {
@@ -74,7 +74,7 @@
           color: #fc4c02; }
     .page_athletes .section_rows .row .distance {
       text-align: right; }
-    .page_athletes .section_rows .row .elevation_gain {
+    .page_athletes .section_rows .row .ascent {
       text-align: right; }
 
 /*# sourceMappingURL=athletes.css.map */

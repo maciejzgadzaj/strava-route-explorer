@@ -37,12 +37,12 @@
         width: calc(100% - 6em); }
     html body .page_routes .section_filters .filter.type .input select {
       width: auto; }
-    html body .page_routes .section_filters .filter.distance .input, html body .page_routes .section_filters .filter.elevation .input {
+    html body .page_routes .section_filters .filter.distance .input, html body .page_routes .section_filters .filter.ascent .input {
       justify-content: flex-start;
       -webkit-justify-content: flex-start;
       flex-direction: row;
       -webkit-flex-direction: row; }
-      html body .page_routes .section_filters .filter.distance .input input, html body .page_routes .section_filters .filter.elevation .input input {
+      html body .page_routes .section_filters .filter.distance .input input, html body .page_routes .section_filters .filter.ascent .input input {
         width: 5em;
         margin-right: .5em; }
     html body .page_routes .section_filters .filter.athlete .starred {
@@ -130,10 +130,10 @@
       text-align: left;
       font-size: .9em;
       color: #aaa; }
-    html body .page_routes .section_rows .row .elevation {
+    html body .page_routes .section_rows .row .ascent {
       width: calc(50vw - .8em);
       padding-left: 1.6em;
-      background: url(../../images/icon-elevation-gain-grey.svg) no-repeat;
+      background: url(../../images/icon-ascent-grey.svg) no-repeat;
       background-size: 1.15em 1.15em;
       text-align: left;
       font-size: .9em;

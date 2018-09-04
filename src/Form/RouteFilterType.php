@@ -101,7 +101,7 @@ class RouteFilterType extends AbstractType
         );
 
         $builder->add(
-            'elevation_gain_min',
+            'ascent_min',
             IntegerType::class,
             [
                 'label' => false,
@@ -109,14 +109,14 @@ class RouteFilterType extends AbstractType
                 'attr' => [
                     'type' => 'number',
                     'placeholder' => 'min',
-                    'title' => 'Filter routes by minimum elevation gain',
+                    'title' => 'Filter routes by minimum ascent',
                     '@focus' => '$event.target.select()',
                 ],
             ]
         );
 
         $builder->add(
-            'elevation_gain_max',
+            'ascent_max',
             IntegerType::class,
             [
                 'label' => false,
@@ -124,7 +124,7 @@ class RouteFilterType extends AbstractType
                 'attr' => [
                     'type' => 'number',
                     'placeholder' => 'max',
-                    'title' => 'Filter routes by maximum elevation gain',
+                    'title' => 'Filter routes by maximum ascent',
                     '@focus' => '$event.target.select()',
                 ],
             ]

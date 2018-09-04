@@ -79,27 +79,27 @@
             </div>
             {# END FILTER: DISTANCE #}
 
-            {# FILTER: ELEVATION GAIN #}
-            <div class="filter elevation">
+            {# FILTER: ASCENT #}
+            <div class="filter ascent">
                 <div class="label">
                     <div class="text">Ascent</div>
                     {% set dir, direction, icon = 'asc', 'ascending', 'icon-sort.svg' %}
-                    {% if query.sort is defined and query.sort == 'elevation' %}
+                    {% if query.sort is defined and query.sort == 'ascent' %}
                         {% set icon = 'icon-sort-active.svg' %}
                         {% if query.dir is defined and query.dir == 'asc' %}
                             {% set dir, direction = 'desc', 'descending' %}
                         {% endif %}
                     {% endif %}
                     <div class="sort">
-                        <a title="Sort routes by elevation gain in {{ direction }} order" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({ 'sort': 'elevation', 'dir': dir })) }}"><img src="images/{{ icon }}" width="12" height="12" /></a>
+                        <a title="Sort routes by ascent in {{ direction }} order" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({ 'sort': 'ascent', 'dir': dir })) }}"><img src="images/{{ icon }}" width="12" height="12" /></a>
                     </div>
                 </div>
                 <div class="input">
-                    {{ form_widget(route_filter_form.elevation_gain_min) }}
-                    {{ form_widget(route_filter_form.elevation_gain_max) }}
+                    {{ form_widget(route_filter_form.ascent_min) }}
+                    {{ form_widget(route_filter_form.ascent_max) }}
                 </div>
             </div>
-            {# END FILTER: ELEVATION GAIN #}
+            {# END FILTER: ASCENT #}
 
             {# FILTER: ATHLETE #}
             <div class="filter athlete">
@@ -254,11 +254,11 @@
                         <div class="cell distance">
                             {{ (row.route.distance // 1000)|number_format }} <span class="unit">km</span>
                         </div>
-                        <div class="cell elevation">
+                        <div class="cell ascent">
                             {% if row.route.climbCategory in [5] %}
                                 <div class="climb cat-{{ row.route.climbCategory }}"></div>
                             {% endif %}
-                            {{ row.route.elevationGain|number_format }} <span class="unit">m</span>
+                            {{ row.route.ascent | number_format }} <span class="unit">m</span>
                         </div>
                         <div class="flex-line-break"></div>
                         <div class="cell athlete">

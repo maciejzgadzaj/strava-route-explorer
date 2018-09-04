@@ -98,14 +98,14 @@ class RouteRepository extends ServiceEntityRepository
                     $parameters['max_distance'] = $value * 1000;
                     break;
 
-                case 'elevation_gain_min':
-                    $wheres[] = 'r.elevationGain > :elevation_gain_min';
-                    $parameters['elevation_gain_min'] = $value;
+                case 'ascent_min':
+                    $wheres[] = 'r.ascent > :ascent_min';
+                    $parameters['ascent_min'] = $value;
                     break;
 
-                case 'elevation_gain_max':
-                    $wheres[] = 'r.elevationGain < :elevation_gain_max';
-                    $parameters['elevation_gain_max'] = $value;
+                case 'ascent_max':
+                    $wheres[] = 'r.ascent < :ascent_max';
+                    $parameters['ascent_max'] = $value;
                     break;
 
                 case 'athlete':

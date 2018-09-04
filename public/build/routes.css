@@ -39,19 +39,19 @@
     .page_routes .section_filters .filter.distance .unit {
       font-size: .8em;
       color: #aaa; }
-  .page_routes .section_filters .filter.elevation {
+  .page_routes .section_filters .filter.ascent {
     order: 4;
     -webkit-order: 4;
     width: 10%; }
-    .page_routes .section_filters .filter.elevation .label {
+    .page_routes .section_filters .filter.ascent .label {
       display: flex; }
-    .page_routes .section_filters .filter.elevation .input {
+    .page_routes .section_filters .filter.ascent .input {
       display: flex;
       justify-content: space-between;
       -webkit-justify-content: space-between; }
-      .page_routes .section_filters .filter.elevation .input input {
+      .page_routes .section_filters .filter.ascent .input input {
         width: 48%; }
-    .page_routes .section_filters .filter.elevation .unit {
+    .page_routes .section_filters .filter.ascent .unit {
       font-size: .8em;
       color: #aaa; }
   .page_routes .section_filters .filter.athlete {
@@ -197,12 +197,12 @@
       .page_routes .section_rows .row .distance .unit {
         font-size: .8em;
         color: #aaa; }
-    .page_routes .section_rows .row .elevation {
+    .page_routes .section_rows .row .ascent {
       order: 6;
       -webkit-order: 6;
       width: 10%;
       white-space: nowrap; }
-      .page_routes .section_rows .row .elevation .climb {
+      .page_routes .section_rows .row .ascent .climb {
         display: inline-block;
         width: 17px;
         height: 17px;
@@ -210,17 +210,17 @@
         vertical-align: bottom;
         margin-right: .3em;
         background-image: url(../../images/sprites-category.png); }
-        .page_routes .section_rows .row .elevation .climb.cat-1 {
+        .page_routes .section_rows .row .ascent .climb.cat-1 {
           background-position: 0 -19px; }
-        .page_routes .section_rows .row .elevation .climb.cat-2 {
+        .page_routes .section_rows .row .ascent .climb.cat-2 {
           background-position: 0 -38px; }
-        .page_routes .section_rows .row .elevation .climb.cat-3 {
+        .page_routes .section_rows .row .ascent .climb.cat-3 {
           background-position: 0 -57px; }
-        .page_routes .section_rows .row .elevation .climb.cat-4 {
+        .page_routes .section_rows .row .ascent .climb.cat-4 {
           background-position: 0 -76px; }
-        .page_routes .section_rows .row .elevation .climb.cat-5 {
+        .page_routes .section_rows .row .ascent .climb.cat-5 {
           background-position: 0 -95px; }
-      .page_routes .section_rows .row .elevation .unit {
+      .page_routes .section_rows .row .ascent .unit {
         font-size: .8em;
         color: #aaa; }
     .page_routes .section_rows .row .athlete {
@@ -245,7 +245,7 @@
           color: #fc4c02; }
     .page_routes .section_rows .row .distance {
       text-align: right; }
-    .page_routes .section_rows .row .elevation_gain {
+    .page_routes .section_rows .row .ascent {
       text-align: right; }
   .page_routes .section_rows .empty {
     width: 100%;
@@ -276,10 +276,10 @@ ul.ui-autocomplete.ui-menu {
     html body .page_routes .section_filters .filter.distance .input input {
       width: 100%;
       max-width: 5em; }
-  html body .page_routes .section_filters .filter.elevation .input {
+  html body .page_routes .section_filters .filter.ascent .input {
     flex-direction: column;
     -webkit-flex-direction: column; }
-    html body .page_routes .section_filters .filter.elevation .input input {
+    html body .page_routes .section_filters .filter.ascent .input input {
       width: 100%;
       max-width: 5em; }
   html body .page_routes .section_filters .filter.updated .input {

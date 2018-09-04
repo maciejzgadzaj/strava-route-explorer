@@ -6,10 +6,10 @@ $imageWidth: 75px;
 $vwExclScrollbar: calc(100vw - (100vw - 100%));
 $typeWidth: calc(#{$imageWidth} + 1em);
 $distanceWidth: 10%;
-$elevationWidth: 10%;
+$ascentWidth: 10%;
 $athleteWidth: 15%;
 $updatedWidth: 12%;
-$nameWidth: calc(100% - #{$typeWidth} - #{$distanceWidth} - #{$elevationWidth} - #{$athleteWidth} - #{$updatedWidth});
+$nameWidth: calc(100% - #{$typeWidth} - #{$distanceWidth} - #{$ascentWidth} - #{$athleteWidth} - #{$updatedWidth});
 
 $locationWidth: calc(30vw);
 
@@ -70,10 +70,10 @@ $locationWidth: calc(30vw);
                 @include unit;
             }
         }
-        .filter.elevation {
+        .filter.ascent {
             order: 4;
             -webkit-order: 4;
-            width: $elevationWidth;
+            width: $ascentWidth;
             .label {
                 display: flex;
             }
@@ -140,7 +140,7 @@ $locationWidth: calc(30vw);
                     width: 100%;
 
                     .location_address {
-                        $locationAddressWidth: calc(#{$typeWidth} + #{$nameWidth} + #{$distanceWidth} + #{$elevationWidth} + 1em);
+                        $locationAddressWidth: calc(#{$typeWidth} + #{$nameWidth} + #{$distanceWidth} + #{$ascentWidth} + 1em);
                         width: $locationAddressWidth;
                         .label {
                             width: $typeWidth;
@@ -302,10 +302,10 @@ $locationWidth: calc(30vw);
                     @include unit;
                 }
             }
-            .elevation {
+            .ascent {
                 order: 6;
                 -webkit-order: 6;
-                width: $elevationWidth;
+                width: $ascentWidth;
                 white-space: nowrap;
                 .climb {
                     display: inline-block;
@@ -364,7 +364,7 @@ $locationWidth: calc(30vw);
             .distance {
                 text-align: right;
             }
-            .elevation_gain {
+            .ascent {
                 text-align: right;
             }
         }
@@ -411,7 +411,7 @@ ul.ui-autocomplete.ui-menu {
                             }
                         }
                     }
-                    .filter.elevation {
+                    .filter.ascent {
                         .input {
                             flex-direction: column;
                             -webkit-flex-direction: column;

@@ -126,7 +126,7 @@ class RouteService extends EntityService
         $route->setName(trim($routeData->name));
         $route->setDescription($routeData->description);
         $route->setDistance($routeData->distance);
-        $route->setElevationGain($routeData->elevation_gain);
+        $route->setAscent($routeData->elevation_gain);
         $route->setPublic($routeData->public ?? true);
         $route->setCreatedAt(\DateTime::createFromFormat('Y-m-d\TH:i:s\Z', $routeData->created_at));
         $route->setUpdatedAt(\DateTime::createFromFormat('Y-m-d\TH:i:s\Z', $routeData->updated_at));
@@ -416,11 +416,11 @@ class RouteService extends EntityService
                 'label' => 'max distance',
                 'suffix' => ' km',
             ],
-            'elevation_gain_min' => [
+            'ascent_min' => [
                 'label' => 'min ascent',
                 'suffix' => ' m',
             ],
-            'elevation_gain_max' => [
+            'ascent_max' => [
                 'label' => 'max ascent',
                 'suffix' => ' m',
             ],

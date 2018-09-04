@@ -93,9 +93,9 @@ class Route
     /**
      * @var float
      *
-     * @ORM\Column(type="decimal", precision=10, scale=2, name="elevation_gain")
+     * @ORM\Column(type="decimal", precision=10, scale=2)
      */
-    private $elevationGain;
+    private $ascent;
 
     /**
      * @var integer
@@ -303,17 +303,17 @@ class Route
     /**
      * @return float
      */
-    public function getElevationGain(): float
+    public function getAscent(): float
     {
-        return $this->elevationGain;
+        return $this->ascent;
     }
 
     /**
-     * @param float $elevationGain
+     * @param float $ascent
      */
-    public function setElevationGain(float $elevationGain): void
+    public function setAscent(float $ascent): void
     {
-        $this->elevationGain = $elevationGain;
+        $this->ascent = $ascent;
     }
 
     /**
