@@ -53,6 +53,7 @@
                 </div>
                 <div class="input">
                     {{ form_row(route_filter_form.name) }}
+                    <a class="help" title="How to search" href="https://github.com/maciejzgadzaj/strava-route-explorer/wiki/Searching#route"></a>
                 </div>
             </div>
             {# END FILTER: NAME #}
@@ -132,11 +133,40 @@
             {# ADVANCED FILTERS WRAPPER #}
             <div class="advanced_filters_wrapper">
                 {% set advanced_filters_display = 'none' %}
-                {% if app.request.query.get('filter') and (app.request.query.get('filter').start_latlon is defined and app.request.query.get('filter').start_latlon or app.request.query.get('filter').end_latlon is defined and app.request.query.get('filter').end_latlon) %}
+                {% if app.request.query.get('filter') and (
+                    app.request.query.get('filter').start_latlon is defined and app.request.query.get('filter').start_latlon
+                    or app.request.query.get('filter').end_latlon is defined and app.request.query.get('filter').end_latlon
+                    or app.request.query.get('filter').tags is defined and app.request.query.get('filter').tags
+                    or app.request.query.get('filter').segments is defined and app.request.query.get('filter').segments
+                ) %}
                     {% set advanced_filters_display = 'block' %}
                 {% endif %}
                 {# ADVANCED FILTERS #}
                 <div class="advanced_filters" style="display:{{ advanced_filters_display }}">
+
+                    {# ADVANCED FILTER: TAGS #}
+                    <div class="filter tags">
+                        <div class="label">
+                            <div class="text">{{ form_label(route_filter_form.tags) }}</div>
+                        </div>
+                        <div class="input">
+                            {{ form_widget(route_filter_form.tags) }}
+                            <a class="help" title="How to search" href="https://github.com/maciejzgadzaj/strava-route-explorer/wiki/Searching#tags"></a>
+                        </div>
+                    </div>
+                    {# END ADVANCED FILTER: TAGS #}
+
+                    {# ADVANCED FILTER: SEGMENTS #}
+                    <div class="filter segments">
+                        <div class="label">
+                            <div class="text">{{ form_label(route_filter_form.segments) }}</div>
+                        </div>
+                        <div class="input">
+                            {{ form_widget(route_filter_form.segments) }}
+                            <a class="help" title="How to search" href="https://github.com/maciejzgadzaj/strava-route-explorer/wiki/Searching#segments"></a>
+                        </div>
+                    </div>
+                    {# END ADVANCED FILTER: SEGMENTS #}
 
                     {# ADVANCED FILTER: START LOCATION #}
                     <div class="filter location location_start">
@@ -187,7 +217,7 @@
                 </div>
                 {# END ADVANCED FILTERS #}
                 <div class="filters advanced-filters-links">
-                    <span class="advanced-filters-toggle">+ more filters</span>
+                    <span class="advanced-filters-toggle">+ advanced search</span>
                 </div>
             </div>
             {# END ADVANCED FILTERS WRAPPER #}
@@ -305,12 +335,23 @@
             }
         }
 
+        function setAdvancedFiltersToggleLabel(element) {
+            if (element.is(":visible")) {
+                $(".advanced-filters-toggle").text('- basic search');
+            } else {
+                $(".advanced-filters-toggle").text('+ advanced search');
+            }
+        }
+
         $(document).ready(function(){
             $("#filter_type, #filter_start_dist, #filter_end_dist").each(function(){
                 setSelectClass($(this));
             }).on("change", function(){
                 setSelectClass($(this));
             });
+
+            setAdvancedFiltersToggleLabel($(".advanced_filters"));
+
             $(".filters_toggle").on("click", function(){
                 $(".section_filters").slideToggle("fast", function(){
                     if ($(this).is(":visible")) {
@@ -333,11 +374,7 @@
             });
             $(".advanced-filters-toggle").on("click", function(){
                 $(".advanced_filters").slideToggle("fast", function(){
-                    if ($(this).is(":visible")) {
-                        $(".advanced-filters-toggle").text('- less filters');
-                    } else {
-                        $(".advanced-filters-toggle").text('+ more filters');
-                    }
+                    setAdvancedFiltersToggleLabel($(this));
                 });
             });
             // https://jqueryui.com/autocomplete/

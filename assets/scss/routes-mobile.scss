@@ -65,6 +65,16 @@
                             width: calc(100% - #{$labelWidth});
                         }
                     }
+                    .filter.name {
+                        .help {
+                            top: 1.2em;
+                            right: 1.4em;
+                            width: 2em;
+                            height: 1.4em;
+                            background-color: white;
+                            background-size: 1.2em 1.2em;
+                        }
+                    }
                     .filter.type {
                         .input {
                             select {
@@ -108,6 +118,21 @@
                         -webkit-order: 7;
                         .advanced_filters {
                             display: block !important;
+
+                            .filter.tags,
+                            .filter.segments {
+                                .input {
+                                    .help {
+                                        top: 1.2em;
+                                        right: .4em;
+                                        width: 2em;
+                                        height: 1.4em;
+                                        background-color: white;
+                                        background-size: 1.2em 1.2em;
+                                    }
+                                }
+                            }
+
                             .filter.location {
                                 flex-direction: column;
                                 -webkit-flex-direction: column;

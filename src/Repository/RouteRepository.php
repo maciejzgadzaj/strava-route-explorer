@@ -43,7 +43,7 @@ class RouteRepository extends ServiceEntityRepository
      *
      * @return array
      */
-    public function findByFilters(array $criteria, ?array $orderBy = null, $limit = 50, $offset = 0)
+    public function findByFilters(array $criteria, ?array $orderBy = [], $limit = 50, $offset = 0)
     {
         $currentAthlete = $this->athleteService->getCurrentAthlete();
 
@@ -76,16 +76,24 @@ class RouteRepository extends ServiceEntityRepository
                 case 'name':
                     $selects[] = 'MATCH (r.name) AGAINST (:name BOOLEAN) AS name_score';
                     $selects[] = 'MATCH (r.description) AGAINST (:name BOOLEAN) AS description_score';
-                    $selects[] = 'MATCH (r.segments) AGAINST (:name BOOLEAN) AS segments_score';
-                    $selects[] = 'MATCH (r.tags) AGAINST (:name BOOLEAN) AS tags_score';
-                    $wheres[] = '(r.id = :id OR MATCH (r.name, r.description, r.segments, r.tags) AGAINST (:name BOOLEAN) > 0)';
+                    $wheres[] = '(r.id = :id OR MATCH (r.name, r.description) AGAINST (:name BOOLEAN) > 0)';
                     $parameters['id'] = $value;
                     $parameters['name'] = $value;
-                    if (empty($orderBy)) {
-                        $orderBy = [
-                            'name_score * 100 + segments_score * 10 + tags_score * 10 + description_score' => 'DESC',
-                        ];
-                    }
+                    $orderBy['name_score * 100 + description_score'] = 'DESC';
+                    break;
+
+                case 'segments':
+                    $selects[] = 'MATCH (r.segments) AGAINST (:segment_name BOOLEAN) AS segments_score';
+                    $wheres[] = 'MATCH (r.segments) AGAINST (:segment_name BOOLEAN) > 0';
+                    $parameters['segment_name'] = $value;
+                    $orderBy['segments_score'] = 'DESC';
+                    break;
+
+                case 'tags':
+                    $selects[] = 'MATCH (r.tags) AGAINST (:tag_name BOOLEAN) AS tags_score';
+                    $wheres[] = 'MATCH (r.tags) AGAINST (:tag_name BOOLEAN) > 0';
+                    $parameters['tag_name'] = $value;
+                    $orderBy['tags_score'] = 'DESC';
                     break;
 
                 case 'distance_min':

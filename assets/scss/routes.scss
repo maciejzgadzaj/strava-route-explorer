@@ -50,6 +50,20 @@ $locationWidth: calc(30vw);
             order: 2;
             -webkit-order: 2;
             width: $nameWidth;
+            position: relative;
+            .help {
+                position: absolute;
+                top: 2.55em;
+                right: 1.5em;
+                display: block;
+                width: 1.2em;
+                height: 1.2em;
+                background: transparent url(../../images/icon-help-grey.svg) no-repeat center center;
+                background-size: 1.1em 1.1em;
+                &:hover {
+                    background-image: url(../../images/icon-help-orange.svg);
+                }
+            }
         }
         .filter.distance {
             order: 3;
@@ -138,6 +152,31 @@ $locationWidth: calc(30vw);
                 .filter {
                     display: flex;
                     width: 100%;
+                    align-items: baseline;
+
+                    &.segments,
+                    &.tags {
+                        .label {
+                            width: $typeWidth;
+                        }
+                        .input {
+                            width: calc(#{$nameWidth} + #{$distanceWidth} + #{$ascentWidth});
+                            position: relative;
+                            .help {
+                                position: absolute;
+                                top: .85em;
+                                right: .4em;
+                                display: block;
+                                width: 1.2em;
+                                height: 1.2em;
+                                background: transparent url(../../images/icon-help-grey.svg) no-repeat center center;
+                                background-size: 1.1em 1.1em;
+                                &:hover {
+                                    background-image: url(../../images/icon-help-orange.svg);
+                                }
+                            }
+                        }
+                    }
 
                     .location_address {
                         $locationAddressWidth: calc(#{$typeWidth} + #{$nameWidth} + #{$distanceWidth} + #{$ascentWidth} + 1em);

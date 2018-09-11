@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
  *         @ORM\Index(name="IDX_FULLTEXT_DESC", columns={"description"}, flags={"fulltext"}),
  *         @ORM\Index(name="IDX_FULLTEXT_SEGMENTS", columns={"segments"}, flags={"fulltext"}),
  *         @ORM\Index(name="IDX_FULLTEXT_TAGS", columns={"tags"}, flags={"fulltext"}),
- *         @ORM\Index(name="IDX_FULLTEXT_NAME_DESC_SEGMENTS_TAGS", columns={"name", "description", "segments", "tags"}, flags={"fulltext"})
+ *         @ORM\Index(name="IDX_FULLTEXT_NAME_DESC", columns={"name", "description"}, flags={"fulltext"})
  *     }
  * )
  *

@@ -63,9 +63,8 @@ class RouteFilterType extends AbstractType
                 'label' => false,
                 'required' => false,
                 'attr' => [
-                    'placeholder' => 'route name, id, town or segment name',
+                    'placeholder' => 'route name or id',
                     'title' => 'Filter routes by name, ID, town or segment name',
-                    '@focus' => '$event.target.select()',
                 ],
             ]
         );
@@ -80,7 +79,6 @@ class RouteFilterType extends AbstractType
                     'type' => 'number',
                     'placeholder' => 'min',
                     'title' => 'Filter routes by minimum distance',
-                    '@focus' => '$event.target.select()',
                 ],
             ]
         );
@@ -95,7 +93,6 @@ class RouteFilterType extends AbstractType
                     'type' => 'number',
                     'placeholder' => 'max',
                     'title' => 'Filter routes by maximum distance',
-                    '@focus' => '$event.target.select()',
                 ],
             ]
         );
@@ -110,7 +107,6 @@ class RouteFilterType extends AbstractType
                     'type' => 'number',
                     'placeholder' => 'min',
                     'title' => 'Filter routes by minimum ascent',
-                    '@focus' => '$event.target.select()',
                 ],
             ]
         );
@@ -125,7 +121,6 @@ class RouteFilterType extends AbstractType
                     'type' => 'number',
                     'placeholder' => 'max',
                     'title' => 'Filter routes by maximum ascent',
-                    '@focus' => '$event.target.select()',
                 ],
             ]
         );
@@ -139,7 +134,6 @@ class RouteFilterType extends AbstractType
                 'attr' => [
                     'placeholder' => 'name or id',
                     'title' => 'Filter routes by athlete name or id',
-                    '@focus' => '$event.target.select()',
                 ],
             ]
         );
@@ -157,6 +151,34 @@ class RouteFilterType extends AbstractType
             ]
         );
 
+        // Tags.
+
+        $builder->add(
+            'tags',
+            TextType::class,
+            [
+                'label' => 'Places',
+                'required' => false,
+                'attr' => [
+                    'placeholder' => 'town names',
+                ],
+            ]
+        );
+
+        // Segments.
+
+        $builder->add(
+            'segments',
+            TextType::class,
+            [
+                'label' => 'Segments',
+                'required' => false,
+                'attr' => [
+                    'placeholder' => 'segment names or ids',
+                ],
+            ]
+        );
+
         // Start location.
 
         $builder->add(
@@ -167,7 +189,6 @@ class RouteFilterType extends AbstractType
                 'required' => false,
                 'attr' => [
                     'placeholder' => 'name or address',
-                    '@focus' => '$event.target.select()',
                 ],
             ]
         );
@@ -179,9 +200,6 @@ class RouteFilterType extends AbstractType
                 'label' => 'within',
                 'choices' => array_flip($routeService->getLocationDistances()),
                 'required' => false,
-                'attr' => [
-                    '@focus' => '$event.target.select()',
-                ],
             ]
         );
 
@@ -200,7 +218,6 @@ class RouteFilterType extends AbstractType
                 'required' => false,
                 'attr' => [
                     'placeholder' => 'name or address',
-                    '@focus' => '$event.target.select()',
                 ],
             ]
         );
@@ -212,9 +229,6 @@ class RouteFilterType extends AbstractType
                 'label' => 'within',
                 'choices' => array_flip($routeService->getLocationDistances()),
                 'required' => false,
-                'attr' => [
-                    '@focus' => '$event.target.select()',
-                ],
             ]
         );
 

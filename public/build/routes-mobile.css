@@ -35,6 +35,13 @@
         width: 6em; }
       html body .page_routes .section_filters .filter .input {
         width: calc(100% - 6em); }
+    html body .page_routes .section_filters .filter.name .help {
+      top: 1.2em;
+      right: 1.4em;
+      width: 2em;
+      height: 1.4em;
+      background-color: white;
+      background-size: 1.2em 1.2em; }
     html body .page_routes .section_filters .filter.type .input select {
       width: auto; }
     html body .page_routes .section_filters .filter.distance .input, html body .page_routes .section_filters .filter.ascent .input {
@@ -60,6 +67,14 @@
       -webkit-order: 7; }
       html body .page_routes .section_filters .advanced_filters_wrapper .advanced_filters {
         display: block !important; }
+        html body .page_routes .section_filters .advanced_filters_wrapper .advanced_filters .filter.tags .input .help,
+        html body .page_routes .section_filters .advanced_filters_wrapper .advanced_filters .filter.segments .input .help {
+          top: 1.2em;
+          right: .4em;
+          width: 2em;
+          height: 1.4em;
+          background-color: white;
+          background-size: 1.2em 1.2em; }
         html body .page_routes .section_filters .advanced_filters_wrapper .advanced_filters .filter.location {
           flex-direction: column;
           -webkit-flex-direction: column; }

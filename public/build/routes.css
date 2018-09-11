@@ -23,7 +23,19 @@
   .page_routes .section_filters .filter.name {
     order: 2;
     -webkit-order: 2;
-    width: calc(100% - calc(75px + 1em) - 10% - 10% - 15% - 12%); }
+    width: calc(100% - calc(75px + 1em) - 10% - 10% - 15% - 12%);
+    position: relative; }
+    .page_routes .section_filters .filter.name .help {
+      position: absolute;
+      top: 2.55em;
+      right: 1.5em;
+      display: block;
+      width: 1.2em;
+      height: 1.2em;
+      background: transparent url(../../images/icon-help-grey.svg) no-repeat center center;
+      background-size: 1.1em 1.1em; }
+      .page_routes .section_filters .filter.name .help:hover {
+        background-image: url(../../images/icon-help-orange.svg); }
   .page_routes .section_filters .filter.distance {
     order: 3;
     -webkit-order: 3;
@@ -86,7 +98,24 @@
     width: 100%; }
     .page_routes .section_filters .advanced_filters_wrapper .advanced_filters .filter {
       display: flex;
-      width: 100%; }
+      width: 100%;
+      align-items: baseline; }
+      .page_routes .section_filters .advanced_filters_wrapper .advanced_filters .filter.segments .label, .page_routes .section_filters .advanced_filters_wrapper .advanced_filters .filter.tags .label {
+        width: calc(75px + 1em); }
+      .page_routes .section_filters .advanced_filters_wrapper .advanced_filters .filter.segments .input, .page_routes .section_filters .advanced_filters_wrapper .advanced_filters .filter.tags .input {
+        width: calc(calc(100% - calc(75px + 1em) - 10% - 10% - 15% - 12%) + 10% + 10%);
+        position: relative; }
+        .page_routes .section_filters .advanced_filters_wrapper .advanced_filters .filter.segments .input .help, .page_routes .section_filters .advanced_filters_wrapper .advanced_filters .filter.tags .input .help {
+          position: absolute;
+          top: .85em;
+          right: .4em;
+          display: block;
+          width: 1.2em;
+          height: 1.2em;
+          background: transparent url(../../images/icon-help-grey.svg) no-repeat center center;
+          background-size: 1.1em 1.1em; }
+          .page_routes .section_filters .advanced_filters_wrapper .advanced_filters .filter.segments .input .help:hover, .page_routes .section_filters .advanced_filters_wrapper .advanced_filters .filter.tags .input .help:hover {
+            background-image: url(../../images/icon-help-orange.svg); }
       .page_routes .section_filters .advanced_filters_wrapper .advanced_filters .filter .location_address {
         width: calc(calc(75px + 1em) + calc(100% - calc(75px + 1em) - 10% - 10% - 15% - 12%) + 10% + 10% + 1em); }
         .page_routes .section_filters .advanced_filters_wrapper .advanced_filters .filter .location_address .label {
