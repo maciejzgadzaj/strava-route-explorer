@@ -197,13 +197,14 @@ class RouteRepository extends ServiceEntityRepository
         }
 
         // Add sorts.
-        if (!empty($orderBy)) {
-            foreach ($orderBy as $field => $direction) {
-                if ($field == 'a.name') {
-                    $joins['athlete'] = 'JOIN r.athlete a';
-                }
-                $orders[] = $field.' '.$direction;
+        if (empty($orderBy)) {
+            $orderBy = ['r.updatedAt' => 'desc'];
+        }
+        foreach ($orderBy as $field => $direction) {
+            if ($field == 'a.name') {
+                $joins['athlete'] = 'JOIN r.athlete a';
             }
+            $orders[] = $field.' '.$direction;
         }
 
         // Build query SQL.

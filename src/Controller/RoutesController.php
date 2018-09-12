@@ -97,11 +97,15 @@ class RoutesController extends ControllerBase
             'athlete' => 'a.name',
             'date' => 'r.updatedAt',
         ];
-        $orderBy = $map[$request->query->get('sort', 'date')];
-        $dir = $request->query->get('dir', 'desc');
+
+        if ($sort = $request->query->get('sort', null)) {
+            $sort = $map[$sort];
+            $dir = $request->query->get('dir', 'desc');
+            $orderBy = [$sort => $dir];
+        }
 
         // Routes.
-        $routes = $repository->findByFilters($filters, [$orderBy => $dir], $perPage, ($page - 1) * $perPage);
+        $routes = $repository->findByFilters($filters, $orderBy ?? null, $perPage, ($page - 1) * $perPage);
 
         return $this->render(
             'routes/list.html.twig',

@@ -197,9 +197,9 @@
                 <div class="label">
                     <div class="text">Updated</div>
                     {% set dir, direction, icon = 'desc', 'descending', 'icon-sort.svg' %}
-                    {% if query.sort is defined and query.sort == 'date' %}
+                    {% if query.sort is not defined and app.request.query.get('filter').name is not defined and app.request.query.get('filter').tags is not defined and app.request.query.get('filter').segments is not defined or query.sort is defined and query.sort == 'date' %}
                         {% set icon = 'icon-sort-active.svg' %}
-                        {% if query.dir is defined and query.dir == 'desc' %}
+                        {% if query.dir is not defined or query.dir is defined and query.dir == 'desc' %}
                             {% set dir, direction = 'asc', 'ascending' %}
                         {% endif %}
                     {% endif %}
