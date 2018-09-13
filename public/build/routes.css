@@ -83,7 +83,7 @@
       display: flex; }
       .page_routes .section_filters .filter.updated .input button {
         margin-right: .5em;
-        padding: .5em 1em; }
+        padding: .5em; }
         .page_routes .section_filters .filter.updated .input button.reset {
           background-color: #f0f0f0;
           color: #bbb; }
@@ -298,7 +298,7 @@ ul.ui-autocomplete.ui-menu {
       background-color: white;
       cursor: pointer; }
 
-@media screen and (max-width: 1350px) {
+@media screen and (max-width: 1199px) {
   html body .page_routes .section_filters .filter.distance .input {
     flex-direction: column;
     -webkit-flex-direction: column; }
