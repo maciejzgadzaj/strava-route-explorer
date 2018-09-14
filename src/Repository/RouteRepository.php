@@ -55,7 +55,14 @@ class RouteRepository extends ServiceEntityRepository
         $sqls = $selects = $joins = $wheres = $havings = $orders = $parameters = [];
 
         $selects[] = 'r AS route';
-        $wheres[] = 'r.public = TRUE';
+
+        // Show public routes to everyone, and private ones only to their owners.
+        if ($currentAthlete) {
+            $wheres[] = '(r.public = TRUE OR r.athlete = :me)';
+            $parameters['me'] = $currentAthlete->getId();
+        } else {
+            $wheres[] = 'r.public = TRUE';
+        }
 
         foreach ($criteria as $key => $value) {
             if (empty($value)) {

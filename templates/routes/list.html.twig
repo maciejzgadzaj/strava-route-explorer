@@ -264,7 +264,10 @@
                                 {% set starred_by = 'searched' %}
                             {% endif %}
                             {% if (starred_by) %}
-                                <span class="starred starred_{{ starred_by }}">★</span>
+                                <span class="icon starred starred_{{ starred_by }}">★</span>
+                            {% endif %}
+                            {% if not row.route.public %}
+                                <span class="icon private" title="This route is not published and visible only to you"></span>
                             {% endif %}
                             <a title="See route on Strava.com" href="https://www.strava.com/routes/{{ row.route.id }}">{{ row.route.name }}</a>
                             <a title="See route on VeloViewer.com" class="veloviewer" href="https://veloviewer.com/routes/{{ row.route.id }}">vv</a>

@@ -206,10 +206,18 @@
       width: calc(100% - calc(75px + 1em) - 10% - 10% - 15% - 12%); }
       .page_routes .section_rows .row .name .starred {
         color: #fc4c02; }
-      .page_routes .section_rows .row .name .veloviewer {
+      .page_routes .section_rows .row .name .icon.private {
+        color: #bbb;
+        display: inline-block;
+        width: 1em;
+        height: 1em;
+        background: transparent url(../../images/icon-lock-grey.svg) no-repeat left bottom;
+        background-size: .9em; }
+      .page_routes .section_rows .row .name .link.external {
+        font-size: .7em;
         text-decoration: none;
         color: #bbb; }
-        .page_routes .section_rows .row .name .veloviewer:hover {
+        .page_routes .section_rows .row .name .link.external:hover {
           color: #fc4c02; }
       .page_routes .section_rows .row .name .distances {
         margin-top: .5em;

@@ -315,7 +315,16 @@ $locationWidth: calc(30vw);
                 .starred {
                     color: $orange;
                 }
-                .veloviewer {
+                .icon.private {
+                    color: #bbb;
+                    display: inline-block;
+                    width: 1em;
+                    height: 1em;
+                    background: transparent url(../../images/icon-lock-grey.svg) no-repeat left bottom;
+                    background-size: .9em;
+                }
+                .link.external {
+                    font-size: .7em;
                     text-decoration: none;
                     color: #bbb;
                     &:hover {
