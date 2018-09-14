@@ -264,8 +264,7 @@ class RoutesController extends ControllerBase
                 // If no routes were fetched from Strava, there is nothing to synchronize,
                 // so redirect back to route listing page.
                 if (empty($stravaRoutes)) {
-                    $this->addFlash('error', 'No routes to synchronize.');
-                    return $this->redirectToRoute('routes');
+                    return $this->getRedirect('routes');
                 }
 
                 // The cache item should be deleted after submitting the route select form,
@@ -358,17 +357,10 @@ and %public_deleted% deleted, %published% published, %private_skipped% private s
                 ];
                 $this->logger->debug(strtr($message, $params));
                 $this->addFlash('notice', 'Routes synchronized.');
-
-                if ($destination = $this->container->get('session')->get('strava_redirect_destination')) {
-                    $this->container->get('session')->remove('strava_redirect_destination');
-                    return $this->redirectToRoute($destination['route'], $destination['query']);
-                } else {
-                    return $this->redirectToRoute('routes', [
-                        'filter[athlete]' => $athlete->getName(),
-                        'filter[starred]' => true,
-                    ]);
-
-                }
+                return $this->getRedirect('routes', [
+                    'filter[athlete]' => $athlete->getName(),
+                    'filter[starred]' => true,
+                ]);
             } else {
                 $this->addFlash('orange', 'Select routes to publish and share with other athletes:');
             }
@@ -385,12 +377,12 @@ and %public_deleted% deleted, %published% published, %private_skipped% private s
             $content = \GuzzleHttp\json_decode($e->getResponse()->getBody()->getContents());
             $this->logger->error($content->message);
             $this->addFlash('error', $content->message);
-            return $this->redirectToRoute('routes');
+            return $this->getRedirect('routes');
         } catch (\Exception $e) {
             $cache->delete($cacheKey);
             $this->logger->error($e->getMessage());
             $this->addFlash('error', $e->getMessage());
-            return $this->redirectToRoute('routes');
+            return $this->getRedirect('routes');
         }
 
         return $this->render('routes/select.html.twig', ['routes' => []]);
@@ -425,5 +417,23 @@ and %public_deleted% deleted, %published% published, %private_skipped% private s
         $response->setData($names);
 
         return $response;
+    }
+
+    /**
+     * Return redirect stored in session during OAuth.
+     *
+     * @param string $route
+     * @param array $parameters
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    private function getRedirect($route, $parameters = [])
+    {
+        if ($destination = $this->container->get('session')->get('strava_redirect_destination')) {
+            $this->container->get('session')->remove('strava_redirect_destination');
+            return $this->redirectToRoute($destination['route'], $destination['query']);
+        } else {
+            return $this->redirectToRoute($route, $parameters);
+        }
     }
 }
