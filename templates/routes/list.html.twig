@@ -270,7 +270,8 @@
                                 <span class="icon private" title="This route is not published and visible only to you"></span>
                             {% endif %}
                             <a title="See route on Strava.com" href="https://www.strava.com/routes/{{ row.route.id }}">{{ row.route.name }}</a>
-                            <a title="See route on VeloViewer.com" class="veloviewer" href="https://veloviewer.com/routes/{{ row.route.id }}">vv</a>
+                            <a title="See route on VeloViewer.com" class="link external veloviewer" href="https://veloviewer.com/routes/{{ row.route.id }}">VV</a>
+                            <a title="Download route in .TCX format" class="link external download-tcx" href="https://www.strava.com/routes/{{ row.route.id }}/export_tcx">TCX</a>
                             <div class="route_id small">{{ row.route.id }}</div>
                             <div class="description small">{{ row.route.description }}</div>
                             {% if row.route.start_dist is defined or row.route.end_dist is defined %}
