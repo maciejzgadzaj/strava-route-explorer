@@ -53,7 +53,7 @@
                     {% if app.session.get('strava_redirect_destination') %}
                         {% set uri = path(app.session.get('strava_redirect_destination').route, app.session.get('strava_redirect_destination').query) %}
                     {% endif %}
-                    <a href="{{ uri }}">cancel sync</a>
+                    <a href="{{ uri }}">skip sync</a>
                 </div>
             </div>
         </div>
