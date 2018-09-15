@@ -142,8 +142,8 @@
                                 .location_address {
                                     .input {
                                         .geolocate {
-                                            top: 1.3em;
-                                            right: .8em;
+                                            top: 1.25em;
+                                            right: .75em;
 
                                         }
                                     }
@@ -156,7 +156,7 @@
                                 width: calc(100% - #{$labelWidth}) !important;
                             }
                         }
-                        .advanced-filters-links {
+                        .toggles {
                             display: none;
                         }
                     }

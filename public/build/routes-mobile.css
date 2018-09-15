@@ -81,13 +81,13 @@
           html body .page_routes .section_filters .advanced_filters_wrapper .advanced_filters .filter.location .location_section {
             width: 100%; }
           html body .page_routes .section_filters .advanced_filters_wrapper .advanced_filters .filter.location .location_address .input .geolocate {
-            top: 1.3em;
-            right: .8em; }
+            top: 1.25em;
+            right: .75em; }
         html body .page_routes .section_filters .advanced_filters_wrapper .advanced_filters .label {
           width: 6em !important; }
         html body .page_routes .section_filters .advanced_filters_wrapper .advanced_filters .input {
           width: calc(100% - 6em) !important; }
-      html body .page_routes .section_filters .advanced_filters_wrapper .advanced-filters-links {
+      html body .page_routes .section_filters .advanced_filters_wrapper .toggles {
         display: none; }
     html body .page_routes .section_filters select, html body .page_routes .section_filters input:not([type='checkbox']), html body .page_routes .section_filters button {
       padding: 1em !important; }

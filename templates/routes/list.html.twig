@@ -53,7 +53,7 @@
                 </div>
                 <div class="input">
                     {{ form_row(route_filter_form.name) }}
-                    <a class="help" title="How to search" href="https://github.com/maciejzgadzaj/strava-route-explorer/wiki/Searching#route"></a>
+                    <a class="help" title="How to search" href="https://github.com/maciejzgadzaj/strava-route-explorer/wiki/Search-help#route"></a>
                 </div>
             </div>
             {# END FILTER: NAME #}
@@ -141,6 +141,16 @@
                 ) %}
                     {% set advanced_filters_display = 'block' %}
                 {% endif %}
+
+                <div class="toggles">
+                    <div class="toggle advanced-filters-toggle">
+                        <a>Advanced search</a>
+                    </div>
+                    <div class="toggle search-help">
+                        <a href="https://github.com/maciejzgadzaj/strava-route-explorer/wiki/Search-help" title="Search help">Search help</a>
+                    </div>
+                </div>
+
                 {# ADVANCED FILTERS #}
                 <div class="advanced_filters" style="display:{{ advanced_filters_display }}">
 
@@ -151,7 +161,7 @@
                         </div>
                         <div class="input">
                             {{ form_widget(route_filter_form.tags) }}
-                            <a class="help" title="How to search" href="https://github.com/maciejzgadzaj/strava-route-explorer/wiki/Searching#tags"></a>
+                            <a class="help" title="How to search" href="https://github.com/maciejzgadzaj/strava-route-explorer/wiki/Search-help#tags"></a>
                         </div>
                     </div>
                     {# END ADVANCED FILTER: TAGS #}
@@ -163,7 +173,7 @@
                         </div>
                         <div class="input">
                             {{ form_widget(route_filter_form.segments) }}
-                            <a class="help" title="How to search" href="https://github.com/maciejzgadzaj/strava-route-explorer/wiki/Searching#segments"></a>
+                            <a class="help" title="How to search" href="https://github.com/maciejzgadzaj/strava-route-explorer/wiki/Search-help#segments"></a>
                         </div>
                     </div>
                     {# END ADVANCED FILTER: SEGMENTS #}
@@ -216,9 +226,6 @@
 
                 </div>
                 {# END ADVANCED FILTERS #}
-                <div class="filters advanced-filters-links">
-                    <span class="advanced-filters-toggle">+ advanced search</span>
-                </div>
             </div>
             {# END ADVANCED FILTERS WRAPPER #}
 
@@ -341,9 +348,9 @@
 
         function setAdvancedFiltersToggleLabel(element) {
             if (element.is(":visible")) {
-                $(".advanced-filters-toggle").text('- basic search');
+                $(".advanced-filters-toggle a").addClass('active');
             } else {
-                $(".advanced-filters-toggle").text('+ advanced search');
+                $(".advanced-filters-toggle a").removeClass('active');
             }
         }
 

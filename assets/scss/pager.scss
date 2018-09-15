@@ -9,7 +9,7 @@
         align-items: baseline;
         -webkit-align-items: baseline;
         margin: 2px 0;
-        padding: 1em;
+        padding: .6em 1em;
         background-color: #f0f0f0;
         text-align: center;
         .per_page {
@@ -55,7 +55,7 @@
             input {
                 width: 3.2em;
                 margin: 0;
-                padding: .5em;
+                padding: .51em;
                 border: 1px solid #ddd;
                 background-color: white;
                 text-align: center;
@@ -75,6 +75,9 @@
         }
         input[type=number] {
             -moz-appearance: textfield;
+        }
+        input, a.button {
+            @include input-box-shadow;
         }
     }
 }

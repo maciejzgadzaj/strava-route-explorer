@@ -53,8 +53,8 @@ $locationWidth: calc(30vw);
             position: relative;
             .help {
                 position: absolute;
-                top: 2.55em;
-                right: 1.5em;
+                top: 2.75em;
+                right: 1.6em;
                 display: block;
                 width: 1.2em;
                 height: 1.2em;
@@ -122,7 +122,7 @@ $locationWidth: calc(30vw);
                 display: flex;
                 button {
                     margin-right: .5em;
-                    padding: .5em;
+                    padding: .8em .5em;
                     &.search {
                     }
                     &.reset {
@@ -148,6 +148,41 @@ $locationWidth: calc(30vw);
             order: 10;
             -webkit-order: 10;
             width: 100%;
+
+            .toggles {
+                display: flex;
+                justify-content: space-between;
+                margin: -.25em 1.8em .25em calc(#{$typeWidth} + .25em);
+                font-size: .8em;
+                color: #777;
+
+                .toggle {
+                    a {
+                        display: block;
+                        border: 1px solid transparent;
+                        padding: .4em .8em;
+                        text-decoration: none;
+                        color: #777;
+                        &:hover {
+                            background-color: #f8f8f8;
+                            background-image: -webkit-linear-gradient(top,#f8f8f8,#f1f1f1);
+                            border: 1px solid #c6c6c6;
+                            cursor: pointer;
+                            @include input-box-shadow;
+                        }
+                        &.active {
+                            background: -webkit-linear-gradient(top,#eee,#e0e0e0);
+                            border: 1px solid #d7d7d7;
+                            @include input-box-shadow;
+                        }
+                    }
+                    &.search-help {
+                        margin-left: auto;
+                    }
+                }
+            }
+
+
             .advanced_filters {
                 .filter {
                     display: flex;
@@ -164,8 +199,8 @@ $locationWidth: calc(30vw);
                             position: relative;
                             .help {
                                 position: absolute;
-                                top: .85em;
-                                right: .4em;
+                                top: 1.15em;
+                                right: .6em;
                                 display: block;
                                 width: 1.2em;
                                 height: 1.2em;
@@ -176,6 +211,10 @@ $locationWidth: calc(30vw);
                                 }
                             }
                         }
+                    }
+
+                    &.tags {
+                        padding-top: 0;
                     }
 
                     .location_address {
@@ -189,8 +228,8 @@ $locationWidth: calc(30vw);
                             position: relative;
                             .geolocate {
                                 position: absolute;
-                                top: .9em;
-                                right: .5em;
+                                top: 1.1em;
+                                right: .6em;
                                 width: 1.2em;
                                 height: 1.2em;
                                 &:hover {
@@ -215,27 +254,16 @@ $locationWidth: calc(30vw);
                     }
                 }
             }
-            .advanced-filters-links {
-                margin-top: -.25em;
-                padding: 0 1em 1em calc(#{$typeWidth} + .5em);
-                font-size: .8em;
-                color: #999;
-                .advanced-filters-toggle {
-                    &:hover {
-                        cursor: pointer;
-                        color: black;
-                    }
-                }
-            }
         }
 
         select, input:not([type='checkbox']), button {
             width: 95%;
             margin-top: .5em;
-            padding: .5em;
+            padding: .8em;
             border: 1px solid #ddd;
             background-color: white;
             font-size: .9em;
+            @include input-box-shadow;
 
             &::placeholder {
                 color: #ccc;

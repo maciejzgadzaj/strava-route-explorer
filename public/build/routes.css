@@ -27,8 +27,8 @@
     position: relative; }
     .page_routes .section_filters .filter.name .help {
       position: absolute;
-      top: 2.55em;
-      right: 1.5em;
+      top: 2.75em;
+      right: 1.6em;
       display: block;
       width: 1.2em;
       height: 1.2em;
@@ -83,7 +83,7 @@
       display: flex; }
       .page_routes .section_filters .filter.updated .input button {
         margin-right: .5em;
-        padding: .5em; }
+        padding: .8em .5em; }
         .page_routes .section_filters .filter.updated .input button.reset {
           background-color: #f0f0f0;
           color: #bbb; }
@@ -96,6 +96,30 @@
     order: 10;
     -webkit-order: 10;
     width: 100%; }
+    .page_routes .section_filters .advanced_filters_wrapper .toggles {
+      display: flex;
+      justify-content: space-between;
+      margin: -0.25em 1.8em 0.25em calc(calc(75px + 1em) + .25em);
+      font-size: .8em;
+      color: #777; }
+      .page_routes .section_filters .advanced_filters_wrapper .toggles .toggle a {
+        display: block;
+        border: 1px solid transparent;
+        padding: .4em .8em;
+        text-decoration: none;
+        color: #777; }
+        .page_routes .section_filters .advanced_filters_wrapper .toggles .toggle a:hover {
+          background-color: #f8f8f8;
+          background-image: -webkit-linear-gradient(top, #f8f8f8, #f1f1f1);
+          border: 1px solid #c6c6c6;
+          cursor: pointer;
+          box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08); }
+        .page_routes .section_filters .advanced_filters_wrapper .toggles .toggle a.active {
+          background: -webkit-linear-gradient(top, #eee, #e0e0e0);
+          border: 1px solid #d7d7d7;
+          box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08); }
+      .page_routes .section_filters .advanced_filters_wrapper .toggles .toggle.search-help {
+        margin-left: auto; }
     .page_routes .section_filters .advanced_filters_wrapper .advanced_filters .filter {
       display: flex;
       width: 100%;
@@ -107,8 +131,8 @@
         position: relative; }
         .page_routes .section_filters .advanced_filters_wrapper .advanced_filters .filter.segments .input .help, .page_routes .section_filters .advanced_filters_wrapper .advanced_filters .filter.tags .input .help {
           position: absolute;
-          top: .85em;
-          right: .4em;
+          top: 1.15em;
+          right: .6em;
           display: block;
           width: 1.2em;
           height: 1.2em;
@@ -116,6 +140,8 @@
           background-size: 1.1em 1.1em; }
           .page_routes .section_filters .advanced_filters_wrapper .advanced_filters .filter.segments .input .help:hover, .page_routes .section_filters .advanced_filters_wrapper .advanced_filters .filter.tags .input .help:hover {
             background-image: url(../../images/icon-help-orange.svg); }
+      .page_routes .section_filters .advanced_filters_wrapper .advanced_filters .filter.tags {
+        padding-top: 0; }
       .page_routes .section_filters .advanced_filters_wrapper .advanced_filters .filter .location_address {
         width: calc(calc(75px + 1em) + calc(100% - calc(75px + 1em) - 10% - 10% - 15% - 12%) + 10% + 10% + 1em); }
         .page_routes .section_filters .advanced_filters_wrapper .advanced_filters .filter .location_address .label {
@@ -125,8 +151,8 @@
           position: relative; }
           .page_routes .section_filters .advanced_filters_wrapper .advanced_filters .filter .location_address .input .geolocate {
             position: absolute;
-            top: .9em;
-            right: .5em;
+            top: 1.1em;
+            right: .6em;
             width: 1.2em;
             height: 1.2em; }
             .page_routes .section_filters .advanced_filters_wrapper .advanced_filters .filter .location_address .input .geolocate:hover {
@@ -138,21 +164,14 @@
       .page_routes .section_filters .advanced_filters_wrapper .advanced_filters .filter .location_section {
         display: flex;
         align-items: baseline; }
-    .page_routes .section_filters .advanced_filters_wrapper .advanced-filters-links {
-      margin-top: -.25em;
-      padding: 0 1em 1em calc(calc(75px + 1em) + .5em);
-      font-size: .8em;
-      color: #999; }
-      .page_routes .section_filters .advanced_filters_wrapper .advanced-filters-links .advanced-filters-toggle:hover {
-        cursor: pointer;
-        color: black; }
   .page_routes .section_filters select, .page_routes .section_filters input:not([type='checkbox']), .page_routes .section_filters button {
     width: 95%;
     margin-top: .5em;
-    padding: .5em;
+    padding: .8em;
     border: 1px solid #ddd;
     background-color: white;
-    font-size: .9em; }
+    font-size: .9em;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08); }
     .page_routes .section_filters select::placeholder, .page_routes .section_filters input:not([type='checkbox'])::placeholder, .page_routes .section_filters button::placeholder {
       color: #ccc;
       opacity: 1; }
