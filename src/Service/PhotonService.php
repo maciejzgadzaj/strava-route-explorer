@@ -12,11 +12,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
- * Class OpenStreetMapService
+ * Class PhotonService
+ *
+ * @see http://photon.komoot.de/
  *
  * @package App\Service
  */
-class OpenStreetMapService
+class PhotonService
 {
     /**
      * @var \Psr\Container\ContainerInterface
@@ -24,20 +26,13 @@ class OpenStreetMapService
     private $container;
 
     /**
-     * @var string
-     */
-    private $mapQuestConsumerKey;
-
-    /**
-     * OpenStreetMapService constructor.
+     * PhotonService constructor.
      *
      * @param \Psr\Container\ContainerInterface $container
-     * @param string $mapQuestConsumerKey
      */
-    public function __construct(ContainerInterface $container, $mapQuestConsumerKey)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-        $this->mapQuestConsumerKey = $mapQuestConsumerKey;
     }
 
     /**
@@ -54,22 +49,18 @@ class OpenStreetMapService
     {
         $queryParams = [
             'q' => $name,
-            'format' => 'json',
+            'limit' => 10,
         ];
 
-        $uri = '/search?'.http_build_query($queryParams);
+        $uri = '/api/?'.http_build_query($queryParams);
 
         $response = $this->apiRequest('get', $uri);
         $content = \GuzzleHttp\json_decode($response->getBody()->getContents());
 
         $return = [];
-        if (!empty($content)) {
-            foreach ($content as $location) {
-                $return[] = (object) [
-                    'label' => $location->display_name,
-                    'latitude' => $location->lat,
-                    'longitude' => $location->lon,
-                ];
+        if (!empty($content->features)) {
+            foreach ($content->features as $feature) {
+                $return[] = $this->featureToResponseObject($feature);
             }
         }
 
@@ -92,13 +83,16 @@ class OpenStreetMapService
         $queryParams = [
             'lat' => $lat,
             'lon' => $lon,
-            'format' => 'json',
         ];
 
         $uri = '/reverse?'.http_build_query($queryParams);
 
         $response = $this->apiRequest('get', $uri);
-        return \GuzzleHttp\json_decode($response->getBody()->getContents());
+        $content = \GuzzleHttp\json_decode($response->getBody()->getContents());
+
+        $feature = reset($content->features);
+
+        return $this->featureToResponseObject($feature);
     }
 
     /**
@@ -116,8 +110,27 @@ class OpenStreetMapService
     public function apiRequest($method, $uri, $options = [])
     {
         /** @var \GuzzleHttp\Client $client */
-        $client = $this->container->get('csa_guzzle.client.openstreetmap.nominatim');
+        $client = $this->container->get('csa_guzzle.client.photon');
 
         return $client->$method($uri, $options);
+    }
+
+    /**
+     * Convert Photon response single feature row into local unified response object.
+     *
+     * @param object $feature
+     *
+     * @return object
+     */
+    private function featureToResponseObject($feature)
+    {
+        return (object) [
+            'name' => $feature->properties->name,
+            'class' => str_replace('_', ' ', $feature->properties->osm_value) ?? null,
+            'city' => $feature->properties->city ?? $feature->properties->state,
+            'country' => $feature->properties->country,
+            'latitude' => $feature->geometry->coordinates[1],
+            'longitude' => $feature->geometry->coordinates[0],
+        ];
     }
 }

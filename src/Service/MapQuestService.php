@@ -117,31 +117,6 @@ class MapQuestService
     }
 
     /**
-     * @param $locations
-     *
-     * @see https://developer.mapquest.com/documentation/open/geocoding-api/batch/post/
-     */
-    public function batchGeocode($locations)
-    {
-        $queryData = [
-            'key' => $this->mapQuestConsumerKey,
-        ];
-
-        $uri = '/geocoding/v1/batch?'.http_build_query($queryData);
-
-        $options = [
-            RequestOptions::JSON => [
-                'locations' => $locations,
-            ],
-        ];
-
-        $response = $this->apiRequest('post', $uri, $options);
-        $content = \GuzzleHttp\json_decode($response->getBody()->getContents());
-
-        return $content;
-    }
-
-    /**
      * Send request to Strava API.
      *
      * @param string $method

@@ -289,9 +289,6 @@
     padding: 4em;
     text-align: center; }
 
-.autocomplete-search-string {
-  font-weight: bold; }
-
 ul.ui-autocomplete.ui-menu {
   width: 60%;
   background-color: #f9f9f9;
@@ -305,6 +302,12 @@ ul.ui-autocomplete.ui-menu {
     ul.ui-autocomplete.ui-menu li:hover {
       background-color: white;
       cursor: pointer; }
+    ul.ui-autocomplete.ui-menu li .name .query {
+      font-weight: bold; }
+    ul.ui-autocomplete.ui-menu li .details {
+      margin-top: .3em;
+      font-size: .8em;
+      color: #888; }
 
 @media screen and (max-width: 1199px) {
   html body .page_routes .section_filters .filter.distance .input {

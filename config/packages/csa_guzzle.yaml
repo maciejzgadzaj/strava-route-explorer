@@ -14,6 +14,6 @@ csa_guzzle:
         mapquest:
             config:
                 base_uri: 'https://www.mapquestapi.com'
-        openstreetmap.nominatim:
+        photon:
             config:
-                base_uri: 'https://nominatim.openstreetmap.org/'
+                base_uri: 'https://photon.komoot.de'

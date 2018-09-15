@@ -3,13 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Route as StravaRoute;
-use App\Exception\NoticeException;
+use App\Form\PublishType;
 use App\Form\RouteAddType;
 use App\Form\RouteFilterType;
-use App\Form\PublishType;
 use App\Service\AthleteService;
 use App\Service\MapService;
-use App\Service\OpenStreetMapService;
+use App\Service\PhotonService;
 use App\Service\RouteService;
 use App\Service\StravaService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -395,14 +394,14 @@ and %public_deleted% deleted, %published% published, %private_skipped% private s
      *
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @param \App\Service\AthleteService $athleteService
-     * @param \App\Service\OpenStreetMapService $openStreetMapService
+     * @param \App\Service\PhotonService $photonService
      *
      * @return \Symfony\Component\HttpFoundation\JsonResponse|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function autocompleteLocationAction(
         Request $request,
         AthleteService $athleteService,
-        OpenStreetMapService $openStreetMapService
+        PhotonService $photonService
     ) {
         // Allow access only to athletes authorized with Strava.
         if (empty($this->getParameter('open_access')) && !$athleteService->isAuthorized()) {
@@ -411,10 +410,35 @@ and %public_deleted% deleted, %published% published, %private_skipped% private s
 
         $name = trim(strip_tags($request->get('term')));
 
-        $names = $openStreetMapService->getLocationsByName($name);
+        $names = $photonService->getLocationsByName($name);
 
         $response = new JsonResponse();
         $response->setData($names);
+
+        return $response;
+    }
+
+    /**
+     * Geolocate callback.
+     *
+     * @Route("/routes/autocomplate/reverse", name="routes_autocomplete_reverse")
+     *
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \App\Service\PhotonService $photonService
+     *
+     * @return \Symfony\Component\HttpFoundation\JsonResponse|\Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function autocompleteReverseAction(Request $request, AthleteService $athleteService, PhotonService $photonService)
+    {
+        // Allow access only to athletes authorized with Strava.
+        if (empty($this->getParameter('open_access')) && !$athleteService->isAuthorized()) {
+            return $this->redirectToRoute('homepage');
+        }
+
+        $location = $photonService->reverseGeocode($request->get('lat'), $request->get('lon'));
+
+        $response = new JsonResponse();
+        $response->setData($location);
 
         return $response;
     }

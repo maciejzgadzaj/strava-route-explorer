@@ -381,33 +381,72 @@
                     setAdvancedFiltersToggleLabel($(this));
                 });
             });
-            // https://jqueryui.com/autocomplete/
             // http://api.jqueryui.com/autocomplete/
-            $('#filter_start, #filter_end').autocomplete({
-                source: "{{ path('routes_autocomplete_location') }}",
-                minLength: 3,
-                delay: 200,
-                search: function(event, ui){
-                    var name = $(this).attr("id");
-                    $("#"+name).parent().find('.geolocate').attr('src', "images/spinner.gif").addClass("clicked");
-                },
-                response: function(event, ui){
-                    $("img.geolocate.clicked").attr("src", "images/icon-geolocate.svg").removeClass("clicked");
-                },
-                select: function(event, ui){
-                    var name = $(this).attr("id");
-                    $("#"+name+"_latlon").val(ui.item.latitude+","+ui.item.longitude);
-                }
-            }).data("ui-autocomplete")._renderItem = function( ul, item ) {
-                var listItem = $("<li></li>").data("ui-autocomplete-item", item);
-
-                // Add span around characters typed by user to make them strong.
-                var re = new RegExp(this.term, 'i');
-                var t = item.label.replace(re, '<span class="autocomplete-search-string">' + this.term + '</span>');
-                listItem.html(t);
-
-                return listItem.appendTo(ul);
-            };
+            // https://jqueryui.com/autocomplete/#custom-data
+            $('#filter_start')
+                .autocomplete({
+                    source: "{{ path('routes_autocomplete_location') }}",
+                    minLength: 3,
+                    delay: 250,
+                    appendTo: $(this).attr("id"),
+                    change: function( event, ui ) {
+                        var name = $(this).attr("id");
+                        if ( ui.item === null ) {
+                            $("#"+name+"_latlon").val(null);
+                        }
+                    },
+                    search: function( event, ui ) {
+                        var name = $(this).attr("id");
+                        $("#"+name).parent().find('.geolocate').attr('src', "images/spinner.gif").addClass("clicked");
+                    },
+                    response: function( event, ui ) {
+                        $("img.geolocate.clicked").attr("src", "images/icon-geolocate.svg").removeClass("clicked");
+                    },
+                    select: function( event, ui ) {
+                        var name = $(this).attr("id");
+                        $("#"+name).val(ui.item.name+", "+ui.item.city+", "+ui.item.country);
+                        $("#"+name+"_latlon").val(ui.item.latitude+","+ui.item.longitude);
+                        return false;
+                    }
+                })
+                .autocomplete( "instance" )._renderItem = function( ul, item ) {
+                    return $("<li>")
+                        .append( "<div class=\"name\">" + item.name + "</div>" )
+                        .append( "<div class=\"details\"><span class=\"class\">" + item.class + "</span>, <span class=\"address\">" + item.city + ", "+ item.country + "</span></div>" )
+                        .appendTo( ul );
+                };
+            $('#filter_end')
+                .autocomplete({
+                    source: "{{ path('routes_autocomplete_location') }}",
+                    minLength: 3,
+                    delay: 250,
+                    appendTo: $(this).attr("id"),
+                    change: function( event, ui ) {
+                        var name = $(this).attr("id");
+                        if ( ui.item === null ) {
+                            $("#"+name+"_latlon").val(null);
+                        }
+                    },
+                    search: function( event, ui ) {
+                        var name = $(this).attr("id");
+                        $("#"+name).parent().find('.geolocate').attr('src', "images/spinner.gif").addClass("clicked");
+                    },
+                    response: function( event, ui ) {
+                        $("img.geolocate.clicked").attr("src", "images/icon-geolocate.svg").removeClass("clicked");
+                    },
+                    select: function( event, ui ) {
+                        var name = $(this).attr("id");
+                        $("#"+name).val(ui.item.name+", "+ui.item.city+", "+ui.item.country);
+                        $("#"+name+"_latlon").val(ui.item.latitude+","+ui.item.longitude);
+                        return false;
+                    }
+                })
+                .autocomplete( "instance" )._renderItem = function( ul, item ) {
+                    return $("<li>")
+                        .append( "<div class=\"name\">" + item.name + "</div>" )
+                        .append( "<div class=\"details\"><span class=\"class\">" + item.class + "</span>, <span class=\"address\">" + item.city + ", "+ item.country + "</span></div>" )
+                        .appendTo( ul );
+                };
 
             // Geolocation for route "Start" and "End" filters.
             if (navigator.geolocation) {
@@ -415,25 +454,34 @@
             }
             $('.geolocate').on("click", function(){
                 $(this).attr('src', "images/spinner.gif").addClass("clicked");
-                navigator.geolocation.getCurrentPosition(handlePosition);
+                var options = {
+                    enableHighAccuracy: true,
+                    timeout: 5000,
+                    maximumAge: 0
+                };
+                navigator.geolocation.getCurrentPosition(handlePosition, geolocationError, options);
             });
             function handlePosition(position, target) {
-                navigator.geolocation.getCurrentPosition(handlePosition);
                 $.ajax({
                     type: "GET",
-                    url: "https://nominatim.openstreetmap.org/reverse?format=json&lat="+position.coords.latitude+"&lon="+position.coords.longitude,
+                    url: "/routes/autocomplate/reverse?lat=" + position.coords.latitude + "&lon=" + position.coords.longitude,
                     timeout: 5000,
                     success: function(data){
                         var target = $("img.geolocate.clicked").attr("data-target");
                         $("img.geolocate.clicked").attr("src", "images/icon-geolocate.svg").removeClass("clicked");
-                        $("#filter_"+target).val(data.display_name);
-                        $("#filter_"+target+"_latlon").val(data.lat+","+data.lon);
+                        $("#filter_"+target).val(data.name + ", " + data.city + ", " + data.country);
+                        $("#filter_"+target+"_latlon").val(data.latitude + "," + data.longitude);
                     },
                     error: function(data){
                         $("img.geolocate.clicked").attr("src", "images/icon-geolocate.svg").removeClass("clicked");
                     }
                 });
             }
+            function geolocationError(err) {
+                $("img.geolocate.clicked").attr("src", "images/icon-geolocate.svg").removeClass("clicked");
+                console.warn(err);
+            }
+
         });
     </script>
 {% endblock %}

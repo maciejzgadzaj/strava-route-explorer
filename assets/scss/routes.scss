@@ -424,9 +424,6 @@ $locationWidth: calc(30vw);
     }
 }
 
-.autocomplete-search-string {
-    font-weight: bold;
-}
 ul.ui-autocomplete.ui-menu {
     width: 60%;
     background-color: #f9f9f9;
@@ -440,6 +437,16 @@ ul.ui-autocomplete.ui-menu {
         &:hover {
             background-color: white;
             cursor: pointer;
+        }
+        .name {
+            .query {
+                font-weight: bold;
+            }
+        }
+        .details {
+            margin-top: .3em;
+            font-size: .8em;
+            color: #888;
         }
     }
 }
