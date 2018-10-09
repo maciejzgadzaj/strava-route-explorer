@@ -108,7 +108,7 @@ body {
       background-color: #ffffff;
       color: #ccc; }
   body .splash {
-    background-image: url(https://lh3.googleusercontent.com/frxoy1aAnAvJAqfyvN86tm3s8qzlW88YWoNcSVFQaYsK9-_6dG4rXxKkBwcDT7ANSHMHyTaFEHxaiOdiMQs=w1200-no-tmp.jpg);
+    background-image: url(https://lh3.googleusercontent.com/frxoy1aAnAvJAqfyvN86tm3s8qzlW88YWoNcSVFQaYsK9-_6dG4rXxKkBwcDT7ANSHMHyTaFEHxaiOdiMQs=w100-no-tmp.jpg);
     background-position: center left; }
     body .splash .arrow {
       position: absolute;
@@ -175,7 +175,7 @@ body {
           font-size: 1.2em; }
   body .enjoy {
     position: relative;
-    background-image: url(https://lh3.googleusercontent.com/Z4AVWAUAR2JjxeVpFZRxZ2MIoXIR4G61jUh8GWbosmIE72t152mH65XRb_D0qTVU_iZh2HAfSG0MldEeMkc=w1200-no-tmp.jpg); }
+    background-image: url(https://lh3.googleusercontent.com/Z4AVWAUAR2JjxeVpFZRxZ2MIoXIR4G61jUh8GWbosmIE72t152mH65XRb_D0qTVU_iZh2HAfSG0MldEeMkc=w100-no-tmp.jpg); }
     body .enjoy .no {
       width: 2em;
       height: 2em;
@@ -233,7 +233,7 @@ body {
             background-size: 16px 16px; }
   body .help {
     position: relative;
-    background-image: url(https://lh3.googleusercontent.com/FXVuv78Ck_BPJqNOI_RXmvpz2EUwG1PmvTCaQqK3qhbNVO8MYwfkgHM46dtb5U57GqHrdrRwzr2uvlFFhkg=w1200-no-tmp.jpg);
+    background-image: url(https://lh3.googleusercontent.com/FXVuv78Ck_BPJqNOI_RXmvpz2EUwG1PmvTCaQqK3qhbNVO8MYwfkgHM46dtb5U57GqHrdrRwzr2uvlFFhkg=w100-no-tmp.jpg);
     background-position: center right; }
     body .help .text-overlay, body .help .text {
       position: absolute;
