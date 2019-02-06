@@ -128,7 +128,8 @@ class RoutesController extends ControllerBase
      * @param string $athlete_id
      * @param string $route_id
      * @param \App\Service\RouteService $routeService
-     * @param \Doctrine\ORM\EntityManagerInterface $entityManager
+     * @param \App\Service\MapService $mapService
+     * @param \Symfony\Component\HttpFoundation\Request $request
      *
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
@@ -137,11 +138,12 @@ class RoutesController extends ControllerBase
         $route_id,
         RouteService $routeService,
         MapService $mapService,
-        EntityManagerInterface $entityManager
+        Request $request
     ) {
         $route = $routeService->load($route_id);
 
-        $map = $mapService->getMap($route);
+        // Regenerate the map if no-cache header was sent.
+        $map = $mapService->getMap($route, $request->isNoCache());
 
         $message = 'Fetched map thumbnail from MapQuest for route "%route_name%" (%route_id%) by %athlete%.';
         $params = [
