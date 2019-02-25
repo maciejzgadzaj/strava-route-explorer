@@ -372,13 +372,17 @@ and %public_deleted% deleted, %published% published, %private_skipped% private s
                 ]
             );
         } catch (ClientException $e) {
-            $cache->delete($cacheKey);
+            if (isset($cache)) {
+                $cache->delete($cacheKey);
+            }
             $content = \GuzzleHttp\json_decode($e->getResponse()->getBody()->getContents());
             $this->logger->error($content->message);
             $this->addFlash('error', $content->message);
             return $this->getRedirect('routes');
         } catch (\Exception $e) {
-            $cache->delete($cacheKey);
+            if (isset($cache)) {
+                $cache->delete($cacheKey);
+            }
             $this->logger->error($e->getMessage());
             $this->addFlash('error', $e->getMessage());
             return $this->getRedirect('routes');

@@ -162,7 +162,7 @@ class ExplorerAthleteSyncCommand extends ContainerAwareCommand
         $this->logger->debug(strtr(strip_tags($message), $params));
         $this->output->writeln(strtr($message, $params));
 
-        if (empty($athlete->getAccessToken())) {
+        if (empty($this->stravaService->getAthleteAccessToken($athlete))) {
             $message = '- <error>No Strava access token found for athlete.</error>';
             $this->logger->error(strip_tags($message));
             $this->output->writeln($message);

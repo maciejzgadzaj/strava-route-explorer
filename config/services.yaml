@@ -11,7 +11,7 @@ parameters:
     # Strava
     strava_client_id: '%env(STRAVA_CLIENT_ID)%'
     strava_client_secret: '%env(STRAVA_CLIENT_SECRET)%'
-    strava_access_token: '%env(STRAVA_ACCESS_TOKEN)%'
+    strava_refresh_token: '%env(STRAVA_REFRESH_TOKEN)%'
     # Meetup
     meetup_api_key: '%env(MEETUP_API_KEY)%'
     meetup_groups: '%env(json:MEETUP_GROUPS)%'
@@ -31,7 +31,7 @@ services:
                             # The best practice is to be explicit about your dependencies anyway.
         bind:
             $mapQuestConsumerKey: "%mapquest_consumer_key%"
-            $stravaAccessToken: "%strava_access_token%"
+            $stravaRefreshToken: "%strava_refresh_token%"
             $meetupGroups: "%meetup_groups%"
             $meetupApiKey: "%meetup_api_key%"
 
