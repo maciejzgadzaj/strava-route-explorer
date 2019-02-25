@@ -44,6 +44,7 @@ class PublishType extends AbstractType
                     return (
                         isset($localRoutes[$choiceValue]) && $localRoutes[$choiceValue]->isPublic()
                         || isset($localStarredRoutes[$choiceValue])
+                        || !isset($localRoutes[$choiceValue]) && !isset($localStarredRoutes[$choiceValue])
                     ) ? ['checked' => 'checked'] : [];
                 },
             ]
