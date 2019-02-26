@@ -125,19 +125,27 @@ class RouteRepository extends ServiceEntityRepository
 
                 case 'athlete':
                     $joins['athlete'] = 'JOIN r.athlete a';
-                    $parameters['athlete_name'] = '%'.$value.'%';
-                    $parameters['athlete_id'] = $value;
+                    // We need this distinction, as searching for "athlete_id" = <string>
+                    // will match unknown Strava athlete with id = 0.
+                    if (is_numeric(trim($value))) {
+                        $parameters['athlete_id'] = $value;
+                    }
+                    else {
+                        $parameters['athlete_name'] = '%'.$value.'%';
+                    }
 
                     if (!empty($criteria['starred'])) {
                         $joins['starred_by_searched'] = 'LEFT JOIN r.starredBy sbs';
-                        $selects[] = 'CASE WHEN sbs.id IS NOT NULL 
-                                                AND (sbs.name LIKE :athlete_name OR sbs.id = :athlete_id) 
-                                           THEN true 
-                                           ELSE false END AS starred_by_searched_athlete';
-                        $wheres[] = '(a.name LIKE :athlete_name OR a.id = :athlete_id
-                                      OR sbs.name LIKE :athlete_name OR sbs.id = :athlete_id)';
+                        $selects[] = (is_numeric(trim($value)))
+                            ? 'CASE WHEN sbs.id IS NOT NULL AND (sbs.id = :athlete_id) THEN true ELSE false END AS starred_by_searched_athlete'
+                            : 'CASE WHEN sbs.id IS NOT NULL AND (sbs.name LIKE :athlete_name) THEN true ELSE false END AS starred_by_searched_athlete';
+                        $wheres[] = (is_numeric(trim($value)))
+                            ? '(a.id = :athlete_id OR sbs.id = :athlete_id)'
+                            : '(a.name LIKE :athlete_name OR sbs.name LIKE :athlete_name)';
                     } else {
-                        $wheres[] = '(a.name LIKE :athlete_name OR a.id = :athlete_id)';
+                        $wheres[] = (is_numeric(trim($value)))
+                            ? '(a.id = :athlete_id)'
+                            : '(a.name LIKE :athlete_name)';
                     }
                     break;
 
