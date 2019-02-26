@@ -118,7 +118,13 @@ class RouteService extends EntityService
             $route->setId($routeData->id);
         }
 
-        $athlete = $this->entityManager->getRepository(Athlete::class)->find($routeData->athlete->id);
+        // Find local athlete entity for the route.
+        if (!$athlete = $this->entityManager->getRepository(Athlete::class)->find($routeData->athlete->id)) {
+            // If the athlete entity does not exist yet (which might be the
+            // case when synchronizing a route starred by current athlete,
+            // but created by a different one) create new athlete entity.
+            $athlete = $this->athleteService->save($routeData->athlete);
+        }
         $route->setAthlete($athlete);
 
         $route->setType($routeData->type);
