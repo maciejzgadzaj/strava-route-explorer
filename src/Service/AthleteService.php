@@ -72,7 +72,7 @@ class AthleteService extends EntityService
      *
      * @return \App\Entity\Athlete
      */
-    public function save($athleteData, $accessToken = null)
+    public function save($athleteData, $tokenData = null)
     {
         if (!$athlete = $this->repository->find($athleteData->id)) {
             $athlete = new Athlete();
@@ -85,12 +85,40 @@ class AthleteService extends EntityService
         $athlete->setPremium($athleteData->premium);
         $athlete->setProfile($athleteData->profile);
 
-        if (!empty($accessToken)) {
-            $athlete->setAccessToken($accessToken);
+        if (!empty($tokenData)) {
+            $athlete = $this->saveTokenData($athlete, $tokenData, true);
         }
 
         $this->entityManager->persist($athlete);
         $this->entityManager->flush();
+
+        return $athlete;
+    }
+
+    /**
+     * Save athlete's new token details.
+     *
+     * @param \App\Entity\Athlete $athlete
+     * @param array $tokenData
+     * @param bool $skipSave
+     *
+     * @return \App\Entity\Athlete
+     *
+     * @throws \Exception
+     */
+    public function saveTokenData($athlete, $tokenData, $skipSave = false)
+    {
+        $athlete->setAccessToken($tokenData->access_token);
+        $athlete->setRefreshToken($tokenData->refresh_token);
+
+        $expiresAt = new \DateTime();
+        $expiresAt->setTimestamp($tokenData->expires_at);
+        $athlete->setExpiresAt($expiresAt);
+
+        if (empty($skipSave)) {
+            $this->entityManager->persist($athlete);
+            $this->entityManager->flush();
+        }
 
         return $athlete;
     }

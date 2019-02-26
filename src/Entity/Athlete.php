@@ -36,6 +36,20 @@ class Athlete
     private $accessToken;
 
     /**
+     * @var \DateTime|null
+     *
+     * @ORM\Column(type="datetime", nullable=true, name="expires_at")
+     */
+    private $expiresAt;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(type="string", nullable=true, name="refresh_token")
+     */
+    private $refreshToken;
+
+    /**
      * @var string
      *
      * @ORM\Column(type="string", nullable=true)
@@ -128,6 +142,37 @@ class Athlete
     public function setAccessToken($accessToken): void
     {
         $this->accessToken = $accessToken;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getExpiresAt(): ?\DateTime {
+        return $this->expiresAt;
+    }
+
+    /**
+     * @param \DateTime|null $expiresAt
+     */
+    public function setExpiresAt(?\DateTime $expiresAt): void
+    {
+        $this->expiresAt = $expiresAt;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getRefreshToken(): ?string
+    {
+        return $this->refreshToken;
+    }
+
+    /**
+     * @param string|null $refreshToken
+     */
+    public function setRefreshToken(?string $refreshToken): void
+    {
+        $this->refreshToken = $refreshToken;
     }
 
     /**

@@ -202,9 +202,7 @@ class RouteService extends EntityService
                 throw new \Exception('Cowardly refusing to add a private route.');
             }
 
-            if (!$this->athleteService->exists($content->athlete->id)) {
-                $this->athleteService->save($content->athlete);
-            }
+            $this->athleteService->save($content->athlete);
 
             // Save route.
             $route = $this->save($content);

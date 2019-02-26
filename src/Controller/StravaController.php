@@ -34,7 +34,7 @@ class StravaController extends ControllerBase
             'redirect_uri' => $this->generateUrl('strava_auth_redirect', [], UrlGeneratorInterface::ABSOLUTE_URL),
             'response_type' => 'code',
             'approval_prompt' => 'auto',
-            'scope' => 'public',
+            'scope' => 'read_all',
             'state' => 'auth',
         ];
         return $this->redirect('https://www.strava.com/oauth/authorize?'.http_build_query($params));
@@ -59,7 +59,14 @@ class StravaController extends ControllerBase
 
         // Redirect back to home page on failed Strava authorization.
         if (empty($query['code'])) {
+            $session->getFlashBag()->add('error', 'Strava authorization failed.');
             return $this->redirectToRoute('homepage');
+        }
+
+        if (strpos($query['scope'], 'read_all') === FALSE) {
+            $session->getFlashBag()->add('error', strtr('Please select "View your private non-activity data such as segments and routes" to sync your private routes too. <a href="@strava_auth_url">Re-authorize</a>?', [
+                '@strava_auth_url' => $this->generateUrl('strava_auth'),
+            ]));
         }
 
         /** @var \GuzzleHttp\Client $client */
@@ -68,11 +75,12 @@ class StravaController extends ControllerBase
             'client_id' => $this->getParameter('strava_client_id'),
             'client_secret' => $this->getParameter('strava_client_secret'),
             'code' => $query['code'],
+            'grant_type' => 'authorization_code',
         ];
         $response = $client->post('/oauth/token', ['form_params' => $params]);
         $content = \GuzzleHttp\json_decode($response->getBody()->getContents());
 
-        $athlete = $athleteService->save($content->athlete, $content->access_token);
+        $athlete = $athleteService->save($content->athlete, $content);
 
         $session->set('strava_athlete', $athlete->getId());
 

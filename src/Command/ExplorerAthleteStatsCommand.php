@@ -111,7 +111,7 @@ class ExplorerAthleteStatsCommand extends ContainerAwareCommand
 
         $options = [
             'headers' => [
-                'Authorization' => 'Bearer '.$athlete->getAccessToken(),
+                'Authorization' => 'Bearer '.$this->stravaService->getAthleteAccessToken($athlete),
             ],
         ];
         $response = $this->stravaService->apiRequest(

@@ -13,7 +13,7 @@
     background-color: #f9f9f9; }
   .page_routes .row:hover {
     cursor: pointer;
-    background-color: #f9f9f9; }
+    background-color: #FAEEE9; }
   .page_routes .head {
     background-color: #f0f0f0;
     border-bottom: 1px solid #e0e0e0; }
@@ -29,7 +29,7 @@
   .page_routes .name {
     order: 3;
     -webkit-order: 3;
-    width: 30%; }
+    width: 50%; }
     .page_routes .name a {
       text-decoration: none; }
       .page_routes .name a:hover {
