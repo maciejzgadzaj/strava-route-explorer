@@ -21,10 +21,10 @@ use Doctrine\ORM\Mapping as ORM;
 class Athlete
 {
     /**
-     * @var integer
+     * @var string
      *
      * @ORM\Id
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string")
      */
     private $id;
 
@@ -113,7 +113,7 @@ class Athlete
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getId()
     {
@@ -121,9 +121,9 @@ class Athlete
     }
 
     /**
-     * @param mixed $id
+     * @param string $id
      */
-    public function setId($id): void
+    public function setId(string $id): void
     {
         $this->id = $id;
     }

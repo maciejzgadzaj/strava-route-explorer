@@ -40,10 +40,10 @@ class Route
     const SUBTYPE_MIXED = 5;
 
     /**
-     * @var integer
+     * @var string
      *
      * @ORM\Id
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string")
      */
     private $id;
 
@@ -191,7 +191,7 @@ class Route
     /**
      * @return int
      */
-    public function getId(): int
+    public function getId(): string
     {
         return $this->id;
     }
@@ -199,7 +199,7 @@ class Route
     /**
      * @param int $id
      */
-    public function setId(int $id): void
+    public function setId(string $id): void
     {
         $this->id = $id;
     }
