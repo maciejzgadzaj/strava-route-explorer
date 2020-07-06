@@ -87,3 +87,7 @@ DirectoryIndex index.php
         # RedirectTemp cannot be used instead
     </IfModule>
 </IfModule>
+
+php_value session.gc_maxlifetime 31536000
+php_value session.cookie_lifetime 31536000
+php_value session.cache_expire 31536000
