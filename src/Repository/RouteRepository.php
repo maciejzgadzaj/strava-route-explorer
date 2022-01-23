@@ -7,6 +7,7 @@ use App\Service\AthleteService;
 use CrEOF\Spatial\PHP\Types\Geometry\Point;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -24,9 +25,9 @@ class RouteRepository extends ServiceEntityRepository
     /**
      * RouteRepository constructor.
      *
-     * @param \Symfony\Bridge\Doctrine\RegistryInterface $registry
+     * @param ManagerRegistry $registry
      */
-    public function __construct(RegistryInterface $registry, AthleteService $athleteService)
+    public function __construct(ManagerRegistry $registry, AthleteService $athleteService)
     {
         parent::__construct($registry, Route::class);
 

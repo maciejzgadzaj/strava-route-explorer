@@ -12,7 +12,7 @@
             <h1 class="small">Strava Route Explorer</h1>
             <h2 class="title">Giving you back what Strava has taken away.</h2>
             <div class="action">
-                {% if current_athlete is defined and current_athlete or open_access %}
+                {% if current_athlete is defined and current_athlete or open_access is defined and open_access %}
                     <a href="{{ path('routes') }}" class="button">Explore routes</a>
                 {% else %}
                     <a href="{{ path('strava_auth') }}" class="button">Connect with Strava</a>
@@ -62,7 +62,7 @@
                 <div class="description">
                     Browse and search our database of bike and run routes. Filter results by name, distance, ascent, athlete, start/end location, and more.
                 </div>
-                {% if current_athlete is defined and current_athlete or open_access %}
+                {% if current_athlete is defined and current_athlete or open_access is defined and open_access %}
                     <a href="{{ path('routes') }}" class="button">Explore all routes</a>
                 {% else %}
                     <a class="button disabled" title="Connect with Strava first">Explore all routes</a>
@@ -80,14 +80,14 @@
         <div class="credits">
             <div class="ride">
                 <div class="athlete">
-                    {% if current_athlete is defined and current_athlete or open_access %}<a href="https://www.strava.com/athletes/20391452">{% endif %}
+                    {% if current_athlete is defined and current_athlete or open_access is defined and open_access %}<a href="https://www.strava.com/athletes/20391452">{% endif %}
                         Emily M
-                    {% if current_athlete is defined and current_athlete or open_access %}</a>{% endif %}
+                    {% if current_athlete is defined and current_athlete or open_access is defined and open_access %}</a>{% endif %}
                 </div>
                 <div class="route">
-                    {% if current_athlete is defined and current_athlete or open_access %}<a href="{{ path('routes', { 'filter[name]': 'Route Des Grandes Alpes'}) }}">{% endif %}
+                    {% if current_athlete is defined and current_athlete or open_access is defined and open_access %}<a href="{{ path('routes', { 'filter[name]': 'Route Des Grandes Alpes'}) }}">{% endif %}
                         La Route des Grandes Alpes
-                    {% if current_athlete is defined and current_athlete or open_access %}</a>{% endif %}
+                    {% if current_athlete is defined and current_athlete or open_access is defined and open_access %}</a>{% endif %}
                 </div>
                 <div class="stats">
                     <div class="location">Nice, France</div>
@@ -96,9 +96,9 @@
                 </div>
             </div>
             <div class="avatar">
-                {% if current_athlete is defined and current_athlete or open_access %}<a href="https://www.strava.com/athletes/20391452">{% endif %}
+                {% if current_athlete is defined and current_athlete or open_access is defined and open_access %}<a href="https://www.strava.com/athletes/20391452">{% endif %}
                     <img src="https://dgalywyr863hv.cloudfront.net/pictures/athletes/20391452/7590193/2/large.jpg" width="60" height="60" />
-                {% if current_athlete is defined and current_athlete or open_access %}</a>{% endif %}
+                {% if current_athlete is defined and current_athlete or open_access is defined and open_access %}</a>{% endif %}
             </div>
         </div>
     </div>

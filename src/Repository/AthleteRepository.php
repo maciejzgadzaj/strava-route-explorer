@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Athlete;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -17,9 +18,9 @@ class AthleteRepository extends ServiceEntityRepository
     /**
      * AthleteRepository constructor.
      *
-     * @param \Symfony\Bridge\Doctrine\RegistryInterface $registry
+     * @param ManagerRegistry $registry
      */
-    public function __construct(RegistryInterface $registry)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Athlete::class);
     }

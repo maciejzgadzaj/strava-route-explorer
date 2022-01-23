@@ -13,10 +13,12 @@ use App\Service\RouteService;
 use App\Service\StravaService;
 use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp\Exception\ClientException;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Cache\Simple\FilesystemCache;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Cache\ItemInterface;
 
 /**
  * Class RoutesController
@@ -254,23 +256,23 @@ class RoutesController extends ControllerBase
 
             // Fetch athlete routes from Strava and store them temporarily in cache,
             // so that we don't have to re-fetch them after submitting the form.
-            $cache = new FilesystemCache();
+            $cache = new FilesystemAdapter();
             $cacheKey = 'strava.routes.'.$athlete->getId();
 
-            if (!$stravaRoutes = $cache->get($cacheKey)) {
+            $stravaRoutes = $cache->get($cacheKey, function (ItemInterface $item) use ($athlete, $stravaService, $cacheKey) {
                 $stravaRoutes = $stravaService->getAthleteRoutes($athlete);
 
                 // If no routes were fetched from Strava, there is nothing to synchronize,
                 // so redirect back to route listing page.
                 if (empty($stravaRoutes)) {
-                    return $this->getRedirect('routes');
+                    return [];
                 }
 
                 // The cache item should be deleted after submitting the route select form,
                 // but just in case something goes wrong and it doesn't happen,
                 // let's also give it a short TTL.
-                $cache->set($cacheKey, $stravaRoutes, 3600);
-            }
+                return $stravaRoutes;
+            });
 
             $localRoutes = $routeService->getAthleteRoutes($athlete);
             $localStarredRoutes = $routeService->getAthleteStarredRoutes($athlete);

@@ -46,16 +46,6 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 class GeoNamesService extends EntityService
 {
     /**
-     * @var \Psr\Container\ContainerInterface
-     */
-    private $container;
-
-    /**
-     * @var \Doctrine\ORM\EntityManagerInterface
-     */
-    protected $entityManager;
-
-    /**
      * @var \Doctrine\DBAL\Connection
      */
     private $connection;
@@ -63,13 +53,11 @@ class GeoNamesService extends EntityService
     /**
      * GeoNamesService constructor.
      *
-     * @param \Psr\Container\ContainerInterface $container
+     * @param EntityManagerInterface $entityManager
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(EntityManagerInterface $entityManager)
     {
-        $this->container = $container;
-        $this->entityManager = $this->container->get('doctrine.orm.geonames_entity_manager');
-        $this->connection = $this->entityManager->getConnection();
+        $this->connection = $entityManager->getConnection();
     }
 
     /**

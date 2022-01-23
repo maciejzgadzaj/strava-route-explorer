@@ -146,17 +146,6 @@ class ExplorerRouteTagCommand extends ContainerAwareCommand
         $this->input = $input;
         $this->output = $output;
 
-        ProgressBar::setFormatDefinition('custom1', " %current%/%max% [%bar%] %percent:3s%% %message%");
-        ProgressBar::setFormatDefinition('custom2', ' %current%/%max% [%bar%] %percent:3s%%');
-
-        $this->section1 = $this->output->section();
-        $this->section2 = $this->output->section();
-
-        $this->progressBar1 = new ProgressBar($this->section1, 0);
-        $this->progressBar1->setFormat('custom1');
-        $this->progressBar2 = new ProgressBar($this->section2, 0);
-        $this->progressBar2->setFormat('custom2');
-
         try {
             // Process all routes without tags.
             if (!$routeId = $input->getOption('route')) {
@@ -172,26 +161,16 @@ class ExplorerRouteTagCommand extends ContainerAwareCommand
                 }
 
                 if (!empty($routes)) {
-                    $this->progressBar1->setMaxSteps(count($routes));
-                    $this->progressBar1->start();
-
                     foreach ($routes as $route) {
                         $this->processRoute($route);
                     }
-
-                    $this->progressBar1->finish();
                 } else {
                     $this->output->writeln('No routes without tags found.');
                 }
             } else {
                 // Process single route.
-                $this->progressBar1->setMaxSteps(1);
-                $this->progressBar1->start();
-
                 $route = $this->routeService->load($routeId);
                 $this->processRoute($route);
-
-                $this->progressBar1->finish();
             }
         } catch (\Exception $e) {
             $this->output->writeln(strtr('Error: <error>%error%</error>', ['%error%' => $e->getMessage()]));
@@ -208,19 +187,15 @@ class ExplorerRouteTagCommand extends ContainerAwareCommand
         $this->tagsCreated = $this->tagsAddedToRoute = 0;
         $this->data = [];
 
-        $this->progressBar1->setMessage(strtr('<info>%name%</info> (%id%) by <comment>%athlete%</comment>', [
+        $this->output->write(strtr('<info>%name%</info> (%id%) by <comment>%athlete%</comment> (%athlete_id%) ... ', [
             '%name%' => $route->getName(),
             '%id%' => $route->getId(),
             '%athlete%' => $route->getAthlete()->getName(),
+            '%athlete_id%' => $route->getAthlete()->getId(),
         ]));
-        $this->progressBar1->display();
 
         $list = \Polyline::decode($route->getPolylineSummary());
         $pairs = \Polyline::pair($list);
-
-        $this->progressBar2->setProgress(0);
-        $this->progressBar2->setMaxSteps(count($pairs));
-        $this->progressBar2->start();
 
         $this->data = [];
         foreach ($pairs as $delta => $pair) {
@@ -230,15 +205,16 @@ class ExplorerRouteTagCommand extends ContainerAwareCommand
                 $value = $geoname['name'];
                 $this->data[$value] = $value;
             }
-
-            $this->progressBar2->advance();
         }
+
+        $this->data = array_filter($this->data);
+        $this->data = array_unique($this->data);
 
         if (!empty($this->data) || $this->input->getOption('save-empty')) {
             $route->setTags(array_values($this->data));
             $this->entityManager->flush();
         }
 
-        $this->progressBar1->advance();
+        $this->output->writeln(implode(', ', $this->data));
     }
 }
