@@ -17,6 +17,7 @@
         "knplabs/knp-time-bundle": "^1.8",
         "phpdocumentor/reflection-docblock": "^5.3",
         "sensio/framework-extra-bundle": "^5.1",
+        "sentry/sentry-symfony": "^4.2",
         "squizlabs/php_codesniffer": "^3.3",
         "symfony/apache-pack": "^1.0",
         "symfony/asset": "^4.1",
