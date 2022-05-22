@@ -18,5 +18,5 @@ return [
     Kilik\TableBundle\KilikTableBundle::class => ['all' => true],
     Knp\Bundle\TimeBundle\KnpTimeBundle::class => ['all' => true],
     Corley\MaintenanceBundle\CorleyMaintenanceBundle::class => ['all' => true],
-    \Sentry\SentryBundle\SentryBundle::class => ['all' => true],
+    Sentry\SentryBundle\SentryBundle::class => ['all' => true],
 ];
