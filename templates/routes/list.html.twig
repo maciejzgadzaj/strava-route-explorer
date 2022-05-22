@@ -331,8 +331,8 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('build/routes.css') }}">
-    <link rel="stylesheet" media='screen and (max-width: 760px)' href="{{ asset('build/routes-mobile.css') }}" />
+    {{ encore_entry_link_tags('routes') }}
+{#    <link rel="stylesheet" media='screen and (max-width: 760px)' href="{{ asset('build/routes-mobile.css') }}" />#}
 {% endblock %}
 
 {% block javascripts %}

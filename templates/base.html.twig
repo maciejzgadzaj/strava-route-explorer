@@ -14,8 +14,8 @@
             gtag('config', '{{ google_analytics_tag }}');
         </script>
         {% block stylesheets %}
-            <link rel="stylesheet" href="{{ asset('build/app.css') }}">
-            <link rel="stylesheet" media='screen and (max-width: 760px)' href="{{ asset('build/app-mobile.css') }}" />
+            {{ encore_entry_link_tags('app') }}
+{#            <link rel="stylesheet" media='screen and (max-width: 760px)' href="{{ asset('build/app-mobile.css') }}" />#}
         {% endblock %}
     </head>
     <body>
@@ -92,7 +92,8 @@
         {% block javascripts %}
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
             <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-            <script src="{{ asset('build/app.js') }}"></script>
+{#            <script src="{{ asset('build/app.js') }}"></script>#}
+            {{ encore_entry_script_tags('app') }}
             <script>
                 $(document).ready(function(){
                     $(".menu_item_burger").on("click", function(){

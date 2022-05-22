@@ -1,0 +1,67 @@
+{
+  "entrypoints": {
+    "app": {
+      "js": [
+        "/build/runtime.js",
+        "/build/app.js"
+      ],
+      "css": [
+        "/build/app.css"
+      ]
+    },
+    "athletes": {
+      "js": [
+        "/build/runtime.js",
+        "/build/athletes.js"
+      ],
+      "css": [
+        "/build/athletes.css"
+      ]
+    },
+    "homepage": {
+      "js": [
+        "/build/runtime.js",
+        "/build/homepage.js"
+      ],
+      "css": [
+        "/build/homepage.css"
+      ]
+    },
+    "maintenance": {
+      "js": [
+        "/build/runtime.js",
+        "/build/maintenance.js"
+      ],
+      "css": [
+        "/build/maintenance.css"
+      ]
+    },
+    "pager": {
+      "js": [
+        "/build/runtime.js",
+        "/build/pager.js"
+      ],
+      "css": [
+        "/build/pager.css"
+      ]
+    },
+    "routes": {
+      "js": [
+        "/build/runtime.js",
+        "/build/routes.js"
+      ],
+      "css": [
+        "/build/routes.css"
+      ]
+    },
+    "select": {
+      "js": [
+        "/build/runtime.js",
+        "/build/select.js"
+      ],
+      "css": [
+        "/build/select.css"
+      ]
+    }
+  }
+}

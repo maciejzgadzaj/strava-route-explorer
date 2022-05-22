@@ -96,6 +96,6 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('build/athletes.css') }}">
-    <link rel="stylesheet" media='screen and (max-width: 760px)' href="{{ asset('build/athletes-mobile.css') }}" />
+    {{ encore_entry_link_tags('athletes') }}
+{#    <link rel="stylesheet" media='screen and (max-width: 760px)' href="{{ asset('build/athletes-mobile.css') }}" />#}
 {% endblock %}

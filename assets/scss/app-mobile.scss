@@ -28,23 +28,23 @@
                             }
                         }
                         .menu_item.menu_item_burger {
-                            background-image: url(../../images/icon-menu-burger.svg);
+                            background-image: url(../../public/images/icon-menu-burger.svg);
                             background-size: 1.5em;
                         }
                         .menu_item.menu_item_burger.open {
-                            background-image: url(../../images/icon-menu-close.svg);
+                            background-image: url(../../public/images/icon-menu-close.svg);
                             background-size: 1.3em;
                         }
                         .menu_item.menu_item_routes {
-                            background-image: url(../../images/icon-menu-routes.svg);
+                            background-image: url(../../public/images/icon-menu-routes.svg);
                             background-size: 2.25em;
                         }
                         .menu_item.menu_item_my_routes {
-                            background-image: url(../../images/icon-menu-my-routes.svg);
+                            background-image: url(../../public/images/icon-menu-my-routes.svg);
                             background-size: 2.15em;
                         }
                         .menu_item.menu_item_athletes {
-                            background-image: url(../../images/icon-menu-athletes.svg);
+                            background-image: url(../../public/images/icon-menu-athletes.svg);
                             background-size: 2.4em;
                         }
                     }
@@ -72,27 +72,27 @@
 
                             }
                             li.home a {
-                                background-image: url(../../images/logo-white-bg.svg);
+                                background-image: url(../../public/images/logo-white-bg.svg);
                                 background-size: 1.2em;
                             }
                             li.routes a {
-                                background-image: url(../../images/icon-menu-routes.svg);
+                                background-image: url(../../public/images/icon-menu-routes.svg);
                                 background-size: 1.5em;
                             }
                             li.my_routes a {
-                                background-image: url(../../images/icon-menu-my-routes.svg);
+                                background-image: url(../../public/images/icon-menu-my-routes.svg);
                                 background-size: 1.4em;
                             }
                             li.athletes a {
-                                background-image: url(../../images/icon-menu-athletes.svg);
+                                background-image: url(../../public/images/icon-menu-athletes.svg);
                                 background-size: 1.5em;
                             }
                             li.sync-my-routes a {
-                                background-image: url(../../images/icon-menu-sync.svg);
+                                background-image: url(../../public/images/icon-menu-sync.svg);
                                 background-size: 1.45em;
                             }
                             li.connect-with-strava a {
-                                background-image: url(../../images/icon-strava.svg);
+                                background-image: url(../../public/images/icon-strava.svg);
                                 background-size: 1.6em;
                             }
                         }

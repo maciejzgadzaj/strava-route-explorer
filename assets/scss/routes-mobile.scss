@@ -22,7 +22,7 @@
                     display: block;
                     margin: 0;
                     padding: 1em;
-                    background: #f0f0f0 url(../../images/icon-caret-down.svg) no-repeat right 1.2em top 1.3em;
+                    background: #f0f0f0 url(../../public/images/icon-caret-down.svg) no-repeat right 1.2em top 1.3em;
                     background-size: .5em;
                     text-align: center;
                     color: #888;
@@ -39,7 +39,7 @@
                         cursor: pointer;
                     }
                     &.open {
-                        background-image: url(../../images/icon-caret-up.svg);
+                        background-image: url(../../public/images/icon-caret-up.svg);
                     }
                 }
 
@@ -230,7 +230,7 @@
                             width: $mobileDistanceWidth;
                             margin-left: $mobileDistanceLeftMargin;
                             padding-left: 1.6em;
-                            background: url(../../images/icon-distance-grey.svg) no-repeat;
+                            background: url(../../public/images/icon-distance-grey.svg) no-repeat;
                             background-size: 1.3em 1.3em;
                             text-align: left;
                             font-size: .9em;
@@ -239,7 +239,7 @@
                         .ascent {
                             width: $mobileAscentWidth;
                             padding-left: 1.6em;
-                            background: url(../../images/icon-ascent-grey.svg) no-repeat;
+                            background: url(../../public/images/icon-ascent-grey.svg) no-repeat;
                             background-size: 1.15em 1.15em;
                             text-align: left;
                             font-size: .9em;

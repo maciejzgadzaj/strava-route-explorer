@@ -183,7 +183,7 @@ body {
 
     .how {
         padding: 2em;
-        background: url(../../images/isolines.jpg);
+        background: url(../../public/images/isolines.jpg);
         .title {
             font-size: 2.3em;
             font-style: italic;
@@ -287,13 +287,13 @@ body {
                     .distance {
                         margin-left: 1em;
                         padding-left: 20px;
-                        background: url(../../images/icon-distance.svg) no-repeat;
+                        background: url(../../public/images/icon-distance.svg) no-repeat;
                         background-size: 16px 16px;
                     }
                     .ascent {
                         margin-left: 1em;
                         padding-left: 24px;
-                        background: url(../../images/icon-ascent.svg) no-repeat;
+                        background: url(../../public/images/icon-ascent.svg) no-repeat;
                         background-size: 16px 16px;
                     }
                 }

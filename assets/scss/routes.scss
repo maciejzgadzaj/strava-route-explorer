@@ -58,10 +58,10 @@ $locationWidth: calc(30vw);
                 display: block;
                 width: 1.2em;
                 height: 1.2em;
-                background: transparent url(../../images/icon-help-grey.svg) no-repeat center center;
+                background: transparent url(../../public/images/icon-help-grey.svg) no-repeat center center;
                 background-size: 1.1em 1.1em;
                 &:hover {
-                    background-image: url(../../images/icon-help-orange.svg);
+                    background-image: url(../../public/images/icon-help-orange.svg);
                 }
             }
         }
@@ -204,10 +204,10 @@ $locationWidth: calc(30vw);
                                 display: block;
                                 width: 1.2em;
                                 height: 1.2em;
-                                background: transparent url(../../images/icon-help-grey.svg) no-repeat center center;
+                                background: transparent url(../../public/images/icon-help-grey.svg) no-repeat center center;
                                 background-size: 1.1em 1.1em;
                                 &:hover {
-                                    background-image: url(../../images/icon-help-orange.svg);
+                                    background-image: url(../../public/images/icon-help-orange.svg);
                                 }
                             }
                         }
@@ -293,7 +293,7 @@ $locationWidth: calc(30vw);
             -moz-appearance: textfield;
         }
         select {
-            background: $white url(../../images/icon-caret-down.svg) no-repeat right .4em center;
+            background: $white url(../../public/images/icon-caret-down.svg) no-repeat right .4em center;
             background-size: 12px 8px;
             color: #bbb;
             option {
@@ -348,7 +348,7 @@ $locationWidth: calc(30vw);
                     display: inline-block;
                     width: 1em;
                     height: 1em;
-                    background: transparent url(../../images/icon-lock-grey.svg) no-repeat left bottom;
+                    background: transparent url(../../public/images/icon-lock-grey.svg) no-repeat left bottom;
                     background-size: .9em;
                 }
                 .link.external {
@@ -390,7 +390,7 @@ $locationWidth: calc(30vw);
                     text-align: right;
                     vertical-align: bottom;
                     margin-right: .3em;
-                    background-image: url(../../images/sprites-category.png);
+                    background-image: url(../../public/images/sprites-category.png);
                     &.cat-1 {
                         background-position: 0 -19px;
                     }

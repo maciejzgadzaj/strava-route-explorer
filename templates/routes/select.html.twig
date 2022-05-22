@@ -60,8 +60,8 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('build/select.css') }}">
-    <link rel="stylesheet" media='screen and (max-width: 760px)' href="{{ asset('build/select-mobile.css') }}" />
+    {{ encore_entry_link_tags('select') }}
+{#    <link rel="stylesheet" media='screen and (max-width: 760px)' href="{{ asset('build/select-mobile.css') }}" />#}
 {% endblock %}
 
 {% block javascripts %}
