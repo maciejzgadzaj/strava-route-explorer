@@ -16,4 +16,4 @@ csa_guzzle:
                 base_uri: 'https://www.mapquestapi.com'
         photon:
             config:
-                base_uri: 'https://photon.komoot.de'
+                base_uri: 'https://photon.komoot.io'

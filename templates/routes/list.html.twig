@@ -417,9 +417,13 @@
                     }
                 })
                 .autocomplete( "instance" )._renderItem = function( ul, item ) {
+                    let address = item.country;
+                    if (item.city && item.city != item.country) {
+                        address = `${item.city}, ${address}`;
+                    }
                     return $("<li>")
-                        .append( "<div class=\"name\">" + item.name + "</div>" )
-                        .append( "<div class=\"details\"><span class=\"class\">" + item.class + "</span>, <span class=\"address\">" + item.city + ", "+ item.country + "</span></div>" )
+                        .append(`<div class="name">${item.name}</div>`)
+                        .append(`<div class="details"><span class="class">${item.class}</span>, <span class="address">${address}</span></div>`)
                         .appendTo( ul );
                 };
             $('#filter_end')

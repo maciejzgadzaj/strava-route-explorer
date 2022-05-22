@@ -126,8 +126,8 @@ class PhotonService
     {
         return (object) [
             'name' => $feature->properties->name,
-            'class' => str_replace('_', ' ', $feature->properties->osm_value) ?? null,
-            'city' => $feature->properties->city ?? $feature->properties->state,
+            'class' => ucfirst(str_replace('_', ' ', $feature->properties->osm_value)) ?? null,
+            'city' => $feature->properties->city ?? $feature->properties->county ?? $feature->properties->state ?? null,
             'country' => $feature->properties->country,
             'latitude' => $feature->geometry->coordinates[1],
             'longitude' => $feature->geometry->coordinates[0],
