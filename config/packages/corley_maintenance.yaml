@@ -1,7 +1,0 @@
-corley_maintenance:
-    web: 'public'
-    page: '%kernel.root_dir%/../public/maintenance.html.dist'
-    hard_lock: 'maintenance.html'
-    symlink: false
-    whitelist:
-        ips: '%env(json:MAINTENANCE_ALLOWED_IPS)%'

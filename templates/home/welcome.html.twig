@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'Welcome'|trans }}{% endblock %}
+
+{% block body %}
+    <div class="immersive small map-bg">
+        <div class="text">
+            <h2 class="title">Hello {{ app.user.name }}!</h2>
+            <div>
+                <h3 class="title">Please take a moment to synchronize and share your routes with the community.</h3>
+                <br />
+                <div class="steps">
+                    <div class="step step1">
+                        <div class="no">1</div>
+                        <h3 class="title">Synchronize</h3>
+                        Both your public and private routes will be fetched from Strava. Don't worry though - your private routes will remain private, visible only to you - unless you choose otherwise.
+                    </div>
+                    <div class="step step2">
+                        <div class="no">2</div>
+                        <h3 class="title">Select</h3>
+                        You will have full control over which routes to share with the community. You can choose to publish your private routes, or hide your public ones, as you wish - one by one.
+                    </div>
+                    <div class="step step3">
+                        <div class="no">3</div>
+                        <h3 class="title">Share</h3>
+                        Sharing your routes benefits the whole community - more routes mean more options for everyone - please remember to periodically re-synchronize your routes.
+                    </div>
+                </div>
+            </div>
+            <div class="action">
+                <a href="{{ path('sync_my_routes') }}" class="button">Synchronize my routes from Strava</a>
+            </div>
+            <div>
+                <p>
+                    <br /><br />
+                    or skip synchronization for now, and <a href="{{ path('routes') }}">access the site directly</a> (you can always sync your routes later).
+                </p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('immersive') }}
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('immersive') }}
+{% endblock %}

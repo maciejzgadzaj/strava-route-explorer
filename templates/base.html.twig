@@ -3,8 +3,8 @@
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-        <title>{% block title %}Strava Route Explorer{% endblock %}</title>
-        <meta name="description" content="Browse and search our database of bike and run routes. Filter results by name, distance, ascent, athlete, start/end location, and more.">
+        <title>{% block title %}Strava Route Explorer{% endblock %} - Strava Route Explorer</title>
+        <meta name="description" content="Browse and search our database of bike and run routes. Filter results by name, distance, elevation gain, athlete, start/end location, and more.">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <script async src="https://www.googletagmanager.com/gtag/js?id={{ google_analytics_tag }}"></script>
         <script>
@@ -15,56 +15,19 @@
         </script>
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
-{#            <link rel="stylesheet" media='screen and (max-width: 760px)' href="{{ asset('build/app-mobile.css') }}" />#}
         {% endblock %}
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     </head>
     <body>
-        {% block header %}
-            <div class="header">
-                <div class="header1">
-                    <div class="header-item logo-title">
-                        <a href="{{ path('homepage') }}"><img src="images/logo.png" alt="Strava Route Explorer" title="Strava Route Explorer" width="125" height="35" /></a>
-                    </div>
-                    <div class="header_item menu_mobile">
-                        <div class="menu_item menu_item_burger"></div>
-                        <div class="menu_item menu_item_routes"><a title="Routes" href="{{ path('routes') }}"></a></div>
-                        {% if (current_athlete.name is defined) %}
-                            <div class="menu_item menu_item_my_routes"><a title="My routes" href="{{ path('routes', { 'filter[athlete]': current_athlete.name, 'filter[starred]': true }) }}"></a></div>
-                        {% endif %}
-                        <div class="menu_item menu_item_athletes"><a title="Athletes" href="{{ path('athletes') }}"></a></div>
-                    </div>
-                </div>
-                <div class="header2">
-                    <div class="header-item menu main-menu">
-                        <ul>
-                            <li class="menu-item home"><a href="{{ path('homepage') }}">home</a></li>
-                            <li class="menu-item routes"><a href="{{ path('routes') }}">all routes</a></li>
-                            {% if (current_athlete.name is defined) %}
-                                <li class="menu-item my_routes"><a href="{{ path('routes', { 'filter[athlete]': current_athlete.name, 'filter[starred]': true }) }}">my routes</a></li>
-                            {% endif %}
-                            <li class="menu-item athletes"><a href="{{ path('athletes') }}">athletes</a></li>
-                        </ul>
-                    </div>
-                    <div class="header-item menu sync-menu">
-                        <ul>
-                            {% if (current_athlete.accessToken is defined and current_athlete.accessToken) %}
-                                <li class="menu-item sync-my-routes"><a href="{{ path('routes_sync_mine') }}">sync my routes</a></li>
-                            {% else %}
-                                <li class="menu-item connect-with-strava"><a href="{{ path('strava_auth') }}">connect with strava</a></li>
-                            {% endif %}
-                        </ul>
-                    </div>
-                    <div class="header-item add-route">
-                        {{ form_start(route_add_form) }}
-                        {{ form_widget(route_add_form) }}
-                        {{ form_end(route_add_form) }}
-                    </div>
-                </div>
-            </div>
-        {% endblock %}
+        {% block header %}{% endblock %}
 
         {% block flash %}
             <div class="flashes">
+                {% if is_granted('IS_IMPERSONATOR') %}
+                    <div class="flash flash-notice center">
+                        Impersonating <a title="See all routes by {{ app.user.name }}" href="{{ path('routes', { 'filter[athlete]': app.user.name }) }}"><strong>{{ app.user.name }}</strong></a> ({{ app.user.id }}). <a href="{{ path('athletes_unimpersonate') }}">Log out</a>
+                    </div>
+                {% endif %}
                 {% for label, messages in app.flashes %}
                     {% for message in messages %}
                         <div class="flash flash-{{ label }}">
@@ -77,35 +40,12 @@
 
         {% block body %}{% endblock %}
 
-        {% block footer %}
-            <div class="footer">
-                <a href="https://github.com/maciejzgadzaj/strava-route-explorer/wiki/About">about</a>
-                <a href="https://github.com/maciejzgadzaj/strava-route-explorer/wiki/FAQ">faq</a>
-                <a href="https://github.com/maciejzgadzaj/strava-route-explorer/issues">issues</a>
-                <a href="https://github.com/maciejzgadzaj/strava-route-explorer/wiki/Developers">developers</a>
-                <a href="https://chat.whatsapp.com/4JQyW36fqxL3VzFja0115c">whatsapp</a>
-                <a href="https://www.meetup.com/Paris-Cycling-B-Group/">meetup</a>
-                <a href="https://github.com/maciejzgadzaj/strava-route-explorer/wiki/Credits">credits</a>
-            </div>
-        {% endblock %}
+        {% block footer %}{% endblock %}
 
         {% block javascripts %}
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-            <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-{#            <script src="{{ asset('build/app.js') }}"></script>#}
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js" defer></script>
+            <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" defer></script>
             {{ encore_entry_script_tags('app') }}
-            <script>
-                $(document).ready(function(){
-                    $(".menu_item_burger").on("click", function(){
-                        if ($(".header2").is(':visible')) {
-                            $(".menu_item_burger").removeClass('open');
-                        } else {
-                            $(".menu_item_burger").addClass('open');
-                        }
-                        $(".header2").slideToggle("fast");
-                    });
-                });
-            </script>
         {% endblock %}
     </body>
 </html>

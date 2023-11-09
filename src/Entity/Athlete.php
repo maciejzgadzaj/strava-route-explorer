@@ -1,297 +1,337 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
+use App\Repository\AthleteRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
-/**
- * Class Athlete
- *
- * @ORM\Entity(repositoryClass="App\Repository\AthleteRepository")
- * @ORM\Table(
- *     name="athlete",
- *     indexes={
- *         @ORM\Index(name="IDX_USERNAME", columns={"username"}),
- *         @ORM\Index(name="IDX_NAME", columns={"name"})
- *     }
- * )
- *
- * @package App\Entity
- */
-class Athlete
+#[ORM\Entity(repositoryClass: AthleteRepository::class)]
+#[ORM\Table(name: 'athletes')]
+#[ORM\Index(columns: ['username'], name: 'idx_username')]
+#[ORM\Index(columns: ['name'], name: 'idx_name')]
+class Athlete implements UserInterface
 {
-    /**
-     * @var string
-     *
-     * @ORM\Id
-     * @ORM\Column(type="string")
-     */
-    private $id;
+    public const ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
+    public const ROLE_ADMIN = 'ROLE_ADMIN';
+    public const ROLE_USER = 'ROLE_USER';
+
+    #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::BIGINT)]
+    private int $id;
+
+    #[ORM\Column(name: 'username', type: Types::STRING, nullable: true)]
+    private ?string $username;
+
+    #[ORM\Column(name: 'name', type: Types::STRING)]
+    private string $name;
+
+    #[ORM\Column(name: 'email', type: Types::STRING, nullable: true)]
+    private ?string $email;
+
+    #[ORM\Column(name: 'country', type: Types::STRING, nullable: true)]
+    private ?string $country;
+
+    #[ORM\Column(name: 'premium', type: Types::BOOLEAN)]
+    private bool $premium;
+
+    #[ORM\Column(name: 'profile', type: Types::STRING)]
+    private string $profile;
+
+    #[ORM\Column(name: 'last_sync', type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTime $lastSync;
+
+    #[ORM\Column(name: 'access_token', type: Types::STRING, length: 255, nullable: true)]
+    private ?string $accessToken;
+
+    #[ORM\Column(name: 'expires_at', type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTime $expiresAt;
+
+    #[ORM\Column(name: 'refresh_token', type: Types::STRING, nullable: true)]
+    private ?string $refreshToken;
+
+    #[ORM\Column(type: 'json')]
+    private array $roles = [];
 
     /**
-     * @var string
-     *
-     * @ORM\Column(type="string", nullable=true, name="access_token")
+     * @var Collection<int, Route>
      */
-    private $accessToken;
+    #[ORM\OneToMany(mappedBy: 'athlete', targetEntity: Route::class)]
+    private Collection $routes;
 
     /**
-     * @var \DateTime|null
-     *
-     * @ORM\Column(type="datetime", nullable=true, name="expires_at")
+     * @var Collection<int, Route>
      */
-    private $expiresAt;
+    #[ORM\ManyToMany(targetEntity: Route::class, mappedBy: 'starredBy')]
+    private Collection $starredRoutes;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(type="string", nullable=true, name="refresh_token")
-     */
-    private $refreshToken;
+    private bool $isNew = false;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="string", nullable=true)
-     */
-    private $username;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="string")
-     */
-    private $name;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="string", nullable=true)
-     */
-    private $email;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean")
-     */
-    private $premium;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="string")
-     */
-    private $profile;
-
-    /**
-     * @var \DateTime|null
-     *
-     * @ORM\Column(type="datetime", name="last_sync", nullable=true)
-     */
-    private $lastSync;
-
-    /**
-     * @var bool
-     */
-    private $isNew = false;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection|\App\Entity\Route[]
-     *
-     * @ORM\ManyToMany(targetEntity="Route", mappedBy="starredBy")
-     */
-    private $starredRoutes;
-
-    /**
-     * Athlete constructor.
-     */
     public function __construct()
     {
-        // This will not be saved in the database.
+        $this->roles = [self::ROLE_USER];
+        $this->routes = new ArrayCollection();
+        $this->starredRoutes = new ArrayCollection();
         $this->isNew = true;
     }
 
-    /**
-     * @return string
-     */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @param string $id
-     */
-    public function setId(string $id): void
+    public function setId(int $id): self
     {
         $this->id = $id;
+
+        return $this;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getAccessToken()
-    {
-        return $this->accessToken;
-    }
-
-    /**
-     * @param mixed $accessToken
-     */
-    public function setAccessToken($accessToken): void
-    {
-        $this->accessToken = $accessToken;
-    }
-
-    /**
-     * @return \DateTime|null
-     */
-    public function getExpiresAt(): ?\DateTime {
-        return $this->expiresAt;
-    }
-
-    /**
-     * @param \DateTime|null $expiresAt
-     */
-    public function setExpiresAt(?\DateTime $expiresAt): void
-    {
-        $this->expiresAt = $expiresAt;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getRefreshToken(): ?string
-    {
-        return $this->refreshToken;
-    }
-
-    /**
-     * @param string|null $refreshToken
-     */
-    public function setRefreshToken(?string $refreshToken): void
-    {
-        $this->refreshToken = $refreshToken;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUsername()
+    public function getUsername(): ?string
     {
         return $this->username;
     }
 
-    /**
-     * @param mixed $username
-     */
-    public function setUsername($username): void
+    public function setUsername(?string $username): self
     {
         $this->username = $username;
+
+        return $this;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param mixed $name
-     */
-    public function setName($name): void
+    public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getEmail()
+    public function getEmail(): ?string
     {
         return $this->email;
     }
 
-    /**
-     * @param mixed $email
-     */
-    public function setEmail($email): void
+    public function setEmail(?string $email): self
     {
         $this->email = $email;
+
+        return $this;
     }
 
-    /**
-     * @return bool
-     */
+    public function getCountry(): ?string
+    {
+        return $this->country;
+    }
+
+    public function setCountry(?string $country): self
+    {
+        $this->country = $country;
+
+        return $this;
+    }
+
     public function isPremium(): bool
     {
         return $this->premium;
     }
 
-    /**
-     * @param bool $premium
-     */
-    public function setPremium(bool $premium): void
+    public function setPremium(bool $premium): self
     {
         $this->premium = $premium;
+
+        return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getProfile(): string
     {
         return $this->profile;
     }
 
-    /**
-     * @param string $profile
-     */
-    public function setProfile(string $profile): void
+    public function setProfile(string $profile): self
     {
         $this->profile = $profile;
+
+        return $this;
     }
 
-    /**
-     * @return \DateTime|null
-     */
     public function getLastSync(): ?\DateTime
     {
         return $this->lastSync;
     }
 
-    /**
-     * @param \DateTime|null $lastSync
-     */
-    public function setLastSync(?\DateTime $lastSync): void
+    public function setLastSync(?\DateTime $lastSync): self
     {
         $this->lastSync = $lastSync;
+
+        return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isNew(): bool
+    public function getAccessToken(): ?string
     {
-        return $this->isNew;
+        return $this->accessToken;
+    }
+
+    public function setAccessToken(?string $accessToken): self
+    {
+        $this->accessToken = $accessToken;
+
+        return $this;
+    }
+
+    public function getExpiresAt(): ?\DateTime
+    {
+        return $this->expiresAt;
+    }
+
+    public function setExpiresAt(?\DateTime $expiresAt): self
+    {
+        $this->expiresAt = $expiresAt;
+
+        return $this;
+    }
+
+    public function getRefreshToken(): ?string
+    {
+        return $this->refreshToken;
+    }
+
+    public function setRefreshToken(?string $refreshToken): self
+    {
+        $this->refreshToken = $refreshToken;
+
+        return $this;
+    }
+
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // Guarantee every user at least has ROLE_USER.
+        // https://symfony.com/doc/current/security.html#the-user
+        $roles[] = self::ROLE_USER;
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
     }
 
     /**
-     * @return \App\Entity\Route[]|\Doctrine\Common\Collections\Collection
+     * @return Collection<int, Route>
      */
-    public function getStarredRoutes()
+    public function getRoutes(): Collection
+    {
+        return $this->routes;
+    }
+
+    /**
+     * @var Collection<int, Route> $routes
+     */
+    public function setRoutes(Collection $routes): self
+    {
+        $this->routes = $routes;
+
+        return $this;
+    }
+
+    public function hasRoute(Route $route): bool
+    {
+        return $this->routes->contains($route);
+    }
+
+    public function addRoute(Route $route): self
+    {
+        if ($this->hasRoute($route)) {
+            return $this;
+        }
+
+        $this->routes->add($route);
+
+        return $this;
+    }
+
+    public function removeRoute(Route $route): self
+    {
+        if (!$this->hasRoute($route)) {
+            return $this;
+        }
+
+        $this->routes->removeElement($route);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Route>
+     */
+    public function getStarredRoutes(): Collection
     {
         return $this->starredRoutes;
     }
 
     /**
-     * @param \App\Entity\Route[]|\Doctrine\Common\Collections\Collection $starredRoutes
+     * @var Collection<int, Route> $starredRoutes
      */
-    public function setStarredRoutes($starredRoutes): void
+    public function setStarredRoutes(Collection $starredRoutes): self
     {
         $this->starredRoutes = $starredRoutes;
+
+        return $this;
+    }
+
+    public function isStarredRoute(Route $route): bool
+    {
+        return $this->starredRoutes->contains($route);
+    }
+
+    public function addStarredRoute(Route $route): self
+    {
+        if ($this->isStarredRoute($route)) {
+            return $this;
+        }
+
+        $this->starredRoutes->add($route);
+
+        return $this;
+    }
+
+    public function removeStarredRoute(Route $route): self
+    {
+        if (!$this->isStarredRoute($route)) {
+            return $this;
+        }
+
+        $this->starredRoutes->removeElement($route);
+
+        return $this;
+    }
+
+    public function isNew(): bool
+    {
+        return $this->isNew;
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->name;
+    }
+
+    public function eraseCredentials(): void
+    {
+        $this->accessToken = null;
+        $this->refreshToken = null;
     }
 }

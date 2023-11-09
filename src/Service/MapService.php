@@ -1,50 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Service;
 
-use App\Entity\Map;
 use App\Entity\Route;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
-/**
- * Class MapService
- *
- * @package App\Service
- */
-class MapService extends EntityService
+class MapService
 {
-    /**
-     * @var \App\Service\MapQuestService
-     */
-    private $mapQuestService;
-
-    /**
-     * MapService constructor.
-     *
-     * @param \Doctrine\ORM\EntityManagerInterface $entityManager
-     * @param \Symfony\Component\HttpFoundation\Session\SessionInterface $session
-     * @param \App\Service\MapQuestService $mapQuestService
-     */
     public function __construct(
-        \Doctrine\ORM\EntityManagerInterface $entityManager,
-        \Symfony\Component\HttpFoundation\Session\SessionInterface $session,
-        MapQuestService $mapQuestService
+        private readonly MapQuestService $mapQuestService,
     ) {
-        parent::__construct($entityManager, $session);
-
-        $this->mapQuestService = $mapQuestService;
     }
 
     /**
      * Download route map thumbnail from MapQuest and save locally.
-     *
-     * @param \App\Entity\Map $map
-     * @param bool $force
-     *
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    public function getMap(Route $route, $force = false)
+    public function getMap(Route $route, bool $force = false): BinaryFileResponse
     {
         $fileSystem = new Filesystem();
 

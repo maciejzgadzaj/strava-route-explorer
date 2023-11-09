@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunk=self.webpackChunk||[]).push([[143],{5177:()=>{$(document).ready((function(){$(".menu_item_burger").on("click",(function(){$(".header2").is(":visible")?$(".menu_item_burger").removeClass("open"):$(".menu_item_burger").addClass("open"),$(".header2").slideToggle("fast")}))}))}},e=>{var s;s=5177,e(e.s=s)}]);

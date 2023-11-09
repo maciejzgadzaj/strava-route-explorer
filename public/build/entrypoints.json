@@ -2,65 +2,70 @@
   "entrypoints": {
     "app": {
       "js": [
-        "/build/runtime.js",
-        "/build/app.js"
+        "/build/runtime.ec2b70cf.js",
+        "/build/app.51c45379.js"
       ],
       "css": [
-        "/build/app.css"
+        "/build/app.8485e4f2.css"
       ]
     },
-    "athletes": {
+    "immersive": {
       "js": [
-        "/build/runtime.js",
-        "/build/athletes.js"
+        "/build/runtime.ec2b70cf.js",
+        "/build/437.d9db3c4b.js",
+        "/build/immersive.5eb9b90b.js"
       ],
       "css": [
-        "/build/athletes.css"
+        "/build/immersive.bb09b0eb.css"
       ]
     },
-    "homepage": {
+    "list-routes": {
       "js": [
-        "/build/runtime.js",
-        "/build/homepage.js"
+        "/build/runtime.ec2b70cf.js",
+        "/build/437.d9db3c4b.js",
+        "/build/list-routes.de060688.js"
       ],
       "css": [
-        "/build/homepage.css"
+        "/build/list-routes.fe8e601e.css"
       ]
     },
-    "maintenance": {
+    "sync-my-routes": {
       "js": [
-        "/build/runtime.js",
-        "/build/maintenance.js"
+        "/build/runtime.ec2b70cf.js",
+        "/build/437.d9db3c4b.js",
+        "/build/853.a748906a.js",
+        "/build/sync-my-routes.2c17e1e2.js"
       ],
       "css": [
-        "/build/maintenance.css"
+        "/build/sync-my-routes.03c1d778.css"
+      ]
+    },
+    "manage-my-routes": {
+      "js": [
+        "/build/runtime.ec2b70cf.js",
+        "/build/437.d9db3c4b.js",
+        "/build/manage-my-routes.0f095879.js"
+      ],
+      "css": [
+        "/build/manage-my-routes.f3569166.css"
+      ]
+    },
+    "list-athletes": {
+      "js": [
+        "/build/runtime.ec2b70cf.js",
+        "/build/list-athletes.6fd38f2f.js"
+      ],
+      "css": [
+        "/build/list-athletes.a63f2ce2.css"
       ]
     },
     "pager": {
       "js": [
-        "/build/runtime.js",
-        "/build/pager.js"
+        "/build/runtime.ec2b70cf.js",
+        "/build/pager.42e633df.js"
       ],
       "css": [
-        "/build/pager.css"
-      ]
-    },
-    "routes": {
-      "js": [
-        "/build/runtime.js",
-        "/build/routes.js"
-      ],
-      "css": [
-        "/build/routes.css"
-      ]
-    },
-    "select": {
-      "js": [
-        "/build/runtime.js",
-        "/build/select.js"
-      ],
-      "css": [
-        "/build/select.css"
+        "/build/pager.48930a7b.css"
       ]
     }
   }

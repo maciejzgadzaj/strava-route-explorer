@@ -5,9 +5,12 @@
 {% block header %}{% endblock %}
 
 {% block body %}
-    <div class="maintenance">
-        <h1>Temporarily down for maintenance.</h1>
-        <p>We are performing scheduled maintenance. We should be back online shortly.</p>
+    <div class="immersive map-bg">
+        <div class="text">
+            <div class="small">503</div>
+            <h2 class="title">Temporarily down for maintenance</h2>
+            <h3 class="title">We are performing scheduled maintenance. We should be back online shortly.</h3>
+        </div>
     </div>
 {% endblock %}
 
@@ -15,5 +18,5 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    {{ encore_entry_link_tags('maintenance') }}
+    {{ encore_entry_link_tags('immersive') }}
 {% endblock %}

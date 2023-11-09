@@ -1,0 +1,75 @@
+{% extends 'base-full.html.twig' %}
+
+{% block title %}{{ 'Athletes'|trans }} - {{ parent() }}{% endblock %}
+
+{% block body %}
+    <div class="page page_athletes">
+        <div class="section_pager section_pager_top">
+            {% include 'elements/pager.html.twig' %}
+        </div>
+
+        {% include 'athletes/athlete-search-form.html.twig' %}
+
+        <div class="section_rows">
+            {% if data.results|length > 0 %}
+                {% for row in data.results %}
+                    <div class="row synchronised-{{ row.synchronized }} {{ cycle(['odd', 'even'], loop.index0) }}">
+                        <div class="cell image">
+                            {% set profile = row.athlete.profile %}
+                            {% if profile|slice(0, 4) != 'http' %}
+                                {% set profile = 'https://d3nn82uaxijpm6.cloudfront.net/assets/' ~ profile %}
+                            {% endif %}
+                            <a href="https://www.strava.com/athletes/{{ row.athlete.id }}"><img src="{{ profile }}" width="70" height="70" /></a>
+                        </div>
+                        <div class="cell name">
+                            <a title="See all athlete routes" href="{{ path('routes', { 'filter[athlete]': row.athlete.name }) }}">{{ row.athlete.name }}</a>
+                            <div class="description"><a title="See athlete on Strava.com" href="https://www.strava.com/athletes/{{ row.athlete.id }}">{{ row.athlete.id }}</a></div>
+                        </div>
+{#                        <div class="cell routes">#}
+{#                            <a href="{{ path('routes', { 'filter[athlete]': row.athlete.name, 'filter[starred]': true }) }}">{{ row.route_count }}#}
+{#                                {% if row.starred_count > 0 %}#}
+{#                                    <span class="starred"> + {{ row.starred_count }}</span>#}
+{#                                {% endif %}#}
+{#                            </a>#}
+{#                        </div>#}
+                        <div class="cell last_sync">
+                            {% if row.athlete.lastSync %}
+                                {{ row.athlete.lastSync|ago }}
+                            {% endif %}
+                        </div>
+                        <div class="cell actions">
+                            {% if row.athlete.accessToken %}
+                                {% if is_granted('ROLE_SUPER_ADMIN') %}
+                                    <a title="Impersonate" class="link impersonate" href="{{ path('athletes_impersonate', { 'athleteId': row.athlete.id }) }}">impersonate</a>
+                                    <a title="Refresh profile" class="link refresh-profile" href="{{ path('strava_athlete_refresh', { 'athleteId': row.athlete.id }) }}">refresh</a>
+                                {% endif %}
+                            {% endif %}
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <a title="Dump" class="link dump" href="{{ path('athlete_dump', { 'athleteId': row.athlete.id }) }}">dump</a>
+                            {% endif %}
+                        </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="row">
+                    <div class="name">No athletes found matching your criteria.</div>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="section_pager section_pager_bottom">
+            {% include 'elements/pager.html.twig' %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('list-athletes') }}
+{#    <link rel="stylesheet" media='screen and (max-width: 760px)' href="{{ asset('build/athletes-mobile.css') }}" />#}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('list-athletes') }}
+{% endblock %}

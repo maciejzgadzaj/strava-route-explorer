@@ -1,57 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Service;
 
-use App\Entity\Athlete;
-use App\Entity\Route;
-use Doctrine\ORM\EntityManagerInterface;
-use GuzzleHttp\RequestOptions;
-use Psr\Container\ContainerInterface;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-/**
- * Class MapQuestService
- *
- * @package App\Service
- */
 class MapQuestService
 {
-    /**
-     * @var \Psr\Container\ContainerInterface
-     */
-    private $container;
-
-    /**
-     * @var string
-     */
-    private $mapQuestConsumerKey;
-
-    /**
-     * StravaService constructor.
-     *
-     * @param \Psr\Container\ContainerInterface $container
-     * @param string $mapQuestConsumerKey
-     */
-    public function __construct(ContainerInterface $container, $mapQuestConsumerKey)
-    {
-        $this->container = $container;
-        $this->mapQuestConsumerKey = $mapQuestConsumerKey;
+    public function __construct(
+        private HttpClientInterface $client,
+        private readonly string $mapQuestConsumerKey,
+    ) {
     }
 
     /**
      * Get static map with polyline overlaid.
-     *
-     * @param string $polyline
-     *
-     * @return \Psr\Http\Message\ResponseInterface
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    public function getStaticMapWithPolyline($polyline)
+    public function getStaticMapWithPolyline(string $polyline): string
     {
         $queryData = [
             'key' => $this->mapQuestConsumerKey,
@@ -61,23 +27,16 @@ class MapQuestService
 
         $uri = 'https://www.mapquestapi.com/staticmap/v5/map?'.http_build_query($queryData);
 
-        $response = $this->apiRequest('get', $uri);
+        $response = $this->client->request('GET', $uri);
 
-        return $response->getBody()->getContents();
+        return $response->getContent();
     }
 
     /**
-     * @param $name
-     *
-     * @return array
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
-     *
      * @see https://developer.mapquest.com/documentation/geocoding-api/
      * @see https://developer.mapquest.com/documentation/samples/geocoding/v1/address/
      */
-    public function getLocationsByName($name)
+    public function getLocationsByName(string $name): array
     {
         $queryData = [
             'key' => $this->mapQuestConsumerKey,
@@ -89,8 +48,9 @@ class MapQuestService
 
         $uri = '/geocoding/v1/address?'.http_build_query($queryData);
 
-        $response = $this->apiRequest('get', $uri);
-        $content = \GuzzleHttp\json_decode($response->getBody()->getContents());
+        $response = $this->client->request('GET', $uri);
+
+        $content = $response->toArray();
 
         $return = [];
         if (!empty($content->results[0]->locations)) {
@@ -114,25 +74,5 @@ class MapQuestService
         }
 
         return $return;
-    }
-
-    /**
-     * Send request to Strava API.
-     *
-     * @param string $method
-     * @param string $uri
-     * @param array $options
-     *
-     * @return \Psr\Http\Message\ResponseInterface
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
-     */
-    public function apiRequest($method, $uri, $options = [])
-    {
-        /** @var \GuzzleHttp\Client $client */
-        $client = $this->container->get('csa_guzzle.client.mapquest');
-
-        return $client->$method($uri, $options);
     }
 }

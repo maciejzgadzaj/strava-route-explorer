@@ -1,0 +1,271 @@
+@import '_variables';
+@import '_mixins';
+
+@media screen and (max-width: 760px) {
+    // Filters.
+    $mobileLabelWitdh: calc(20vw);
+    $mobileFilterWidth: calc(80vw - 2.5em);
+    // Rows.
+    $mobileImageWidth: calc(15vw);
+    $mobileNameWidth: calc(85vw - 1.6em);
+    $mobileAthleteWidth: calc(55vw - 1em);
+    $mobileDateWidth: calc(30vw - 1em);
+    $mobileDistanceLeftMargin: calc(15vw + .8em);
+    $mobileDistanceWidth: calc(35vw - .8em);
+    $mobileElevationGainWidth: calc(50vw - .8em);
+
+    html {
+        body {
+            .page_routes {
+
+                .filters_toggle {
+                    display: block;
+                    margin: 0;
+                    padding: 1em;
+                    background: #f0f0f0 url(../../public/images/icon-caret-down.svg) no-repeat right 1.2em top 1.3em;
+                    background-size: .5em;
+                    text-align: center;
+                    color: #888;
+                    .filter_values {
+                        margin-top: .8em;
+                        font-size: .8em;
+                        .filter_value {
+                            display: inline-block;
+                            margin: .3em;
+                            padding: 0 .3em;
+                        }
+                    }
+                    &:hover {
+                        cursor: pointer;
+                    }
+                    &.open {
+                        background-image: url(../../public/images/icon-caret-up.svg);
+                    }
+                }
+
+                .section_filters {
+                    display: none;
+                    $labelWidth: 6em;
+                    flex-direction: column;
+                    -webkit-flex-direction: column;
+                    margin-top: 0;
+                    padding-bottom: .5em;
+
+                    .filter {
+                        width: 100% !important;
+                        display: flex;
+                        flex-direction: row;
+                        -webkit-flex-direction: row;
+                        align-items: baseline;
+                        padding: 0 1em 0 0;
+                        .label {
+                            width: $labelWidth;
+                        }
+                        .input {
+                            width: calc(100% - #{$labelWidth});
+                        }
+                    }
+                    .filter.name {
+                        .help {
+                            top: 1.2em;
+                            right: 1.4em;
+                            width: 2em;
+                            height: 1.4em;
+                            background-color: white;
+                            background-size: 1.2em 1.2em;
+                        }
+                    }
+                    .filter.type {
+                        .input {
+                            select {
+                                width: auto;
+                            }
+                        }
+                    }
+                    .filter.distance, .filter.elevation_gain {
+                        .input {
+                            justify-content: flex-start;
+                            -webkit-justify-content: flex-start;
+                            flex-direction: row;
+                            -webkit-flex-direction: row;
+                            input {
+                                width: 5em;
+                                margin-right: .5em;
+                            }
+                        }
+                    }
+                    .filter.athlete {
+                        .starred {
+                            position: static;
+                        }
+                    }
+                    .filter.updated {
+                        .label {
+                            display: none;
+                        }
+                        .input {
+                            flex-direction: row;
+                            -webkit-flex-direction: row;
+                            margin-left: $labelWidth;
+                            button {
+                                width: calc(50% - .5em);
+                            }
+                        }
+                    }
+
+                    .advanced_filters_wrapper {
+                        order: 7;
+                        -webkit-order: 7;
+                        .advanced_filters {
+                            display: block !important;
+
+                            .filter.tags,
+                            .filter.segments {
+                                .input {
+                                    .help {
+                                        top: 1.2em;
+                                        right: .4em;
+                                        width: 2em;
+                                        height: 1.4em;
+                                        background-color: white;
+                                        background-size: 1.2em 1.2em;
+                                    }
+                                }
+                            }
+
+                            .filter.location {
+                                flex-direction: column;
+                                -webkit-flex-direction: column;
+                                .location_section {
+                                    width: 100%;
+                                }
+                                .location_address {
+                                    .input {
+                                        .geolocate {
+                                            top: 1.25em;
+                                            right: .75em;
+
+                                        }
+                                    }
+                                }
+                            }
+                            .label {
+                                width: $labelWidth !important;
+                            }
+                            .input {
+                                width: calc(100% - #{$labelWidth}) !important;
+                            }
+                        }
+                        .toggles {
+                            display: none;
+                        }
+                    }
+
+                    select, input:not([type='checkbox']), button {
+                        padding: 1em !important;
+                    }
+                }
+                // End .section_filters
+
+                .section_rows {
+                    .row {
+                        flex-wrap: wrap;
+                        -webkit-flex-wrap: wrap;
+                        justify-content: space-around;
+                        -webkit-justify-content: space-around;
+                        padding: .5em .3em;
+                        .cell {
+                            margin: .2em 0;
+                            padding: 0;
+                            //border: 1px solid yellow;
+                        }
+                        .flex-line-break {
+                            width: 100%;
+                        }
+                        .image {
+                            width: $mobileImageWidth;
+                            margin: 0;
+                            margin-bottom: -10vw;
+                            img {
+                                width: 15vw;
+                                height: 10vw;
+                            }
+                        }
+                        .name {
+                            width: $mobileNameWidth;
+                            //font-size: 1.1em;
+                            .route_id, .description {
+                                display: none;
+                            }
+                        }
+                        .athlete {
+                            order: 3;
+                            -webkit-order: 3;
+                            align-self: baseline;
+                            -webkit-align-self: baseline;
+                            width: $mobileAthleteWidth;
+                            margin: .5em 0 .5em $mobileDistanceLeftMargin;
+                            font-size: .9em;
+                            color: #aaa;
+                            a {
+                                color: #aaa;
+                            }
+                            .athlete_id {
+                                display: none;
+                            }
+                        }
+                        .updated {
+                            order: 4;
+                            -webkit-order: 4;
+                            align-self: baseline;
+                            -webkit-align-self: baseline;
+                            width: $mobileDateWidth;
+                            font-size: .7em;
+                            color: #bbb;
+                            .created {
+                                display: none;
+                            }
+                        }
+                        .distance {
+                            width: $mobileDistanceWidth;
+                            margin-left: $mobileDistanceLeftMargin;
+                            padding-left: 1.6em;
+                            background: url(../../public/images/icon-distance-grey.svg) no-repeat;
+                            background-size: 1.3em 1.3em;
+                            text-align: left;
+                            font-size: .9em;
+                            color: #aaa;
+                        }
+                        .elevation_gain {
+                            width: $mobileElevationGainWidth;
+                            padding-left: 1.6em;
+                            background: url(../../public/images/icon-elevation-gain-grey.svg) no-repeat;
+                            background-size: 1.15em 1.15em;
+                            text-align: left;
+                            font-size: .9em;
+                            color: #aaa;
+                        }
+                    }
+                }
+                // End .section_rows
+
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 540px) {
+    html {
+        body {
+
+        }
+    }
+}
+
+@media screen and (max-width: 340px) {
+    html {
+        body {
+
+        }
+    }
+}

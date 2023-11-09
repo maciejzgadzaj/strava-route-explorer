@@ -1,0 +1,65 @@
+version: "3.5"
+
+services:
+    nginx:
+        image: nginx:1-alpine
+        container_name: strava-route-explorer-nginx
+        hostname: nginx
+        working_dir: /application
+        volumes:
+            - .:/application
+            - /application/vendor
+            - ./.docker/nginx/default-dev.conf:/etc/nginx/conf.d/default.conf
+            - ./.docker/nginx/log/:/var/log/nginx/
+        env_file:
+            - .env
+        ports:
+            - 80:80
+            - 443:443
+        depends_on:
+          - php
+          - mysql
+
+    php:
+        build: .docker/php-fpm
+        container_name: strava-route-explorer-php-fpm
+        hostname: php
+        working_dir: /application
+        volumes:
+            - ~/.ssh/:/root/.ssh/
+            - .:/application
+            # Do not mount
+            - /application/node_modules
+            - ./.docker/php-fpm/custom.ini:/etc/php/8.1/fpm/conf.d/custom.ini
+            - ./.docker/php-fpm/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+        env_file:
+            - .env
+        tty: true
+        depends_on:
+            - mysql
+
+    mysql:
+        image: mysql:5.7
+        platform: linux/x86_64
+        container_name: strava-route-explorer-mysql
+        hostname: mysql
+        volumes:
+            - ./.docker/mysql/data:/var/lib/mysql
+            - ./.docker/mysql/dump:/dump
+        ports:
+            - 3306:3306
+        restart: always
+        env_file:
+            - .env
+        environment:
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+
+    phpmyadmin:
+        image: phpmyadmin
+        container_name: strava-route-explorer-phpmyadmin
+        hostname: phpmyadmin
+        restart: always
+        ports:
+            - 8080:80
+        environment:
+            - PMA_ARBITRARY=1

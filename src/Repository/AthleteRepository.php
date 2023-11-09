@@ -1,68 +1,64 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\Athlete;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use function func_get_args;
 
-/**
- * Class AthleteRepository
- *
- * @package App\Repository
- */
 class AthleteRepository extends ServiceEntityRepository
 {
-    /**
-     * AthleteRepository constructor.
-     *
-     * @param ManagerRegistry $registry
-     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Athlete::class);
     }
 
-    /**
-     * Find Athlete entities filtered and sorted by a set criteria.
-     *
-     * @param array $criteria
-     * @param array|null $orderBy
-     * @param int $limit
-     * @param int $offset
-     *
-     * @return array
-     */
-    public function findByFilters(array $criteria, ?array $orderBy = null, $limit = 50, $offset = 0)
+    public function findByFilters(array $criteria, ?array $orderBy = null, int $limit = 50, int $offset = 0): array
     {
-        $repository = $this->_em->getRepository(Athlete::class);
+        $repository = $this->getEntityManager()->getRepository(Athlete::class);
 
         $query = $repository->createQueryBuilder('a', 'a.id')
             ->select('a AS athlete')
-            ->addSelect('COUNT(r.id) AS route_count')
             ->addSelect('CASE WHEN a.accessToken IS NOT NULL THEN true ELSE false END AS synchronized')
-            ->addSelect('(SELECT COUNT(1) FROM App:Route r2 JOIN r2.starredBy sb WHERE sb.id = a.id) AS starred_count')
-            ->leftjoin('App:Route', 'r', 'WITH', 'r.athlete = a.id')
-            ->where('r.public = true')
+            // Route count.
+//            ->addSelect('COUNT(r) AS route_count')
+//            ->leftJoin('a.routes', 'r')
+//            ->where('r.public = true')
+//            ->addSelect('(SELECT COUNT(1) FROM App:Route r2 JOIN r2.starredBy sb WHERE sb.id = a.id) AS starred_count')
             ->groupBy('a.id');
 
-        // Add sorts.
+        foreach ($criteria as $key => $value) {
+            if (empty($value)) {
+                continue;
+            }
+
+            switch ($key) {
+                case 'name':
+                    if (is_numeric(trim($value))) {
+                        $query->andWhere('a.id = :athlete_id')->setParameter('athlete_id', $value);
+                    } else {
+                        $query->andWhere('a.name LIKE :athlete_name')->setParameter('athlete_name', '%'.$value.'%');
+                    }
+                    break;
+            }
+        }
+
         if (!empty($orderBy)) {
             foreach ($orderBy as $field => $direction) {
                 $query->addOrderBy($field, $direction);
             }
         } else {
-            $query->orderBy('synchronized', 'DESC')
-                ->addOrderBy('route_count', 'DESC')
+            $query->orderBy('a.lastSync', 'DESC')
+//                ->addOrderBy('route_count', 'DESC')
                 ->addOrderBy('a.name', 'ASC');
         }
 
-        // Paginate.
         $paginator = new Paginator($query);
 
-        // Return results.
         return [
             'total' => count($paginator),
             'pages' => ceil(count($paginator) / $limit),

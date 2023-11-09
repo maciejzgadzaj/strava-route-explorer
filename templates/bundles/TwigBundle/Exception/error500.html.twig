@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Maintenance - {{ parent() }}{% endblock %}
+
+{% block header %}{% endblock %}
+
+{% block body %}
+    <div class="immersive map-bg">
+        <div class="text">
+            <div class="small">500</div>
+            <h2 class="title">Internal Server Error</h2>
+            <h3 class="title">
+                Something did not work as expected.
+                <br />Please try again, and if the error persists <a href="https://github.com/maciejzgadzaj/strava-route-explorer/issues/new">let us know</a>.
+            </h3>
+            <div class="small"><br /><br /><a href="javascript:history.go(-1)">go back</a></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer %}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('immersive') }}
+{% endblock %}

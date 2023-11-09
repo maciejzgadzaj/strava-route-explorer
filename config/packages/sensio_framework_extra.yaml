@@ -1,6 +1,0 @@
-sensio_framework_extra:
-    router:
-        annotations: false
-    # https://packagist.org/packages/sentry/sentry-symfony
-    psr_message:
-        enabled: false

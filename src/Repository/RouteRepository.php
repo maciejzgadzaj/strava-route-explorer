@@ -1,68 +1,43 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
+use App\Entity\Athlete;
 use App\Entity\Route;
-use App\Service\AthleteService;
 use CrEOF\Spatial\PHP\Types\Geometry\Point;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 
-/**
- * Class RouteRepository
- *
- * @package App\Repository
- */
 class RouteRepository extends ServiceEntityRepository
 {
-    /**
-     * @var \App\Service\AthleteService
-     */
-    private $athleteService;
-
-    /**
-     * RouteRepository constructor.
-     *
-     * @param ManagerRegistry $registry
-     */
-    public function __construct(ManagerRegistry $registry, AthleteService $athleteService)
+    public function __construct(ManagerRegistry $registry, private readonly Security $security)
     {
         parent::__construct($registry, Route::class);
-
-        $this->athleteService = $athleteService;
     }
 
-    /**
-     * Find Route entities filtered and sorted by a set criteria .
-     *
-     * @param array $criteria
-     * @param array|null $orderBy
-     * @param int $limit
-     * @param int $offset
-     *
-     * @return array
-     */
-    public function findByFilters(array $criteria, ?array $orderBy = [], $limit = 50, $offset = 0)
+    public function findByFilters(array $criteria, ?array $orderBy = [], int $limit = 50, int $offset = 0): array
     {
-        $currentAthlete = $this->athleteService->getCurrentAthlete();
+        /** @var ?Athlete $currentAthlete */
+        $currentAthlete = $this->security->getUser();
 
-        // Apparently subqueries cannot be used in Doctrine for filtering
-        // and ordering, so we have switched to DQL instead.
-        // https://symfony.com/doc/current/doctrine.html#querying-with-dql-or-sql
-        $entityManager = $this->getEntityManager();
+        $repository = $this->getEntityManager()->getRepository(Route::class);
 
-        $sqls = $selects = $joins = $wheres = $havings = $orders = $parameters = [];
-
-        $selects[] = 'r AS route';
+        $query = $repository->createQueryBuilder('r', 'r.id')
+            ->select('r AS route')
+        ;
 
         // Show public routes to everyone, and private ones only to their owners.
         if ($currentAthlete) {
-            $wheres[] = '(r.public = TRUE OR r.athlete = :me)';
-            $parameters['me'] = $currentAthlete->getId();
+            $query
+                ->andWhere('(r.public = TRUE OR r.athlete = :me)')
+                ->setParameter('me', $currentAthlete->getId())
+            ;
         } else {
-            $wheres[] = 'r.public = TRUE';
+            $query->andWhere('r.public = TRUE');
         }
 
         foreach ($criteria as $key => $value) {
@@ -73,80 +48,139 @@ class RouteRepository extends ServiceEntityRepository
             switch ($key) {
                 case 'type':
                     $values = explode(',', $value);
-                    $wheres[] = 'r.type = :type';
-                    $parameters['type'] = $values[0];
+                    $query
+                        ->andWhere('r.type = :type')
+                        ->setParameter('type', $values[0])
+                    ;
                     if (!empty($values[1])) {
-                        $wheres[] = 'r.subType = :sub_type';
-                        $parameters['sub_type'] = $values[1];
+                        $query
+                            ->andWhere('r.subType = :sub_type')
+                            ->setParameter('sub_type', $values[1])
+                        ;
                     }
                     break;
 
                 case 'name':
-                    $selects[] = 'MATCH (r.name) AGAINST (:name BOOLEAN) AS name_score';
-                    $selects[] = 'MATCH (r.description) AGAINST (:name BOOLEAN) AS description_score';
-                    $wheres[] = '(r.id = :id OR MATCH (r.name, r.description) AGAINST (:name BOOLEAN) > 0)';
-                    $parameters['id'] = $value;
-                    $parameters['name'] = $value;
-                    $orderBy['name_score * 100 + description_score'] = 'DESC';
+                    $query
+                        ->addSelect('MATCH (r.name) AGAINST (:name BOOLEAN) AS name_score')
+                        ->addSelect('MATCH (r.description) AGAINST (:name BOOLEAN) AS description_score')
+                        ->andWhere('(r.id = :id OR MATCH (r.name, r.description) AGAINST (:name BOOLEAN) > 0)')
+                        ->setParameter('id', $value)
+                        ->setParameter('name', $value)
+                        ->addOrderBy('name_score * 100 + description_score', 'DESC')
+                    ;
                     break;
 
                 case 'segments':
-                    $selects[] = 'MATCH (r.segments) AGAINST (:segment_name BOOLEAN) AS segments_score';
-                    $wheres[] = 'MATCH (r.segments) AGAINST (:segment_name BOOLEAN) > 0';
-                    $parameters['segment_name'] = $value;
-                    $orderBy['segments_score'] = 'DESC';
+                    $query
+                        ->addSelect('MATCH (r.segments) AGAINST (:segment_name BOOLEAN) AS segments_score')
+                        ->andWhere('MATCH (r.segments) AGAINST (:segment_name BOOLEAN) > 0')
+                        ->setParameter('segment_name', $value)
+                        ->addOrderBy('segments_score', 'DESC')
+                    ;
                     break;
 
                 case 'tags':
-                    $selects[] = 'MATCH (r.tags) AGAINST (:tag_name BOOLEAN) AS tags_score';
-                    $wheres[] = 'MATCH (r.tags) AGAINST (:tag_name BOOLEAN) > 0';
-                    $parameters['tag_name'] = $value;
-                    $orderBy['tags_score'] = 'DESC';
+                    $query
+                        ->addSelect('MATCH (r.tags) AGAINST (:tag_name BOOLEAN) AS tags_score')
+                        ->andWhere('MATCH (r.tags) AGAINST (:tag_name BOOLEAN) > 0')
+                        ->setParameter('tag_name', $value)
+                        ->addOrderBy('tags_score', 'DESC')
+                    ;
                     break;
 
                 case 'distance_min':
-                    $wheres[] = 'r.distance > :min_distance';
-                    $parameters['min_distance'] = $value * 1000;
+                    $query
+                        ->andWhere('r.distance > :min_distance')
+                        ->setParameter('min_distance', $value * 1000)
+                    ;
                     break;
 
                 case 'distance_max':
-                    $wheres[] = 'r.distance < :max_distance';
-                    $parameters['max_distance'] = $value * 1000;
+                    $query
+                        ->andWhere('r.distance < :max_distance')
+                        ->setParameter('max_distance', $value * 1000)
+                    ;
                     break;
 
-                case 'ascent_min':
-                    $wheres[] = 'r.ascent > :ascent_min';
-                    $parameters['ascent_min'] = $value;
+                case 'elevation_gain_min':
+                    $query
+                        ->andWhere('r.elevationGain > :elevation_gain_min')
+                        ->setParameter('elevation_gain_min', $value)
+                    ;
                     break;
 
-                case 'ascent_max':
-                    $wheres[] = 'r.ascent < :ascent_max';
-                    $parameters['ascent_max'] = $value;
+                case 'elevation_gain_max':
+                    $query
+                        ->andWhere('r.elevationGain < :elevation_gain_max')
+                        ->setParameter('elevation_gain_max', $value)
+                    ;
                     break;
 
                 case 'athlete':
-                    $joins['athlete'] = 'JOIN r.athlete a';
+                    $query->join('r.athlete', 'a');
                     // We need this distinction, as searching for "athlete_id" = <string>
                     // will match unknown Strava athlete with id = 0.
                     if (is_numeric(trim($value))) {
-                        $parameters['athlete_id'] = $value;
+                        $query->setParameter('athlete_id', $value);
                     }
                     else {
-                        $parameters['athlete_name'] = '%'.$value.'%';
+                        $query->setParameter('athlete_name', '%'.$value.'%');
                     }
 
                     if (!empty($criteria['starred'])) {
-                        $joins['starred_by_searched'] = 'LEFT JOIN r.starredBy sbs';
-                        $selects[] = (is_numeric(trim($value)))
-                            ? 'CASE WHEN sbs.id IS NOT NULL AND (sbs.id = :athlete_id) THEN true ELSE false END AS starred_by_searched_athlete'
-                            : 'CASE WHEN sbs.id IS NOT NULL AND (sbs.name LIKE :athlete_name) THEN true ELSE false END AS starred_by_searched_athlete';
-                        $wheres[] = (is_numeric(trim($value)))
-                            ? '(a.id = :athlete_id OR sbs.id = :athlete_id)'
-                            : '(a.name LIKE :athlete_name OR sbs.name LIKE :athlete_name)';
+                        $query->leftJoin('r.starredBy', 'rsb');
+                        if (is_numeric(trim($value))) {
+                            $query
+                                ->addSelect('
+                                    CASE WHEN rsb.id IS NOT NULL AND (rsb.id = :athlete_id)
+                                         THEN true
+                                         ELSE false
+                                    END AS starred_by_searched_athlete
+                                ')
+                                ->andWhere('(rsb.id = :athlete_id)')
+                            ;
+                        } else {
+                            $query
+                                ->addSelect('
+                                    CASE WHEN rsb.id IS NOT NULL AND (rsb.name LIKE :athlete_name)
+                                         THEN true
+                                         ELSE false
+                                    END AS starred_by_searched_athlete
+                                ')
+                                ->andWhere('(rsb.name LIKE :athlete_name)')
+                            ;
+                        }
                     } else {
-                        $wheres[] = (is_numeric(trim($value)))
-                            ? '(a.id = :athlete_id)'
-                            : '(a.name LIKE :athlete_name)';
+                        if (is_numeric(trim($value))) {
+                            $query->andWhere('(a.id = :athlete_id)');
+                        } else {
+                            $query->andWhere('(a.name LIKE :athlete_name)');
+                        }
+                    }
+
+                    if (!empty($criteria['private'])) {
+                        $query->andWhere('r.public = 0');
+                    }
+
+                    break;
+
+                // https://www.movable-type.co.uk/scripts/latlong.html
+                // https://www.movable-type.co.uk/scripts/latlong-db.html
+                case 'start':
+                    if (!empty($criteria['start_latlon'])) {
+                        $start = new Point(array_reverse(explode(',', $criteria['start_latlon'])));
+                        $query
+                            ->addSelect('
+                                ( 3959 * acos(cos(radians('.$start->getLatitude().'))
+                                * cos( radians( x(r.start) ) )
+                                * cos( radians( y(r.start) )
+                                - radians('.$start->getLongitude().') )
+                                + sin( radians('.$start->getLatitude().') )
+                                * sin( radians( x(r.start) ) ) ) ) AS start_dist
+                            ')
+                            ->addOrderBy('start_dist', 'ASC')
+                        ;
                     }
                     break;
 
@@ -154,33 +188,28 @@ class RouteRepository extends ServiceEntityRepository
                     // Even if a user removes "start" filter value, "start_latlon" is still kept,
                     // as it is hidden - but we don't want to use it anymore for search.
                     if (!empty($criteria['start_latlon']) && !empty($criteria['start'])) {
-                        $start = new Point(array_reverse(explode(',', $criteria['start_latlon'])));
-                        $selects['start_dist'] = '
-                            ( 3959 * acos(cos(radians('.$start->getLatitude().'))
-                            * cos( radians( x(r.start) ) )
-                            * cos( radians( y(r.start) )
-                            - radians('.$start->getLongitude().') )
-                            + sin( radians('.$start->getLatitude().') )
-                            * sin( radians( x(r.start) ) ) ) ) AS start_dist
-                        ';
-                        $havings[] = 'start_dist < :start_dist';
-                        $parameters['start_dist'] = $value;
-                        $orders[] = 'start_dist ASC';
+                        $query
+                            ->andHaving('start_dist < :start_dist')
+                            ->setParameter('start_dist', $value)
+                            ->addOrderBy('start_dist', 'ASC')
+                        ;
                     }
                     break;
 
-                case 'start':
-                    if (!empty($criteria['start_latlon'])) {
-                        $start = new Point(array_reverse(explode(',', $criteria['start_latlon'])));
-                        $selects['start_dist'] = '
-                            ( 3959 * acos(cos(radians('.$start->getLatitude().'))
-                            * cos( radians( x(r.start) ) )
-                            * cos( radians( y(r.start) )
-                            - radians('.$start->getLongitude().') )
-                            + sin( radians('.$start->getLatitude().') )
-                            * sin( radians( x(r.start) ) ) ) ) AS start_dist
-                        ';
-                        $orders[] = 'start_dist ASC';
+                case 'end':
+                    if (!empty($criteria['end_latlon'])) {
+                        $end = new Point(array_reverse(explode(',', $criteria['end_latlon'])));
+                        $query
+                            ->addSelect('
+                                ( 3959 * acos(cos(radians('.$end->getLatitude().'))
+                                * cos( radians( x(r.end) ) )
+                                * cos( radians( y(r.end) )
+                                - radians('.$end->getLongitude().') )
+                                + sin( radians('.$end->getLatitude().') )
+                                * sin( radians( x(r.end) ) ) ) ) AS end_dist
+                            ')
+                            ->addOrderBy('end_dist', 'ASC')
+                        ;
                     }
                     break;
 
@@ -188,77 +217,21 @@ class RouteRepository extends ServiceEntityRepository
                     // Even if a user removes "end" filter value, "end_latlon" is still kept,
                     // as it is hidden - but we don't want to use it anymore for search.
                     if (!empty($criteria['end_latlon']) && !empty($criteria['end'])) {
-                        $end = new Point(array_reverse(explode(',', $criteria['end_latlon'])));
-                        $selects['end_dist'] = '
-                            ( 3959 * acos(cos(radians('.$end->getLatitude().'))
-                            * cos( radians( x(r.end) ) )
-                            * cos( radians( y(r.end) )
-                            - radians('.$end->getLongitude().') )
-                            + sin( radians('.$end->getLatitude().') )
-                            * sin( radians( x(r.end) ) ) ) ) AS end_dist
-                        ';
-                        $havings[] = 'end_dist < :end_dist';
-                        $parameters['end_dist'] = $value;
-                        $orders[] = 'end_dist ASC';
-                    }
-                    break;
-
-                case 'end':
-                    if (!empty($criteria['end_latlon'])) {
-                        $end = new Point(array_reverse(explode(',', $criteria['end_latlon'])));
-                        $selects['end_dist'] = '
-                            ( 3959 * acos(cos(radians('.$end->getLatitude().'))
-                            * cos( radians( x(r.end) ) )
-                            * cos( radians( y(r.end) )
-                            - radians('.$end->getLongitude().') )
-                            + sin( radians('.$end->getLatitude().') )
-                            * sin( radians( x(r.end) ) ) ) ) AS end_dist
-                        ';
-                        $orders[] = 'end_dist ASC';
+                        $query
+                            ->andHaving('end_dist < :end_dist')
+                            ->setParameter('end_dist', $value)
+                            ->addOrderBy('end_dist', 'ASC')
+                        ;
                     }
                     break;
             }
         }
 
-        // Add sorts.
-        if (empty($orderBy)) {
-            $orderBy = ['r.updatedAt' => 'desc'];
-        }
-        foreach ($orderBy as $field => $direction) {
-            if ($field == 'a.name') {
-                $joins['athlete'] = 'JOIN r.athlete a';
-            }
-            $orders[] = $field.' '.$direction;
-        }
+        // If no order was added by any of the filters above, let's add a default one.
+        $query->addOrderBy('r.updatedAt', 'DESC');
 
-        // Build query SQL.
-        $sqls[] = 'SELECT '.implode(', ', $selects).' FROM App:Route r INDEX BY r.id';
-        if (!empty($joins)) {
-            $sqls[] = implode(' ', $joins);
-        }
-        if (!empty($wheres)) {
-            $sqls[] = 'WHERE '.implode(' AND ', $wheres);
-        }
-        if (!empty($havings)) {
-            $sqls[] = 'HAVING '.implode(' AND ', $havings);
-        }
-        if (!empty($orders)) {
-            $sqls[] = 'ORDER BY '.implode(', ', $orders);
-        }
-
-        // Create query.
-        $sql = implode(' ', $sqls);
-        $query = $entityManager->createQuery($sql);
-
-        // Add parameters.
-        foreach ($parameters as $key => $value) {
-            $query->setParameter($key, $value);
-        }
-
-        // Paginate.
         $paginator = new Paginator($query);
 
-        // Return results.
         return [
             'total' => count($paginator),
             'pages' => ceil(count($paginator) / $limit),
@@ -270,31 +243,29 @@ class RouteRepository extends ServiceEntityRepository
         ];
     }
 
-    /**
-     * Find all routes without segments fetched.
-     *
-     * @return \App\Entity\Route[]
-     */
-    public function findAllWithoutSegments()
+    public function findAllWithoutSegments(): iterable
     {
         return $this->createQueryBuilder('r')
-            ->select('r')
+            ->select('r.id')
             ->where('r.segments IS NULL')
             ->getQuery()
-            ->getResult();
+            ->toIterable()
+        ;
     }
 
-    /**
-     * Find all not tagged routes.
-     *
-     * @return \App\Entity\Route[]
-     */
-    public function findAllNotTagged()
+    public function findAllNotTagged(int $athleteId = null): iterable
     {
-        return $this->createQueryBuilder('r')
-            ->select('r')
-            ->where('r.tags IS NULL')
-            ->getQuery()
-            ->getResult();
+        $builder = $this->createQueryBuilder('r')
+            ->select('r.id')
+            ->andWhere('r.tags IS NULL')
+            ->orderBy('r.updatedAt', 'DESC')
+        ;
+
+        if ($athleteId) {
+            $builder->andWhere('r.athlete = :athlete_id');
+            $builder->setParameter('athlete_id', $athleteId);
+        }
+
+        return $builder->getQuery()->toIterable();
     }
 }

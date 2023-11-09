@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'Sync Routes'|trans }}{% endblock %}
+
+{% block body %}
+    <div class="immersive small map-bg">
+        <div class="text">
+            <div class="small" id="wait">
+                Please wait
+            </div>
+            <h2 class="title" id="fetching">
+                <span id="fetching-text">Fetching your routes from Strava</span><span id="fetching-ellipsis">&nbsp;</span>
+            </h2>
+            <div>
+                <img id="spinner" src="/images/downloading.gif" height="200" alt="Fetching your routes from Strava" />
+            </div>
+            <h3 class="title" id="fetched_routes">
+                Fetched <span id="fetched_routes_count">0</span> routes
+            </h3>
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('sync-my-routes') }}
+    {{ encore_entry_link_tags('immersive') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('sync-my-routes') }}
+    {{ encore_entry_link_tags('immersive') }}
+{% endblock %}

@@ -1,0 +1,243 @@
+@import '_variables';
+@import '_mixins';
+
+$imageWidth: 75px;
+$nameWidth: calc(40% - 2em);
+$distanceWidth: calc(10% - 2em);
+$elevationGainWidth: calc(10% - 2em);
+$athleteWidth: calc(18% - 2em);
+$updatedWidth: calc(12% - 2em);
+$locationWidth: calc(30% - 2em);
+
+.page_athletes {
+    .section_filters {
+        display: flex;
+        margin: 2px 0 0;
+        padding: 0;
+        background-color: #f0f0f0;
+
+        //& > div {
+        //    display: flex;
+        //    padding: .5em 1em;
+        //    .sort {
+        //        margin: 0 0 0 .3em;
+        //    }
+        //}
+        //&::after {
+        //    content: "";
+        //    clear: both;
+        //    display: table;
+        //}
+        //&.even {
+        //    background-color: #f9f9f9;
+        //}
+
+        .filter {
+            padding: .5em 1em .5em 0;
+            .label {
+                display: flex;
+                .sort {
+                    margin: 0 0 0 .3em;
+                }
+            }
+            .input {
+                input:not([type='checkbox']) {
+                    width: 50%;
+                }
+            }
+        }
+        .filter.name {
+            //order: 5;
+            //-webkit-order: 6;
+            width: $nameWidth;
+            position: relative;
+        }
+        .filter.updated {
+            order: 8;
+            -webkit-order: 8;
+            width: $updatedWidth;
+            .input {
+                display: flex;
+                button {
+                    margin-right: .5em;
+                    padding: .8em .5em;
+                    &.search {
+                    }
+                    &.reset {
+                        background-color: #f0f0f0;
+                        color: #bbb;
+                    }
+                    &:hover {
+                        cursor: pointer;
+                    }
+                }
+            }
+            &.active {
+                .input {
+                    button.reset {
+                        background-color: white;
+                        color: black;
+                    }
+                }
+            }
+        }
+        .filter.buttons {
+            .input {
+                display: flex;
+                .input, .button {
+                    margin-right: 1.5%;
+                }
+                .input.name {
+                    width: 65%;
+                }
+                .button.search,
+                .button.reset {
+                    width: 15%;
+                }
+                select, input:not([type='checkbox']), button {
+                    width: 90%;
+                    margin-top: .5em;
+                    padding: .8em;
+                    border: 1px solid #ddd;
+                    background-color: white;
+                    font-size: .9em;
+                    @include input-box-shadow;
+
+                    &::placeholder {
+                        color: #ccc;
+                        opacity: 1;
+                    }
+                    &:-ms-input-placeholder {
+                        color: #ccc;
+                    }
+                    &::-ms-input-placeholder {
+                        color: #ccc;
+                    }
+                    &:hover {
+                        border-color: $orange;
+                    }
+                }
+                input:not([type='checkbox']), select, button {
+                    -webkit-appearance: none;
+                    -moz-appearance: none;
+                    appearance: none;
+                }
+                input[type=number]::-webkit-inner-spin-button,
+                input[type=number]::-webkit-outer-spin-button {
+                    -webkit-appearance: none;
+                    margin: 0;
+                }
+                input[type=number] {
+                    -moz-appearance: textfield;
+                }
+                select {
+                    background: $white url(../../public/images/icon-caret-down.svg) no-repeat right .4em center;
+                    background-size: 12px 8px;
+                    color: #bbb;
+                    option {
+                        .placeholder {
+                            color: #bbb;
+                        }
+                    }
+                    &.not_empty {
+                        color: $black;
+                        border-color: $orange;
+                        .placeholder {
+                            color: $black;
+                        }
+                    }
+                }
+                input:not([type='checkbox']) {
+                    &:not(:placeholder-shown) {
+                        border-color: $orange;
+
+                    }
+                }
+            }
+        }
+        .image {
+            width: $imageWidth;
+        }
+        .name {
+            width: $nameWidth;
+        }
+        .updated {
+            width: $updatedWidth;
+        }
+    }
+
+    .section_rows {
+        margin: 2px 0;
+
+        .row {
+            border-bottom: 1px solid #eee;
+            &.even {
+                background-color: #f9f9f9;
+            }
+            &.synchronised-1 {
+                .name {
+                    font-weight: bold;
+                }
+            }
+            & > * {
+                float: left;
+                margin: 0;
+                padding: $padding;
+            }
+            .image {
+                width: $imageWidth;
+                img {
+                    border-radius: 50%;
+                }
+            }
+            .name {
+                width: $nameWidth;
+                .link {
+                    font-size: .7em;
+                    text-decoration: none;
+                    text-transform: uppercase;
+                    color: #bbb;
+                    &:hover {
+                        color: $orange;
+                    }
+                }
+            }
+            .routes {
+                width: $distanceWidth;
+                a {
+                    text-decoration: none;
+                }
+                .starred {
+                    color: #bbb;
+                }
+            }
+            .last_sync {
+                color: #bbb;
+            }
+            &::after {
+                content: "";
+                clear: both;
+                display: table;
+            }
+            .description {
+                margin-top: .3em;
+                font-size: .6em;
+                color: #aaa;
+                font-weight: normal;
+                a {
+                    text-decoration: none;
+                    color: #aaa;
+                    &:hover {
+                        color: $orange;
+                    }
+                }
+            }
+            .distance {
+                text-align: right;
+            }
+            .elevation_gain {
+                text-align: right;
+            }
+        }
+    }
+}

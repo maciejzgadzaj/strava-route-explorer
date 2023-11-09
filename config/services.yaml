@@ -2,12 +2,9 @@
 # Files in the packages/ subdirectory configure your dependencies.
 
 # Put parameters here that don't need to change on each machine where the app is deployed
-# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     locale: 'en'
-    # Allow open access to site without authorizing with Strava first.
-    env(OPEN_ACCESS): 0
-    open_access: '%env(OPEN_ACCESS)%'
     # Strava
     strava_client_id: '%env(STRAVA_CLIENT_ID)%'
     strava_client_secret: '%env(STRAVA_CLIENT_SECRET)%'
@@ -28,9 +25,11 @@ services:
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
         bind:
             $mapQuestConsumerKey: "%mapquest_consumer_key%"
+            $stravaClientId: "%strava_client_id%"
+            $stravaClientSecret: "%strava_client_secret%"
             $stravaRefreshToken: "%strava_refresh_token%"
-            $meetupGroups: "%meetup_groups%"
-            $meetupApiKey: "%meetup_api_key%"
+#            $meetupGroups: "%meetup_groups%"
+#            $meetupApiKey: "%meetup_api_key%"
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -40,13 +39,10 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
-            - '../src/Tests/'
-
-    # controllers are imported separately to make sure services can be injected
-    # as action arguments even if you don't extend any base controller class
-    App\Controller\:
-        resource: '../src/Controller/'
-        tags: ['controller.service_arguments']
+            - '../tests/'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    App\Logger\UserProcessor:
+        tags: [monolog.processor]

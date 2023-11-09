@@ -1,92 +1,33 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Service;
 
 use App\Entity\Athlete;
-use Psr\Container\ContainerInterface;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Exception;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpClient\Exception\ClientException;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-/**
- * Class StravaService
- *
- * @package App\Service
- */
 class StravaService
 {
-    /**
-     * @var \Psr\Container\ContainerInterface
-     */
-    private $container;
-
-    /**
-     * @var \Symfony\Component\HttpFoundation\Session\SessionInterface
-     */
-    private $session;
-
-    /**
-     * @var string
-     */
-    public $stravaRefreshToken;
-
-    /**
-     * @var \App\Service\AthleteService
-     */
-    private $athleteService;
-
-    /**
-     * StravaService constructor.
-     *
-     * @param \Psr\Container\ContainerInterface $container
-     * @param \Symfony\Component\HttpFoundation\Session\SessionInterface $session
-     * @param $stravaRefreshToken
-     * @param \App\Service\AthleteService $athleteService
-     */
     public function __construct(
-        ContainerInterface $container,
-        SessionInterface $session,
-        $stravaRefreshToken,
-        AthleteService $athleteService
+        private readonly HttpClientInterface $stravaClient,
+        private readonly AthleteService $athleteService,
+        private readonly LoggerInterface $logger,
+        private readonly string $stravaClientId,
+        private readonly string $stravaClientSecret,
+        private readonly string $stravaRefreshToken,
     ) {
-        $this->container = $container;
-        $this->session = $session;
-        $this->stravaRefreshToken = $stravaRefreshToken;
-        $this->athleteService = $athleteService;
     }
 
-    /**
-     * Send request to Strava API.
-     *
-     * @param string $method
-     * @param string $uri
-     * @param array $options
-     *
-     * @return \Psr\Http\Message\ResponseInterface
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
-     */
-    public function apiRequest($method, $uri, $options = [])
-    {
-        /** @var \GuzzleHttp\Client $client */
-        $client = $this->container->get('csa_guzzle.client.strava');
-
-        return $client->$method($uri, $options);
-    }
-
-    /**
-     * Return athlete's access_token (after refreshing it if needed).
-     *
-     * @param \App\Entity\Athlete $athlete
-     *
-     * @return string
-     *
-     * @throws \Exception
-     */
-    public function getAthleteAccessToken($athlete)
+    public function getAthleteAccessToken(Athlete $athlete): ?string
     {
         // No access_token means an athlete has never authorized so far.
         if (empty($athlete->getAccessToken())) {
-            return;
+            return null;
         }
 
         // https://developers.strava.com/docs/authentication/#refresh-expired-access-tokens
@@ -101,15 +42,7 @@ class StravaService
         return $athlete->getAccessToken();
     }
 
-    /**
-     * Refresh athlete's access_token.
-     *
-     * @param \App\Entity\Athlete|null $athlete
-     * @param string|null $refreshToken
-     *
-     * @return \App\Entity\Athlete|string
-     */
-    public function refreshAccessToken(Athlete $athlete = null, $refreshToken = null)
+    public function refreshAccessToken(Athlete $athlete = null, string $refreshToken = null): Athlete|string
     {
         if (!empty($athlete)) {
             // To refresh short-lived access_token, we need to send user's refresh_token.
@@ -121,84 +54,71 @@ class StravaService
             }
         }
 
-        /** @var \GuzzleHttp\Client $client */
-        $client = $this->container->get('csa_guzzle.client.strava');
         $params = [
-            'client_id' => $this->container->getParameter('strava_client_id'),
-            'client_secret' => $this->container->getParameter('strava_client_secret'),
+            'client_id' => $this->stravaClientId,
+            'client_secret' => $this->stravaClientSecret,
             'grant_type' => 'refresh_token',
             'refresh_token' => $refreshToken,
         ];
-        $response = $client->post('/oauth/token', ['form_params' => $params]);
-        $content = \GuzzleHttp\json_decode($response->getBody()->getContents());
 
-        return !empty($athlete) ? $this->athleteService->saveTokenData($athlete, $content) : $content->access_token;
+        try {
+            $response = $this->stravaClient->request('POST', '/oauth/token', ['body' => $params]);
+        } catch (ClientException $clientException) {
+            $this->logger->error('Error refreshing user access token', [
+                'exception' => $clientException->getMessage(),
+            ]);
+            throw $clientException;
+        }
+
+        $content = $response->toArray();
+
+        return !empty($athlete)
+            ? $this->athleteService->saveTokenData($athlete, $content)
+            : $content['access_token'];
     }
 
-    /**
-     * Fetch all athlete routes data from Strava API.
-     *
-     * @param Athlete $athlete
-     *
-     * @return array
-     *
-     * @throws \Exception
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
-     */
-    public function getAthleteRoutes(Athlete $athlete)
+    public function fetchAthleteRoutes(Athlete $athlete, $page = 1, $perPage = 50): ArrayCollection
     {
-        $perPage = 200;
-
         // Athlete has not connected his Strava account yet.
         if (!$athleteAccessToken = $this->getAthleteAccessToken($athlete)) {
-            throw new \Exception(strtr('No token found for %athlete_name% (%athlete_id%).', [
+            $this->logger->error('Athlete has not connected his Strava account yet');
+            throw new Exception(strtr('No token found for %athlete_name% (%athlete_id%).', [
                 '%athlete_name%' => $athlete->getName(),
                 '%athlete_id%' => $athlete->getId(),
             ]));
         }
 
-        // Use athlete-specific access token to fetch their routes.
         $options = [
             'headers' => [
                 'Authorization' => 'Bearer '.$athleteAccessToken,
             ],
+            'query' => [
+                'page' => $page,
+                'per_page' => $perPage,
+            ],
         ];
-        $page = 1;
 
-        do {
-            $response = $this->apiRequest(
-                'get',
-                '/api/v3/athletes/'.$athlete->getId().'/routes?per_page='.$perPage.'&page='.$page,
-                $options
-            );
-            $content = \GuzzleHttp\json_decode($response->getBody()->getContents());
+        $response = $this->stravaClient->request('GET', '/api/v3/athletes/'.$athlete->getId().'/routes', $options);
 
-            $routes = array_merge($routes ?? [], $content);
-
-            $page++;
-        } while (!empty($content) && count($content) == $perPage);
-
-        // Key return array by route id.
-        $return = [];
-        foreach ($routes as $route) {
-            $return[$route->id] = $route;
-        }
-
-        return $return;
+        return new ArrayCollection($response->toArray());
     }
 
-    /**
-     * Fetch route data from Strava API.
-     *
-     * @param int $routeId
-     *
-     * @return mixed
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
-     */
-    public function getRoute($routeId)
+    public function getAthlete(int $athleteId): array
+    {
+        $athlete = $this->athleteService->load($athleteId);
+
+        $options = [
+            'headers' => [
+                'Authorization' => 'Bearer '.$this->getAthleteAccessToken($athlete),
+            ],
+        ];
+
+        $response = $this->stravaClient->request('GET', '/api/v3/athlete', $options);
+
+        return $response->toArray();
+    }
+
+    public function getRoute(int $routeId): array
     {
         // Use app's "refresh_token" to get new "access_token".
         $accessToken = $this->refreshAccessToken(null, $this->stravaRefreshToken);
@@ -208,7 +128,8 @@ class StravaService
                 'Authorization' => 'Bearer '.$accessToken,
             ],
         ];
-        $response = $this->apiRequest('get', '/api/v3/routes/'.$routeId, $options);
-        return \GuzzleHttp\json_decode($response->getBody()->getContents());
+        $response = $this->stravaClient->request('GET', '/api/v3/routes/'.$routeId, $options);
+
+        return $response->toArray();
     }
 }

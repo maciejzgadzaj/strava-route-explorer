@@ -1,33 +1,29 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
+use App\Repository\RouteRepository;
+use CrEOF\Spatial\PHP\Types\Geometry\Point;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Class Route
- *
- * @ORM\Entity(repositoryClass="App\Repository\RouteRepository")
- * @ORM\Table(
- *     name="route",
- *     indexes={
- *         @ORM\Index(name="IDX_TYPE", columns={"type"}),
- *         @ORM\Index(name="IDX_SUB_TYPE", columns={"sub_type"}),
- *         @ORM\Index(name="IDX_NAME", columns={"name"}),
- *         @ORM\Index(name="IDX_DISTANCE", columns={"distance"}),
- *         @ORM\Index(name="IDX_ASCENT", columns={"ascent"}),
- *         @ORM\Index(name="IDX_PUBLIC", columns={"public"}),
- *         @ORM\Index(name="IDX_FULLTEXT_NAME", columns={"name"}, flags={"fulltext"}),
- *         @ORM\Index(name="IDX_FULLTEXT_DESC", columns={"description"}, flags={"fulltext"}),
- *         @ORM\Index(name="IDX_FULLTEXT_SEGMENTS", columns={"segments"}, flags={"fulltext"}),
- *         @ORM\Index(name="IDX_FULLTEXT_TAGS", columns={"tags"}, flags={"fulltext"}),
- *         @ORM\Index(name="IDX_FULLTEXT_NAME_DESC", columns={"name", "description"}, flags={"fulltext"})
- *     }
- * )
- *
- * @package App\Entity
- */
+#[ORM\Entity(repositoryClass: RouteRepository::class)]
+#[ORM\Table(name: 'routes')]
+#[ORM\Index(columns: ['name'], name: 'idx_name')]
+#[ORM\Index(columns: ['name'], name: 'idx_fulltext_name', flags: ['fulltext'])]
+#[ORM\Index(columns: ['description'], name: 'idx_fulltext_desc', flags: ['fulltext'])]
+#[ORM\Index(columns: ['name', 'description'], name: 'idx_fulltext_name_desc', flags: ['fulltext'])]
+#[ORM\Index(columns: ['type'], name: 'idx_type')]
+#[ORM\Index(columns: ['sub_type'], name: 'idx_sub_type')]
+#[ORM\Index(columns: ['public'], name: 'idx_public')]
+#[ORM\Index(columns: ['distance'], name: 'idx_distance')]
+#[ORM\Index(columns: ['elevation_gain'], name: 'idx_elevation_gain')]
+#[ORM\Index(columns: ['segments'], name: 'idx_fulltext_segments', flags: ['fulltext'])]
+#[ORM\Index(columns: ['tags'], name: 'idx_fulltext_tags', flags: ['fulltext'])]
 class Route
 {
     const TYPE_RUN = 1;
@@ -39,478 +35,381 @@ class Route
     const SUBTYPE_TRAIL = 4;
     const SUBTYPE_MIXED = 5;
 
-    /**
-     * @var string
-     *
-     * @ORM\Id
-     * @ORM\Column(type="string")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::BIGINT)]
+    private int $id;
+
+    #[ORM\ManyToOne(targetEntity: Athlete::class, inversedBy: 'routes')]
+    #[ORM\JoinColumn(name: 'athlete_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    private Athlete $athlete;
+
+    #[ORM\Column(name: 'name', type: Types::STRING, length: 255)]
+    private string $name;
+
+    #[ORM\Column(name: 'type', type: Types::SMALLINT)]
+    private int $type;
+
+    #[ORM\Column(name: 'sub_type', type: Types::SMALLINT)]
+    private int $subType;
+
+    // Strava value.
+    #[ORM\Column(name: 'private', type: Types::BOOLEAN)]
+    private ?bool $private;
+
+    // Local "published" value.
+    #[ORM\Column(name: 'public', type: Types::BOOLEAN, options: ['default' => true])]
+    private bool $public;
+
+    #[ORM\Column(name: 'description', type: Types::TEXT)]
+    private string $description;
+
+    #[ORM\Column(name: 'distance', type: Types::DECIMAL, precision: 10, scale: 2)]
+    private float $distance;
+
+    #[ORM\Column(name: 'elevation_gain', type: Types::DECIMAL, precision: 10, scale: 2)]
+    private float $elevationGain;
+
+    #[ORM\Column(name: 'climb_category', type: Types::SMALLINT)]
+    private int $climbCategory;
+
+    #[ORM\Column(name: 'start', type: 'point')]
+    private Point $start;
+
+    #[ORM\Column(name: 'end', type: 'point')]
+    private Point $end;
+
+    #[ORM\Column(name: 'map_url', type: Types::TEXT, nullable: true)]
+    private ?string $mapUrl;
+
+    #[ORM\Column(name: 'polyline_summary', type: Types::TEXT)]
+    private string $polylineSummary;
+
+    #[ORM\Column(name: 'segments', type: Types::JSON, nullable: true)]
+    private ?array $segments;
+
+    #[ORM\Column(name: 'tags', type: Types::JSON, nullable: true)]
+    private ?array $tags;
 
     /**
-     * @var \App\Entity\Athlete
-     *
-     * @ORM\ManyToOne(targetEntity="Athlete")
-     * @ORM\JoinColumn(name="athlete_id", referencedColumnName="id", onDelete="CASCADE")
+     * @var Collection<int, Athlete>
      */
-    private $athlete;
+    #[ORM\ManyToMany(targetEntity: Athlete::class, inversedBy: 'starredRoutes')]
+    #[ORM\JoinTable(name: 'route_starred_by')]
+    #[ORM\JoinColumn(name: 'route_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'athlete_id', referencedColumnName: 'id')]
+    private Collection $starredBy;
 
-    /**
-     * @var integer
-     *
-     * @ORM\Column(type="smallint")
-     */
-    private $type;
+    #[ORM\Column(name: 'created_at', type: Types::DATETIME_MUTABLE)]
+    private \DateTime $createdAt;
 
-    /**
-     * @var integer
-     *
-     * @ORM\Column(type="smallint", name="sub_type")
-     */
-    private $subType;
+    #[ORM\Column(name: 'updated_at', type: Types::DATETIME_MUTABLE)]
+    private \DateTime $updatedAt;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="string")
-     */
-    private $name;
+    private bool $isNew = false;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="text")
-     */
-    private $description;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(type="decimal", precision=10, scale=2)
-     */
-    private $distance;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(type="decimal", precision=10, scale=2)
-     */
-    private $ascent;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(type="integer", name="climb_category")
-     */
-    private $climbCategory;
-
-    /**
-     * @var \CrEOF\Spatial\PHP\Types\Geometry\Point
-     *
-     * @ORM\Column(type="point")
-     */
-    private $start;
-
-    /**
-     * @var \CrEOF\Spatial\PHP\Types\Geometry\Point
-     *
-     * @ORM\Column(type="point")
-     */
-    private $end;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="text", name="polyline_summary")
-     */
-    private $polylineSummary;
-
-    /**
-     * @var array
-     *
-     * @ORM\Column(type="json", nullable=true)
-     */
-    private $segments;
-
-    /**
-     * @var array
-     *
-     * @ORM\Column(type="json", nullable=true)
-     */
-    private $tags;
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(type="boolean", options={"default": true})
-     */
-    private $public;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="created_at")
-     */
-    private $createdAt;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="updated_at")
-     */
-    private $updatedAt;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection|\App\Entity\Athlete[]
-     *
-     * @ORM\ManyToMany(targetEntity="Athlete", inversedBy="starredRoutes")
-     * @ORM\JoinTable(
-     *     name="route_starred_by",
-     *     joinColumns={@ORM\JoinColumn(name="route_id", referencedColumnName="id")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="athlete_id", referencedColumnName="id")}
-     * )
-     */
-    private $starredBy;
-
-    /**
-     * @var bool
-     */
-    private $isNew = false;
-
-    /**
-     * Route constructor.
-     */
     public function __construct()
     {
         $this->starredBy = new ArrayCollection();
-
-        // This will not be saved in the database.
         $this->isNew = true;
     }
 
-    /**
-     * @return int
-     */
-    public function getId(): string
+    public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     */
-    public function setId(string $id): void
+    public function setId(int $id): self
     {
         $this->id = $id;
+
+        return $this;
     }
 
-    /**
-     * @return \App\Entity\Athlete
-     */
-    public function getAthlete(): \App\Entity\Athlete
+    public function getAthlete(): Athlete
     {
         return $this->athlete;
     }
 
-    /**
-     * @param \App\Entity\Athlete $athlete
-     */
-    public function setAthlete(\App\Entity\Athlete $athlete): void
+    public function setAthlete(Athlete $athlete): self
     {
         $this->athlete = $athlete;
+
+        return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getType(): int
-    {
-        return $this->type;
-    }
-
-    /**
-     * @param int $type
-     */
-    public function setType(int $type): void
-    {
-        $this->type = $type;
-    }
-
-    /**
-     * @return int
-     */
-    public function getSubType(): int
-    {
-        return $this->subType;
-    }
-
-    /**
-     * @param int $subType
-     */
-    public function setSubType(int $subType): void
-    {
-        $this->subType = $subType;
-    }
-
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     */
-    public function setName(string $name): void
+    public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getDescription(): string
+    public function getType(): int
     {
-        return $this->description;
+        return $this->type;
     }
 
-    /**
-     * @param string $description
-     */
-    public function setDescription(string $description): void
+    public function setType(int $type): self
     {
-        $this->description = $description;
+        $this->type = $type;
+
+        return $this;
     }
 
-    /**
-     * @return float
-     */
-    public function getDistance(): float
+    public function getSubType(): int
     {
-        return $this->distance;
+        return $this->subType;
     }
 
-    /**
-     * @param float $distance
-     */
-    public function setDistance(float $distance): void
+    public function setSubType(int $subType): self
     {
-        $this->distance = $distance;
+        $this->subType = $subType;
+
+        return $this;
     }
 
-    /**
-     * @return float
-     */
-    public function getAscent(): float
+    public function isPrivate(): ?bool
     {
-        return $this->ascent;
+        return $this->private;
     }
 
-    /**
-     * @param float $ascent
-     */
-    public function setAscent(float $ascent): void
+    public function setPrivate(?bool $private): self
     {
-        $this->ascent = $ascent;
+        $this->private = $private;
+
+        return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getClimbCategory(): int
-    {
-        return $this->climbCategory;
-    }
-
-    /**
-     * @param int $climbCategory
-     */
-    public function setClimbCategory(int $climbCategory): void
-    {
-        $this->climbCategory = $climbCategory;
-    }
-
-    /**
-     * @return \CrEOF\Spatial\PHP\Types\Geometry\Point
-     */
-    public function getStart(): \CrEOF\Spatial\PHP\Types\Geometry\Point
-    {
-        return $this->start;
-    }
-
-    /**
-     * @param \CrEOF\Spatial\PHP\Types\Geometry\Point $start
-     */
-    public function setStart(\CrEOF\Spatial\PHP\Types\Geometry\Point $start): void
-    {
-        $this->start = $start;
-    }
-
-    /**
-     * @return \CrEOF\Spatial\PHP\Types\Geometry\Point
-     */
-    public function getEnd(): \CrEOF\Spatial\PHP\Types\Geometry\Point
-    {
-        return $this->end;
-    }
-
-    /**
-     * @param \CrEOF\Spatial\PHP\Types\Geometry\Point $end
-     */
-    public function setEnd(\CrEOF\Spatial\PHP\Types\Geometry\Point $end): void
-    {
-        $this->end = $end;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPolylineSummary(): string
-    {
-        return $this->polylineSummary;
-    }
-
-    /**
-     * @param string $polylineSummary
-     */
-    public function setPolylineSummary(string $polylineSummary): void
-    {
-        $this->polylineSummary = $polylineSummary;
-    }
-
-    /**
-     * @return array
-     */
-    public function getSegments(): array
-    {
-        return $this->segments;
-    }
-
-    /**
-     * @param array $segments
-     */
-    public function setSegments(array $segments): void
-    {
-        $this->segments = $segments;
-    }
-
-    /**
-     * @return array
-     */
-    public function getTags(): array
-    {
-        return $this->tags;
-    }
-
-    /**
-     * @param array $tags
-     */
-    public function setTags(array $tags): void
-    {
-        $this->tags = $tags;
-    }
-
-    /**
-     * @return bool
-     */
     public function isPublic(): bool
     {
         return $this->public;
     }
 
-    /**
-     * @param bool $public
-     */
-    public function setPublic(bool $public): void
+    public function setPublic(bool $public): self
     {
         $this->public = $public;
+
+        return $this;
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getCreatedAt(): \DateTime
+    public function getDescription(): string
     {
-        return $this->createdAt;
+        return $this->description;
     }
 
-    /**
-     * @param \DateTime $createdAt
-     */
-    public function setCreatedAt(\DateTime $createdAt): void
+    public function setDescription(string $description): self
     {
-        $this->createdAt = $createdAt;
+        $this->description = $description;
+
+        return $this;
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getUpdatedAt(): \DateTime
+    public function getDistance(): float
     {
-        return $this->updatedAt;
+        return $this->distance;
     }
 
-    /**
-     * @param \DateTime $updatedAt
-     */
-    public function setUpdatedAt(\DateTime $updatedAt): void
+    public function setDistance(float $distance): self
     {
-        $this->updatedAt = $updatedAt;
+        $this->distance = $distance;
+
+        return $this;
+    }
+
+    public function getElevationGain(): float
+    {
+        return $this->elevationGain;
+    }
+
+    public function setElevationGain(float $elevationGain): self
+    {
+        $this->elevationGain = $elevationGain;
+
+        return $this;
+    }
+
+    public function getClimbCategory(): int
+    {
+        return $this->climbCategory;
+    }
+
+    public function setClimbCategory(int $climbCategory): self
+    {
+        $this->climbCategory = $climbCategory;
+
+        return $this;
+    }
+
+    public function getStart(): Point
+    {
+        return $this->start;
+    }
+
+    public function setStart(Point $start): self
+    {
+        $this->start = $start;
+
+        return $this;
+    }
+
+    public function getEnd(): Point
+    {
+        return $this->end;
+    }
+
+    public function setEnd(Point $end): self
+    {
+        $this->end = $end;
+
+        return $this;
+    }
+
+    public function getMapUrl(): ?string
+    {
+        return $this->mapUrl;
+    }
+
+    public function setMapUrl(?string $mapUrl): self
+    {
+        $this->mapUrl = $mapUrl;
+
+        return $this;
+    }
+
+    public function getPolylineSummary(): string
+    {
+        return $this->polylineSummary;
+    }
+
+    public function setPolylineSummary(string $polylineSummary): self
+    {
+        $this->polylineSummary = $polylineSummary;
+
+        return $this;
+    }
+
+    public function getSegments(): ?array
+    {
+        return $this->segments;
+    }
+
+    public function setSegments(?array $segments): self
+    {
+        $this->segments = $segments;
+
+        return $this;
+    }
+
+    public function getTags(): ?array
+    {
+        return $this->tags;
+    }
+
+    public function setTags(?array $tags): self
+    {
+        $this->tags = $tags;
+
+        return $this;
+    }
+
+    public function hasTag(Tag $tag): bool
+    {
+        return $this->tags->contains($tag);
+    }
+
+    public function addTag(Tag $tag): self
+    {
+        if ($this->hasTag($tag)) {
+            return $this;
+        }
+
+        $this->tags->add($tag);
+
+        return $this;
+    }
+
+    public function removeTag(Tag $tag): self
+    {
+        if (!$this->hasTag($tag)) {
+            return $this;
+        }
+
+        $this->tags->removeElement($tag);
+
+        return $this;
     }
 
     /**
-     * @return \App\Entity\Athlete[]|\Doctrine\Common\Collections\Collection
+     * @return Collection<int, Athlete>
      */
-    public function getStarredBy()
+    public function getStarredBy(): Collection
     {
         return $this->starredBy;
     }
 
-    /**
-     * @param \App\Entity\Athlete[]|\Doctrine\Common\Collections\Collection $starredBy
-     */
-    public function setStarredBy($starredBy): void
+    public function setStarredBy(Collection $starredBy): self
     {
         $this->starredBy = $starredBy;
+
+        return $this;
     }
 
-    /**
-     * @param \App\Entity\Athlete $athlete
-     */
-    public function addStarredBy(Athlete $athlete): void
-    {
-        if ($this->starredBy->contains($athlete)) {
-            return;
-        }
-
-        $this->starredBy->add($athlete);
-    }
-
-    /**
-     * @param \App\Entity\Athlete $athlete
-     */
-    public function removeStarredBy(Athlete $athlete): void
-    {
-        if (!$this->starredBy->contains($athlete)) {
-            return;
-        }
-
-        $this->starredBy->removeElement($athlete);
-    }
-
-    /**
-     * @param \App\Entity\Athlete $athlete
-     */
     public function isStarredBy(Athlete $athlete): bool
     {
         return $this->starredBy->contains($athlete);
     }
 
-    /**
-     * @return bool
-     */
+    public function addStarredBy(Athlete $athlete): self
+    {
+        if ($this->isStarredBy($athlete)) {
+            return $this;
+        }
+
+        $this->starredBy->add($athlete);
+
+        return $this;
+    }
+
+    public function removeStarredBy(Athlete $athlete): self
+    {
+        if (!$this->isStarredBy($athlete)) {
+            return $this;
+        }
+
+        $this->starredBy->removeElement($athlete);
+
+        return $this;
+    }
+
+    public function getCreatedAt(): \DateTime
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTime $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): \DateTime
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTime $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
     public function isNew(): bool
     {
         return $this->isNew ?? false;

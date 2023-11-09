@@ -1,158 +1,100 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Service;
 
 use App\Entity\Athlete;
 use App\Entity\Route;
-use App\Exception\NoticeException;
+use App\Repository\AthleteRepository;
 use CrEOF\Spatial\PHP\Types\Geometry\Point;
 use Doctrine\ORM\EntityManagerInterface;
-use GuzzleHttp\Exception\ClientException;
+use Doctrine\ORM\EntityRepository;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
-/**
- * Class RouteService
- *
- * @package App\Service
- */
-class RouteService extends EntityService
+class RouteService
 {
-    /**
-     * @var \App\Repository\RouteRepository
-     */
-    private $repository;
+    private AthleteRepository|EntityRepository $repository;
 
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected $logger;
-
-    /**
-     * @var \App\Service\AthleteService
-     */
-    private $athleteService;
-
-    /**
-     * @var \App\Service\MapService
-     */
-    private $mapService;
-
-    /**
-     * @var \App\Service\StravaService
-     */
-    private $stravaService;
-
-    /**
-     * RouteService constructor.
-     *
-     * @param \Doctrine\ORM\EntityManagerInterface $entityManager
-     * @param \Symfony\Component\HttpFoundation\Session\SessionInterface $session
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \App\Service\AthleteService $athleteService
-     * @param \App\Service\MapService $mapService
-     * @param \App\Service\StravaService $stravaService
-     */
     public function __construct(
-        EntityManagerInterface $entityManager,
-        SessionInterface $session,
-        LoggerInterface $logger,
-        AthleteService $athleteService,
-        MapService $mapService,
-        StravaService $stravaService
+        private readonly EntityManagerInterface $entityManager,
+        private readonly RequestStack $requestStack,
+        private readonly LoggerInterface $logger,
+        private readonly AthleteService $athleteService,
+        private readonly StravaService $stravaService
     ) {
-        parent::__construct($entityManager, $session);
-
         $this->repository = $this->entityManager->getRepository(Route::class);
-        $this->logger = $logger;
-        $this->athleteService = $athleteService;
-        $this->mapService = $mapService;
-        $this->stravaService = $stravaService;
     }
 
-    /**
-     * Return total number of routes.
-     *
-     * @return int
-     */
-    public function count()
+    public function count(): int
     {
         return $this->repository->count([]);
     }
 
-    /**
-     * Check if route exists.
-     *
-     * @param int $routeId
-     *
-     * @return bool
-     */
-    public function exists($routeId)
+    public function exists(int $routeId): bool
     {
         return !empty($this->repository->findOneBy(['id' => $routeId]));
     }
 
-    /**
-     * Load a route.
-     *
-     * @param int $routeId
-     *
-     * @return \App\Entity\Route
-     */
-    public function load($routeId)
+    public function load(string $routeId): Route
     {
         return $this->repository->findOneBy(['id' => $routeId]);
     }
 
-    /**
-     * Save new or update existing route.
-     *
-     * @param object $routeData
-     *
-     * @return \App\Entity\Route
-     */
-    public function save($routeData)
+    public function save(array $routeData): Route
     {
-        if (!$route = $this->repository->find($routeData->id)) {
+        /** @var Route $route */
+        if (!$route = $this->repository->find($routeData['id'])) {
             $route = new Route();
-            $route->setId($routeData->id);
+            $route->setId($routeData['id']);
         }
 
         // Find local athlete entity for the route.
-        if (!$athlete = $this->entityManager->getRepository(Athlete::class)->find($routeData->athlete->id)) {
+        if (!$athlete = $this->entityManager->getRepository(Athlete::class)->find($routeData['athlete']['id'])) {
             // If the athlete entity does not exist yet (which might be the
             // case when synchronizing a route starred by current athlete,
             // but created by a different one) create new athlete entity.
-            $athlete = $this->athleteService->save($routeData->athlete);
+            $athlete = $this->athleteService->save($routeData['athlete']);
         }
         $route->setAthlete($athlete);
 
-        $route->setType($routeData->type);
-        $route->setSubType($routeData->sub_type);
-        $route->setName(trim($routeData->name));
-        $route->setDescription($routeData->description);
-        $route->setDistance($routeData->distance);
-        $route->setAscent($routeData->elevation_gain);
-        $route->setPublic($routeData->public ?? true);
-        $route->setCreatedAt(\DateTime::createFromFormat('Y-m-d\TH:i:s\Z', $routeData->created_at));
-        $route->setUpdatedAt(\DateTime::createFromFormat('Y-m-d\TH:i:s\Z', $routeData->updated_at));
+        $route->setType($routeData['type']);
+        $route->setSubType($routeData['sub_type']);
+        $route->setName(trim($routeData['name']));
+        $route->setDescription($routeData['description'] ?? '');
+        $route->setPrivate($routeData['private']);
+        $route->setDistance($routeData['distance']);
+        $route->setElevationGain($routeData['elevation_gain']);
+        $route->setPublic(
+            $route->isNew() ? !$routeData['private'] : $route->isPublic()
+        );
+        $route->setCreatedAt(\DateTime::createFromFormat('Y-m-d\TH:i:s\Z', $routeData['created_at']));
+        $route->setUpdatedAt(\DateTime::createFromFormat('Y-m-d\TH:i:s\Z', $routeData['updated_at']));
+        $route->setMapUrl($routeData['map_urls']['url']);
 
         // No segments are included in getRoutesByAthleteId,
         // they are added only to the getRouteById.
         $climbCategory = 0;
-        if (!empty($routeData->segments)) {
-            foreach ($routeData->segments as $segment) {
-                if ($segment->climb_category > $climbCategory) {
-                    $climbCategory = $segment->climb_category;
+        if (!empty($routeData['segments'])) {
+            $segments = array_combine(
+                array_column($routeData['segments'], 'id'),
+                array_column($routeData['segments'], 'name'),
+            );
+            $route->setSegments($segments);
+
+            foreach ($routeData['segments'] as $segment) {
+                if ($segment['climb_category'] > $climbCategory) {
+                    $climbCategory = $segment['climb_category'];
                 }
             }
         }
         $route->setClimbCategory($climbCategory);
 
-        if (!empty($routeData->map->summary_polyline)) {
-            $route->setPolylineSummary($routeData->map->summary_polyline);
+        if (!empty($routeData['map']['summary_polyline'])) {
+            $route->setPolylineSummary($routeData['map']['summary_polyline']);
 
-            $list = \Polyline::decode($routeData->map->summary_polyline);
+            $list = \Polyline::decode($routeData['map']['summary_polyline']);
             $pairs = \Polyline::pair($list);
 
             $start = reset($pairs);
@@ -170,12 +112,7 @@ class RouteService extends EntityService
         return $route;
     }
 
-    /**
-     * Delete a route.
-     *
-     * @param int $routeId
-     */
-    public function delete($routeId)
+    public function delete(int $routeId): void
     {
         $route = $this->repository->findOneBy(['id' => $routeId]);
 
@@ -183,83 +120,56 @@ class RouteService extends EntityService
         $this->entityManager->flush();
     }
 
-    public function syncRoute($routeId)
+    public function syncRoute(int $routeId): ?Route
     {
-        try {
+//        try {
             $content = $this->stravaService->getRoute($routeId);
 
-            if (!empty($content->private)) {
-                // If a private route is found in our database, let's delete it.
-                if ($this->exists($content->id)) {
-                    $this->delete($content->id);
-
-                    throw new NoticeException(
-                        strtr(
-                            'Deleted private route "%route_name%" (%route_id%) by %athlete%.',
-                            [
-                                '%route_name%' => $content->name,
-                                '%route_id%' => $content->id,
-                                '%athlete%' => $content->athlete->firstname.' '.$content->athlete->lastname,
-                            ]
-                        )
-                    );
-                }
-
-                throw new \Exception('Cowardly refusing to add a private route.');
-            }
-
-            $this->athleteService->save($content->athlete);
-
-            // Save route.
             $route = $this->save($content);
 
             $message = '%action% route "%route_name%" (%route_id%) by %athlete%.';
             $params = [
                 '%action%' => $route->isNew() ? 'Added' : 'Updated',
-                '%route_name%' => $content->name,
-                '%route_id%' => $content->id,
-                '%athlete%' => $content->athlete->firstname.' '.$content->athlete->lastname,
+                '%route_name%' => $route->getName(),
+                '%route_id%' => $route->getId(),
+                '%athlete%' => $route->getAthlete()->getName(),
             ];
             $this->logger->info(strtr($message, $params));
-            $this->session->getFlashBag()->add('notice', strtr($message, $params));
+            $this->requestStack->getSession()->getFlashBag()->add('notice', strtr($message, $params));
 
             return $route;
-        } catch (ClientException $e) {
-            $response = $e->getResponse();
-            $content = \GuzzleHttp\json_decode($response->getBody()->getContents());
-            $this->logger->error($content->message);
-            $this->session->getFlashBag()->add('error', $content->message);
-
-            // Delete local route if it was not found on Strava.
-            if ($localRoute = $this->load($routeId)) {
-                $this->delete($localRoute->getId());
-
-                $message = 'Deleted route "%route_name%" (%route_id%) by %athlete% not found on Strava.';
-                $params = [
-                    '%route_name%' => $localRoute->getName(),
-                    '%route_id%' => $localRoute->getId(),
-                    '%athlete%' => $localRoute->getAthlete()->getName(),
-                ];
-                $this->logger->info(strtr($message, $params));
-                $this->session->getFlashBag()->add('notice', strtr($message, $params));
-            }
-        } catch (NoticeException $e) {
-            $this->logger->warning($e->getMessage());
-            $this->session->getFlashBag()->add('notice', $e->getMessage());
-        } catch (\Exception $e) {
-            $this->logger->error($e->getMessage());
-            $this->session->getFlashBag()->add('error', $e->getMessage());
-        }
+//        } catch (ClientException $e) {
+//            $response = $e->getResponse();
+//            $content = \GuzzleHttp\json_decode($response->getBody()->getContents());
+//            $this->logger->error($content->message);
+//            $this->requestStack->getSession()->getFlashBag()->add('error', $content->message);
+//
+//            // Delete local route if it was not found on Strava.
+//            if ($localRoute = $this->load($routeId)) {
+//                $this->delete($localRoute->getId());
+//
+//                $message = 'Deleted route "%route_name%" (%route_id%) by %athlete% not found on Strava.';
+//                $params = [
+//                    '%route_name%' => $localRoute->getName(),
+//                    '%route_id%' => $localRoute->getId(),
+//                    '%athlete%' => $localRoute->getAthlete()->getName(),
+//                ];
+//                $this->logger->info(strtr($message, $params));
+//                $this->requestStack->getSession()->getFlashBag()->add('notice', strtr($message, $params));
+//            }
+//        } catch (NoticeException $e) {
+//            $this->logger->warning($e->getMessage());
+//            $this->requestStack->getSession()->getFlashBag()->add('notice', $e->getMessage());
+//        } catch (\Exception $e) {
+//            $this->logger->error($e->getMessage());
+//            $this->requestStack->getSession()->getFlashBag()->add('error', $e->getMessage());
+//        }
     }
 
     /**
-     * Return array of athlete routes keyed by route ID.
-     *
-     * @param \App\Entity\Athlete $athlete
-     *
-     * @return array
+     * @return array<int, Route>
      */
-    public function getAthleteRoutes(Athlete $athlete)
+    public function getAthleteRoutes(Athlete $athlete): array
     {
         /** @var \App\Entity\Route[] $routes */
         $routes = $this->repository->findBy(['athlete' => $athlete->getId()]);
@@ -273,13 +183,9 @@ class RouteService extends EntityService
     }
 
     /**
-     * Return array of athlete routes keyed by route ID.
-     *
-     * @param \App\Entity\Athlete $athlete
-     *
-     * @return array
+     * @return array<int, Route>
      */
-    public function getAthleteStarredRoutes(Athlete $athlete)
+    public function getAthleteStarredRoutes(Athlete $athlete): array
     {
         $qb = $this->repository->createQueryBuilder('r');
 
@@ -297,13 +203,7 @@ class RouteService extends EntityService
         return $return;
     }
 
-    /**
-     * Delete athlete routes excluding specified ids.
-     *
-     * @param \App\Entity\Athlete $athlete
-     * @param array $excludeIds
-     */
-    public function deleteAthleteRoutes(Athlete $athlete, array $excludeIds)
+    public function deleteAthleteRoutes(Athlete $athlete, array $excludeIds): int
     {
         $qb = $this->repository->createQueryBuilder('r');
 
@@ -330,15 +230,7 @@ class RouteService extends EntityService
         return count($routesToDelete);
     }
 
-    /**
-     * Unstar athlete starred routes excluding specified ids.
-     *
-     * @param \App\Entity\Athlete $athlete
-     * @param array $excludeIds
-     *
-     * @return int
-     */
-    public function unstarAthleteRoutes(Athlete $athlete, array $excludeIds)
+    public function unstarAthleteRoutes(Athlete $athlete, array $excludeIds): int
     {
         $unstarred = 0;
 
@@ -359,7 +251,10 @@ class RouteService extends EntityService
         return $unstarred;
     }
 
-    public function getRouteTypes($type = null)
+    /**
+     * @return array<string, string>|string|null
+     */
+    public function getRouteTypes(string $type = null): array|string|null
     {
         $types = [
             '1' => 'bike',
@@ -371,6 +266,7 @@ class RouteService extends EntityService
             '2,1' => 'run · road',
             '2,4' => 'run · trail',
             '2,5' => 'run · mixed',
+            '3' => 'hike',
         ];
 
         if (isset($type)) {
@@ -380,9 +276,13 @@ class RouteService extends EntityService
         return $types;
     }
 
-    public function getLocationDistances($distance = null)
+    /**
+     * @return array<string, string>|string|null
+     */
+    public function getLocationDistances($distance = null): array|string|null
     {
         $distances = [
+            null => 'any',
             '0.1' => '100 m',
             '0.5' => '500 m',
             '1' => '1 km',
@@ -400,7 +300,11 @@ class RouteService extends EntityService
         return $distances;
     }
 
-    public function getFiltersForDisplay($filters)
+    /**
+     * @param array $filters
+     * @return array<string, array<string, string>>
+     */
+    public function getFiltersForDisplay(array $filters): array
     {
         $return = [];
 
@@ -420,12 +324,12 @@ class RouteService extends EntityService
                 'label' => 'max distance',
                 'suffix' => ' km',
             ],
-            'ascent_min' => [
-                'label' => 'min ascent',
+            'elevation_gain_min' => [
+                'label' => 'min elevation gain',
                 'suffix' => ' m',
             ],
-            'ascent_max' => [
-                'label' => 'max ascent',
+            'elevation_gain_max' => [
+                'label' => 'max elevation gain',
                 'suffix' => ' m',
             ],
             'athlete' => [

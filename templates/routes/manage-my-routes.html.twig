@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'Select routes to publish'|trans }} - {{ parent() }}{% endblock %}
+
+{% block body %}
+    <div class="page page_routes">
+        <div class="head">
+            <div class="cell checkbox"><input type="checkbox" id="select_all_header" class="select_all" name="select_all" checked="checked" /></div>
+            <div class="cell id">Id</div>
+            <div class="cell name">Name</div>
+            <div class="cell distance">Distance</div>
+            <div class="cell elevation_gain">Elevation gain</div>
+            <div class="cell athlete">Author</div>
+        </div>
+
+        {{ form_start(manage_my_routes_form) }}
+        <div class="rows">
+            {% for route in local_routes %}
+                <div class="row {{ cycle(['odd', 'even'], loop.index0) }}{% if route.private %} private{% endif %}">
+                    <div class="cell checkbox">{{ form_row(manage_my_routes_form.route[loop.index0]) }}</div>
+                    <div class="cell id">{{ route.id }}</div>
+                    <div class="cell name">
+                        {% apply spaceless %}
+                            {% if route.private %}
+                                <span class="private" title="This route is private in Strava">🔒</span>
+                            {% endif %}
+                            <a class="strava-link" href="https://www.strava.com/routes/{{ route.id }}">{{ route.name }}</a>
+                        {% endapply %}
+                    </div>
+                    <div class="cell distance number">{{ (route.distance // 1000) | number_format }} km</div>
+                    <div class="cell elevation_gain number">{{ route.elevationGain | number_format }} m</div>
+                    <div class="cell athlete">{{ route.athlete.name }}</div>
+                </div>
+            {% endfor %}
+            <div class="submit">
+                <div class="toggle">
+                    <label for="select_all_header"><input type="checkbox" id="select_all_header" class="select_all" name="select_all" checked="checked" /> Select all / none</label>
+                </div>
+                {{ form_widget(manage_my_routes_form.publish) }}
+                <div class="cancel">
+                    {% set uri = path('routes') %}
+                    {% if app.session.get('strava_redirect_destination') %}
+                        {% set uri = path(app.session.get('strava_redirect_destination').route, app.session.get('strava_redirect_destination').query) %}
+                    {% endif %}
+                    <a href="{{ uri }}">cancel</a>
+                </div>
+            </div>
+        </div>
+        {{ form_end(manage_my_routes_form) }}
+
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('manage-my-routes') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('manage-my-routes') }}
+{% endblock %}

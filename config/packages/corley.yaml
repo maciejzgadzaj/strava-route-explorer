@@ -1,0 +1,6 @@
+# https://packagist.org/packages/corley/maintenance-bundle#user-content-configuration
+corley_maintenance:
+    page: '%kernel.project_dir%/templates/maintenance.dist.html'
+    hard_lock: maintenance.html
+    whitelist:
+        ips: '%env(json:MAINTENANCE_ALLOWED_IPS)%'

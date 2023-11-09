@@ -1,0 +1,356 @@
+@import '_variables';
+@import '_mixins';
+
+@-moz-keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        -moz-transform: translateY(0);
+        transform: translateY(0);
+    }
+    40% {
+        -moz-transform: translateY(-30px);
+        transform: translateY(-30px);
+    }
+    60% {
+        -moz-transform: translateY(-15px);
+        transform: translateY(-15px);
+    }
+}
+@-webkit-keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+    }
+    40% {
+        -webkit-transform: translateY(-30px);
+        transform: translateY(-30px);
+    }
+    60% {
+        -webkit-transform: translateY(-15px);
+        transform: translateY(-15px);
+    }
+}
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        -moz-transform: translateY(0);
+        -ms-transform: translateY(0);
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+    }
+    40% {
+        -moz-transform: translateY(-30px);
+        -ms-transform: translateY(-30px);
+        -webkit-transform: translateY(-30px);
+        transform: translateY(-30px);
+    }
+    60% {
+        -moz-transform: translateY(-15px);
+        -ms-transform: translateY(-15px);
+        -webkit-transform: translateY(-15px);
+        transform: translateY(-15px);
+    }
+}
+
+h1, h2, h3 {
+    font-weight: normal;
+}
+
+body {
+    text-align: center;
+    line-height: 1.5em;
+}
+
+.flashes {
+    .flash {
+        margin: 0;
+    }
+}
+
+.immersive {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    min-height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    .big-image, .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+    .big-image {
+        z-index: 2;
+    }
+    .overlay {
+        background-color: $black;
+        opacity: .5;
+        z-index: 3;
+    }
+    &.white {
+        .overlay {
+            background-color: $orange;
+        }
+    }
+    .text {
+        z-index: 10;
+        margin: 0 10%;
+        .small {
+            font-size: .9em;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: .2em;
+            line-height: 1.5em;
+        }
+        h2.title {
+            margin: 1em 0;
+            font-size: 2.5em;
+            line-height: 1.5em;
+        }
+        h3.title {
+            margin: 1em 0;
+            font-size: 1.5em;
+            line-height: 1.5em;
+        }
+    }
+}
+
+.splash {
+    overflow: hidden;
+    background-color: $almostBlack;
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    //background-position: center center;
+    background-size: cover;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    color: $white;
+    background-image: url(https://lh3.googleusercontent.com/frxoy1aAnAvJAqfyvN86tm3s8qzlW88YWoNcSVFQaYsK9-_6dG4rXxKkBwcDT7ANSHMHyTaFEHxaiOdiMQs=w100-no-tmp.jpg);
+    background-position: center left;
+    .arrow {
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        margin-left: -20px;
+        width: 40px;
+        height: 40px;
+    }
+    .bounce {
+        -moz-animation: bounce 3s infinite;
+        -webkit-animation: bounce 3s infinite;
+        animation: bounce 3s infinite;
+    }
+}
+
+.remember {
+    position: relative;
+    padding: 4em 10%;
+    background-color: $orange;
+    text-align: center;
+    color: white;
+    .title {
+        margin: 0 0 1.5em;
+        line-height: 1.5em;
+        font-size: 2.2em;
+        font-style: italic;
+    }
+    .description {
+        margin: 1em 0;
+        font-size: 1.2em;
+        line-height: 1.8em;
+    }
+    a {
+        color: white;
+    }
+}
+
+.how {
+    padding: 2em;
+    .title {
+        font-size: 2.3em;
+        font-style: italic;
+        line-height: 1.3em;
+    }
+}
+
+.map-bg {
+    background: url(../../public/images/isolines.jpg);
+}
+
+.steps {
+    display: flex;
+    justify-content: space-around;
+    color: $almostBlack;
+    .step {
+        width: 28%;
+        margin-bottom: 3em;
+        text-align: center;
+        .no {
+            width: 2em;
+            height: 2em;
+            margin: 0 auto;
+            padding-top: .45em;
+            border: 1px solid $orange;
+            border-radius: 50%;
+            color: $orange;
+            text-align: center;
+            line-height: 1em;
+        }
+        .title {
+            margin: 1.5em 0;
+            font-size: .9em;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: $orange;
+            letter-spacing: .1em;
+        }
+        .description {
+            line-height: 1.5em;
+            font-size: 1.2em;
+        }
+    }
+}
+.dark-background {
+    .steps {
+        .step {
+            .no {
+                border: 1px solid $white;
+                color: $white;
+            }
+            .title {
+                color: $white;
+            }
+            .description {
+                color: $notSoWhite;
+            }
+        }
+    }
+}
+
+.enjoy {
+    position: relative;
+    background-image: url(https://lh3.googleusercontent.com/Z4AVWAUAR2JjxeVpFZRxZ2MIoXIR4G61jUh8GWbosmIE72t152mH65XRb_D0qTVU_iZh2HAfSG0MldEeMkc=w100-no-tmp.jpg);
+    .no {
+        width: 2em;
+        height: 2em;
+        margin: 0 auto;
+        padding-top: .45em;
+        border: 1px solid $white;
+        border-radius: 50%;
+        color: $white;
+        text-align: center;
+        line-height: 1em;
+    }
+    .title {
+        margin-top: .5em !important;
+    }
+    .credits {
+        position: absolute;
+        right: 2em;
+        bottom: 1.5em;
+        z-index: 10;
+        display: flex;
+        text-align: right;
+        color: $darkerWhite;
+        font-size: .8em;
+        line-height: 1.5em;
+        .avatar {
+            img {
+                border: 2px solid $notSoWhite;
+                border-radius: 50%;
+                &:hover {
+                    border-color: $white;
+                }
+            }
+        }
+        .ride {
+            margin-right: 1em;
+            a {
+                text-decoration: none;
+                color: $darkerWhite;
+                &:hover {
+                    text-decoration: underline;
+                    color: $white;
+                }
+            }
+            .route {
+                margin: .2em 0 .4em;
+                font-size: 1.5em;
+                color: $white;
+                a {
+                    color: $white;
+                }
+            }
+            .stats {
+                display: flex;
+                justify-content: flex-end;
+                -webkit-justify-content: flex-end;
+                .distance {
+                    margin-left: 1em;
+                    padding-left: 20px;
+                    background: url(../../public/images/icon-distance.svg) no-repeat;
+                    background-size: 16px 16px;
+                }
+                .elevation_gain {
+                    margin-left: 1em;
+                    padding-left: 24px;
+                    background: url(../../public/images/icon-elevation-gain.svg) no-repeat;
+                    background-size: 16px 16px;
+                }
+            }
+        }
+    }
+}
+
+.help {
+    position: relative;
+    background-image: url(https://lh3.googleusercontent.com/FXVuv78Ck_BPJqNOI_RXmvpz2EUwG1PmvTCaQqK3qhbNVO8MYwfkgHM46dtb5U57GqHrdrRwzr2uvlFFhkg=w100-no-tmp.jpg);
+    background-position: center right;
+    .text-overlay, .text {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 540px;
+        //max-width: 50%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    .text-overlay {
+        position: absolute;
+        margin: 0;
+        padding: 0;
+        background-color: $black;
+        opacity: .6;
+        overflow: hidden;
+    }
+    .text {
+        .item {
+            margin: 3em 4em 2em 3em;
+            padding-left: 2em;
+            text-align: left;
+            .title {
+                margin: 0 0 .5em;
+                font-size: 1.5em;
+                &:before {
+                    content: '>';
+                    margin-left: -1.5em;
+                    width: 1.5em;
+                    display: inline-block;
+                    color: $orange;
+                }
+                a {
+                    color: $white;
+                    text-decoration: none;
+                    &:hover {
+                        color: $orange;
+                        text-decoration: underline;
+                    }
+                }
+            }
+        }
+    }
+}

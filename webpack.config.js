@@ -1,46 +1,81 @@
-var Encore = require('@symfony/webpack-encore');
+const Encore = require('@symfony/webpack-encore');
+
+// Manually configure the runtime environment if not already configured yet by the "encore" command.
+// It's useful when you use tools that rely on webpack.config.js file.
+if (!Encore.isRuntimeEnvironmentConfigured()) {
+    Encore.configureRuntimeEnvironment(process.env.NODE_ENV || 'dev');
+}
 
 Encore
-// the project directory where all compiled assets will be stored
+    // directory where compiled assets will be stored
     .setOutputPath('public/build/')
 
-    // the public path used by the web server to access the previous directory
+    // public path used by the web server to access the output path
     .setPublicPath('/build')
 
-    // will create public/build/app.js and public/build/app.css
+    // only needed for CDN's or subdirectory deploy
+    //.setManifestKeyPrefix('build/')
+
+    /*
+     * ENTRY CONFIG
+     *
+     * Each entry will result in one JavaScript file (e.g. app.js)
+     * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
+     */
     .addEntry('app', './assets/js/app.js')
-    .addEntry('athletes', './assets/js/athletes.js')
-    .addEntry('homepage', './assets/js/homepage.js')
-    .addEntry('maintenance', './assets/js/maintenance.js')
+    .addEntry('immersive', './assets/js/immersive.js')
+    .addEntry('list-routes', './assets/js/list-routes.js')
+    .addEntry('sync-my-routes', './assets/js/sync-my-routes.js')
+    .addEntry('manage-my-routes', './assets/js/manage-my-routes.js')
+    .addEntry('list-athletes', './assets/js/list-athletes.js')
     .addEntry('pager', './assets/js/pager.js')
-    .addEntry('routes', './assets/js/routes.js')
-    .addEntry('select', './assets/js/select.js')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
-    // .splitEntryChunks()
+    .splitEntryChunks()
 
     // will require an extra script tag for runtime.js
     // but, you probably want this, unless you're building a single-page app
     .enableSingleRuntimeChunk()
 
-    // allow legacy applications to use $/jQuery as a global variable
-    .autoProvidejQuery()
-
-    // enable source maps during development
-    .enableSourceMaps(!Encore.isProduction())
-
-    // empty the outputPath dir before each build
+    /*
+     * FEATURE CONFIG
+     *
+     * Enable & configure other features below. For a full
+     * list of features, see:
+     * https://symfony.com/doc/current/frontend.html#adding-more-features
+     */
     .cleanupOutputBeforeBuild()
-
-    // show OS notifications when builds finish/fail
     .enableBuildNotifications()
-
-    // create hashed filenames (e.g. app.abc123.css)
+    .enableSourceMaps(!Encore.isProduction())
+    // enables hashed filenames (e.g. app.abc123.css)
     .enableVersioning(Encore.isProduction())
 
-    // allow sass/css files to be processed
+    // configure Babel
+    // .configureBabel((config) => {
+    //     config.plugins.push('@babel/a-babel-plugin');
+    // })
+
+    // enables and configure @babel/preset-env polyfills
+    .configureBabelPresetEnv((config) => {
+        config.useBuiltIns = 'usage';
+        config.corejs = '3.23';
+    })
+
+    // enables Sass/SCSS support
     .enableSassLoader()
+
+    // uncomment if you use TypeScript
+    //.enableTypeScriptLoader()
+
+    // uncomment if you use React
+    //.enableReactPreset()
+
+    // uncomment to get integrity="..." attributes on your script & link tags
+    // requires WebpackEncoreBundle 1.4 or higher
+    //.enableIntegrityHashes(Encore.isProduction())
+
+    // uncomment if you're having problems with a jQuery plugin
+    // .autoProvidejQuery()
 ;
 
-// export the final configuration
 module.exports = Encore.getWebpackConfig();

@@ -1,0 +1,33 @@
+#fetching {
+    margin-left: .8em;
+    span {
+        display: inline-block;
+    }
+    #fetching-ellipsis {
+        position: relative;
+        width: .8em;
+    }
+    #fetching-ellipsis:after {
+        position: absolute;
+        top: 0;
+        left: 0;
+        text-align: left;
+        overflow: hidden;
+        display: inline-block;
+        vertical-align: bottom;
+        -webkit-animation: ellipsis steps(4,end) 900ms infinite;
+        animation: ellipsis steps(4,end) 900ms infinite;
+        content: "\2026"; /* ascii code for the ellipsis character */
+        width: 0px;
+    }
+}
+@keyframes ellipsis {
+    to {
+        width: .8em;
+    }
+}
+@-webkit-keyframes ellipsis {
+    to {
+        width: .8em;
+    }
+}

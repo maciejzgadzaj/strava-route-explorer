@@ -5,4 +5,7 @@ twig:
     exception_controller: null
     globals:
         google_analytics_tag: '%google_analytics_tag%'
-        open_access: '%open_access%'
+
+when@test:
+    twig:
+        strict_variables: true

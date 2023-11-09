@@ -1,0 +1,108 @@
+{% extends 'base-full.html.twig' %}
+
+{% block title %}{{ 'Routes'|trans }} - {{ parent() }}{% endblock %}
+
+{% block body %}
+    <div class="page page_routes">
+        {% if data.results|length > 0 %}
+            <div class="section_pager section_pager_top">
+                {% include 'elements/pager.html.twig' %}
+            </div>
+        {% endif %}
+
+        {% include 'routes/route-search-form.html.twig' %}
+
+        {# SECTION: ROWS #}
+        <div class="section_rows">
+            {% if data.results|length > 0 %}
+                {% for row in data.results %}
+                    <div class="row type-{{ row.route.type }} {{ cycle(['odd', 'even'], loop.index0) }}">
+                        <div class="cell image">
+                            <a href="https://www.strava.com/routes/{{ row.route.id }}">
+                                {% if row.route.mapUrl %}
+                                    <img class="strava" src="{{ row.route.mapUrl }}" />
+                                {% else %}
+                                    <img class="mapquest" src="images/routes/{{ row.route.athlete.id }}/{{ row.route.id }}.jpg" width="75" height="50" />
+                                {% endif %}
+                            </a>
+                        </div>
+                        <div class="cell name">
+                            {% set starred_by = null %}
+                            {% if (row.starred_by_current_athlete is defined and row.starred_by_current_athlete) %}
+                                {% set starred_by = 'current' %}
+                            {% elseif (row.starred_by_searched_athlete is defined and row.starred_by_searched_athlete) %}
+                                {% set starred_by = 'searched' %}
+                            {% endif %}
+                            {% if (starred_by) %}
+                                <span class="icon starred starred_{{ starred_by }}">★</span>
+                            {% endif %}
+                            {% if not row.route.public %}
+                                <span class="private" title="This route is not published and is visible only to you">🔒</span>
+                            {% endif %}
+                            <a title="See route on Strava.com" href="https://www.strava.com/routes/{{ row.route.id }}">{{ row.route.name }}</a>
+                            <a title="See route on VeloViewer.com" class="link external veloviewer" href="https://veloviewer.com/routes/{{ row.route.id }}">VV</a>
+                            <a title="Download route in .TCX format" class="link external download-tcx" href="https://www.strava.com/routes/{{ row.route.id }}/export_tcx">TCX</a>
+                            <a title="Download route in .GPX format" class="link external download-gpx" href="https://www.strava.com/routes/{{ row.route.id }}/export_gpx">GPX</a>
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <a title="Dump" class="link dump" href="{{ path('route_dump', { 'routeId': row.route.id }) }}">dump</a>
+                            {% endif %}
+                            <div class="description small not-too-black">{{ row.route.description }}</div>
+                            <div class="route_id small">{{ row.route.id }}</div>
+                            {% if row.route.start_dist is defined or row.route.end_dist is defined %}
+                                <div class="distances">
+                                    {% if row.start_dist is defined %}
+                                        <span class="start_dist">Start: <span class="distance">{{ row.start_dist|number_format(1, '.', ',') }} km</span></span>
+                                    {% endif %}
+                                    {% if row.end_dist is defined %}
+                                        <span class="end_dist">End: <span class="distance">{{ row.end_dist|number_format(1, '.', ',') }} km</span></span>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="cell distance">
+                            {{ (row.route.distance // 1000)|number_format }} <span class="unit">km</span>
+                        </div>
+                        <div class="cell elevation_gain">
+                            {% if row.route.climbCategory in [5] %}
+                                <div class="climb cat-{{ row.route.climbCategory }}"></div>
+                            {% endif %}
+                            {{ row.route.elevationGain | number_format }} <span class="unit">m</span>
+                        </div>
+                        <div class="flex-line-break"></div>
+                        <div class="cell athlete">
+                            <a title="See all routes by {{ row.route.athlete.name }}" href="{{ path('routes', { 'filter[athlete]': row.route.athlete.name }) }}">{{ row.route.athlete.name}}</a>
+                            <div class="athlete_id"><a class="small external" title="See athlete profile on Strava.com" href="https://www.strava.com/athletes/{{ row.route.athlete.id }}">{{ row.route.athlete.id }}</a></div>
+                        </div>
+                        <div class="cell updated">
+                            {{ row.route.updatedAt|date('Y-m-d') }}
+                            <div class="created small" title="Created">{{ row.route.createdAt|date('Y-m-d') }}</div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="row">
+                    <div class="empty">No routes found matching your criteria.</div>
+                </div>
+            {% endif %}
+        </div>
+        {# END SECTION: ROWS #}
+
+        {% if data.results|length > 0 %}
+            <div class="section_pager section_pager_bottom">
+                {% include 'elements/pager.html.twig' %}
+            </div>
+        {% endif %}
+
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('list-routes') }}
+{#    <link rel="stylesheet" media='screen and (max-width: 760px)' href="{{ asset('build/routes-mobile.css') }}" />#}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('list-routes') }}
+{% endblock %}

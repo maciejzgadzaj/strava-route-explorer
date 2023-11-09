@@ -1,3 +1,2 @@
-Contact: mailto:admin@stravaroutes.com
-Expires: 2022-12-31T22:59:00.000Z
-
+Contact: mailto:security@stravaroutes.com
+Expires: 2023-12-31T00:00:00.000Z

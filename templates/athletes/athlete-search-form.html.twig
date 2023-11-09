@@ -1,0 +1,62 @@
+{{ form_start(athlete_search_form) }}
+{% set query = app.request.query.all %}
+<div class="section_filters">
+
+    <div class="image"></div>
+
+    {# FILTER: ATHLETE #}
+    <div class="filter name buttons">
+        <div class="label">
+            <div class="text">Athlete</div>
+            {% set dir, direction, icon = 'asc', 'ascending', 'icon-sort.svg' %}
+            {% if query.sort is defined and query.sort == 'name' %}
+                {% set icon = 'icon-sort-active.svg' %}
+                {% if query.dir is defined and query.dir == 'asc' %}
+                    {% set dir, direction = 'desc', 'descending' %}
+                {% endif %}
+            {% endif %}
+            <div class="sort">
+                <a title="Sort athletes by name in {{ direction }} order" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({ 'sort': 'name', 'dir': dir })) }}"><img src="images/{{ icon }}" width="12" height="12" /></a>
+            </div>
+        </div>
+        <div class="input">
+            {{ form_widget(athlete_search_form.name) }}
+            {{ form_widget(athlete_search_form.search) }}
+            {{ form_widget(athlete_search_form.reset) }}
+        </div>
+    </div>
+    {# END FILTER: ATHLETE #}
+
+{#    <div class="filter routes">#}
+{#        <div class="label">#}
+{#            <div class="text">Routes</div>#}
+{#            {% set dir, direction, icon = 'desc', 'descending', 'icon-sort.svg' %}#}
+{#            {% if query.sort is defined and query.sort == 'route_count' %}#}
+{#                {% set icon = 'icon-sort-active.svg' %}#}
+{#                {% if query.dir is defined and query.dir == 'desc' %}#}
+{#                    {% set dir, direction = 'asc', 'ascending' %}#}
+{#                {% endif %}#}
+{#            {% endif %}#}
+{#            <div class="sort">#}
+{#                <a title="Sort athletes by route count in {{ direction }} order" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({ 'sort': 'route_count', 'dir': dir })) }}"><img src="images/{{ icon }}" width="12" height="12" /></a>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+
+    <div class="filter last_sync">
+        <div class="label">
+            <div class="text">Last sync</div>
+            {% set dir, direction, icon = 'desc', 'descending', 'icon-sort.svg' %}
+            {% if query.sort is defined and query.sort == 'last_sync' %}
+                {% set icon = 'icon-sort-active.svg' %}
+                {% if query.dir is defined and query.dir == 'desc' %}
+                    {% set dir, direction = 'asc', 'ascending' %}
+                {% endif %}
+            {% endif %}
+            <div class="sort">
+                <a title="Sort athletes by last routes sync date in {{ direction }} order" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({ 'sort': 'last_sync', 'dir': dir })) }}"><img src="images/{{ icon }}" width="12" height="12" /></a>
+            </div>
+        </div>
+    </div>
+</div>
+{{ form_end(athlete_search_form) }}

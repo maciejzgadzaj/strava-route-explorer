@@ -1,89 +1,52 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Service;
 
 use App\Entity\Athlete;
+use App\Repository\AthleteRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Doctrine\ORM\EntityRepository;
 
-/**
- * Class AthleteService
- *
- * @package App\Service
- */
-class AthleteService extends EntityService
+class AthleteService
 {
-    /**
-     * @var \App\Repository\AthleteRepository
-     */
-    private $repository;
+    private AthleteRepository|EntityRepository $repository;
 
-    /**
-     * AthleteService constructor.
-     *
-     * @param \Doctrine\ORM\EntityManagerInterface $entityManager
-     * @param \Symfony\Component\HttpFoundation\Session\SessionInterface $session
-     */
-    public function __construct(EntityManagerInterface $entityManager, SessionInterface $session)
-    {
-        parent::__construct($entityManager, $session);
-
+    public function __construct(
+        private readonly EntityManagerInterface $entityManager,
+    ) {
         $this->repository = $this->entityManager->getRepository(Athlete::class);
     }
 
-    /**
-     * Return total number of athletes.
-     *
-     * @return int
-     */
-    public function count()
+    public function count(): int
     {
         return $this->repository->count([]);
     }
 
-    /**
-     * Check if athlete exists.
-     *
-     * @param int $athleteId
-     *
-     * @return bool
-     */
-    public function exists($athleteId)
+    public function exists(int $athleteId): bool
     {
         return !empty($this->repository->findOneBy(['id' => $athleteId]));
     }
 
-    /**
-     * Load an athlete.
-     *
-     * @param int $athleteId
-     *
-     * @return \App\Entity\Athlete
-     */
-    public function load($athleteId)
+    public function load(int $athleteId): Athlete
     {
         return $this->repository->findOneBy(['id' => $athleteId]);
     }
 
-    /**
-     * Save new or update existing athlete.
-     *
-     * @param object $athleteData
-     *
-     * @return \App\Entity\Athlete
-     */
-    public function save($athleteData, $tokenData = null)
+    public function save(array $athleteData, array $tokenData = null): Athlete
     {
-        if (!$athlete = $this->repository->find($athleteData->id)) {
+        if (!$athlete = $this->repository->find($athleteData['id'])) {
             $athlete = new Athlete();
-            $athlete->setId($athleteData->id);
+            $athlete->setId($athleteData['id']);
         }
 
-        $athlete->setUsername($athleteData->username);
-        $athlete->setEmail($athleteData->email ?? null);
-        $athlete->setName(trim($athleteData->firstname).' '.trim($athleteData->lastname));
-        $athlete->setPremium($athleteData->premium);
-        $athlete->setProfile($athleteData->profile);
+        $athlete->setUsername($athleteData['username']);
+        $athlete->setName(trim($athleteData['firstname']).' '.trim($athleteData['lastname']));
+        $athlete->setEmail($athleteData['email'] ?? null);
+        $athlete->setCountry($athleteData['country']);
+        $athlete->setPremium($athleteData['premium']);
+        $athlete->setProfile($athleteData['profile']);
 
         if (!empty($tokenData)) {
             $athlete = $this->saveTokenData($athlete, $tokenData, true);
@@ -95,24 +58,13 @@ class AthleteService extends EntityService
         return $athlete;
     }
 
-    /**
-     * Save athlete's new token details.
-     *
-     * @param \App\Entity\Athlete $athlete
-     * @param array $tokenData
-     * @param bool $skipSave
-     *
-     * @return \App\Entity\Athlete
-     *
-     * @throws \Exception
-     */
-    public function saveTokenData($athlete, $tokenData, $skipSave = false)
+    public function saveTokenData(Athlete $athlete, array $tokenData, bool $skipSave = false): Athlete
     {
-        $athlete->setAccessToken($tokenData->access_token);
-        $athlete->setRefreshToken($tokenData->refresh_token);
+        $athlete->setAccessToken($tokenData['access_token']);
+        $athlete->setRefreshToken($tokenData['refresh_token']);
 
         $expiresAt = new \DateTime();
-        $expiresAt->setTimestamp($tokenData->expires_at);
+        $expiresAt->setTimestamp($tokenData['expires_at']);
         $athlete->setExpiresAt($expiresAt);
 
         if (empty($skipSave)) {
@@ -123,67 +75,11 @@ class AthleteService extends EntityService
         return $athlete;
     }
 
-    /**
-     * Delete an athlete.
-     *
-     * @param int $atleteId
-     */
-    public function delete($atleteId)
+    public function delete(int $atleteId): void
     {
         $athlete = $this->repository->findOneBy(['id' => $atleteId]);
 
         $this->entityManager->remove($athlete);
         $this->entityManager->flush();
-    }
-
-    /**
-     * Check if current site user is authorized with Strava.
-     *
-     * @return bool
-     */
-    public function isAuthorized()
-    {
-        return !empty($this->session->get('strava_athlete'));
-    }
-
-    /**
-     * Return athlete currently authorized with Strava.
-     *
-     * @return \App\Entity\Athlete
-     */
-    public function getCurrentAthlete()
-    {
-        if ($athleteId = $this->session->get('strava_athlete')) {
-            return $this->load($athleteId);
-        }
-    }
-
-    /**
-     * Return an array of athletes authorized with Strava.
-     *
-     * @return Athlete[]
-     */
-    public function getAuthorizedWithStrava()
-    {
-        $qb = $this->repository->createQueryBuilder('a');
-        return $qb->where($qb->expr()->isNotNull('a.accessToken'))
-            ->getQuery()
-            ->getResult();
-    }
-
-    /**
-     * Remove old Strava cookies and set one new one.
-     */
-    public function removeOldCookies()
-    {
-        // Set new cookie from old.
-        if ($athleteCookie = $this->session->get('athlete')) {
-            $athlete = $this->load($athleteCookie->id);
-            $this->session->set('strava_athlete', $athlete->getId());
-
-            // Remove old cookies.
-            $this->session->remove('athlete');
-            $this->session->remove('strava_access_token');
-        }
     }
 }
