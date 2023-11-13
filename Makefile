@@ -90,7 +90,6 @@ run: ## Project startup
 	$(COMPOSE) up -d
 	@echo "\033[32mContainers running!\033[0m"
 	@echo "Site: \033[33mhttp://localhost/\033[0m"
-	@echo "phpMyAdmin: \033[33mhttp://localhost:8080/\033[0m"
 up: run
 
 

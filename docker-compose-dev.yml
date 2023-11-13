@@ -53,13 +53,3 @@ services:
             - .env
         environment:
             MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-
-    phpmyadmin:
-        image: phpmyadmin
-        container_name: strava-route-explorer-phpmyadmin
-        hostname: phpmyadmin
-        restart: always
-        ports:
-            - 8080:80
-        environment:
-            - PMA_ARBITRARY=1
