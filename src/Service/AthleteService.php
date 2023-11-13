@@ -41,12 +41,14 @@ class AthleteService
             $athlete->setId($athleteData['id']);
         }
 
-        $athlete->setUsername($athleteData['username']);
-        $athlete->setName(trim($athleteData['firstname']).' '.trim($athleteData['lastname']));
-        $athlete->setEmail($athleteData['email'] ?? null);
-        $athlete->setCountry($athleteData['country']);
-        $athlete->setPremium($athleteData['premium']);
-        $athlete->setProfile($athleteData['profile']);
+        $athlete
+            ->setUsername($athleteData['username'])
+            ->setName(trim($athleteData['firstname']).' '.trim($athleteData['lastname']))
+            ->setEmail($athleteData['email'] ?? null)
+            ->setCountry($athleteData['country'])
+            ->setPremium($athleteData['premium'])
+            ->setProfile($athleteData['profile'])
+        ;
 
         if (!empty($tokenData)) {
             $athlete = $this->saveTokenData($athlete, $tokenData, true);

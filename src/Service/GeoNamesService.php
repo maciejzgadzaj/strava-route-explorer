@@ -7,7 +7,7 @@ namespace App\Service;
 use Doctrine\DBAL\Connection;
 use Doctrine\Persistence\ManagerRegistry;
 
-class GeoNamesService extends EntityService
+class GeoNamesService
 {
     private Connection $connection;
 
