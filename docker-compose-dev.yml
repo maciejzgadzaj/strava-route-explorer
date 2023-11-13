@@ -30,7 +30,7 @@ services:
             - .:/application
             # Do not mount
             - /application/node_modules
-            - ./.docker/php-fpm/custom.ini:/etc/php/8.1/fpm/conf.d/custom.ini
+            - ./.docker/php-fpm/custom.ini:/etc/php/8.2/fpm/conf.d/custom.ini
             - ./.docker/php-fpm/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
         env_file:
             - .env

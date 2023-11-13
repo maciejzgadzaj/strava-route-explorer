@@ -1,4 +1,4 @@
-FROM php:8.1-fpm-alpine
+FROM php:8.2-fpm-alpine
 
 WORKDIR /application
 
@@ -40,8 +40,12 @@ RUN apk update \
 # zip
     && docker-php-ext-configure zip \
     && docker-php-ext-install zip \
-# mysql \
+# mysql
     && docker-php-ext-install mysqli \
+# mongodb
+    && pecl channel-update pecl.php.net \
+    && pecl install mongodb \
+    && docker-php-ext-enable mongodb \
 # other
     && docker-php-ext-configure gd \
     && docker-php-ext-install -j$(nproc) bcmath gd \
