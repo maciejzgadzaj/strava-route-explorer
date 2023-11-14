@@ -14,8 +14,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class RouteMap extends AbstractController
 {
     public function __invoke(
-        string $athlete_id,
-        string $route_id,
+        int $athlete_id,
+        int $route_id,
         RouteService $routeService,
         MapService $mapService,
     ): BinaryFileResponse {

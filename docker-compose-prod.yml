@@ -8,9 +8,10 @@ services:
         working_dir: /application
         volumes:
             - .:/application
-            - /application/vendor
             - ./.docker/nginx/default-prod.conf:/etc/nginx/conf.d/default.conf
             - ./.docker/nginx/cloudflare-origin-certificate:/etc/certs
+            # Do not mount
+            - /application/vendor
         env_file:
             - .env
         ports:
@@ -37,13 +38,20 @@ services:
         hostname: php-fpm
         working_dir: /application
         volumes:
+            # docker-compose resolves $HOME and ~ to the guest home instead of host home, so they cannot be used here,
+            # we need absolute path. See for example https://github.com/containerd/nerdctl/issues/996
             - /home/maciej_zgadzaj/.ssh:/root/.ssh
             - .:/application
+            # Do not mount
+            - /application/node_modules
+        env_file:
+            - .env
         tty: true
         networks:
             - strava-route-explorer
         depends_on:
             - mysql
+        restart: always
         logging:
             # https://docs.docker.com/config/containers/logging/gcplogs/
             # https://docs.docker.com/compose/compose-file/05-services/#logging

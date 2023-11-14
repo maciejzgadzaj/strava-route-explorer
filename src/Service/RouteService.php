@@ -11,6 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use LongitudeOne\Spatial\PHP\Types\Geometry\Point;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpClient\Exception\ClientException;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class RouteService
@@ -37,7 +38,7 @@ class RouteService
         return !empty($this->repository->findOneBy(['id' => $routeId]));
     }
 
-    public function load(string $routeId): Route
+    public function load(int $routeId): Route
     {
         return $this->repository->findOneBy(['id' => $routeId]);
     }
@@ -57,21 +58,21 @@ class RouteService
             // but created by a different one) create new athlete entity.
             $athlete = $this->athleteService->save($routeData['athlete']);
         }
-        $route->setAthlete($athlete);
 
-        $route->setType($routeData['type']);
-        $route->setSubType($routeData['sub_type']);
-        $route->setName(trim($routeData['name']));
-        $route->setDescription($routeData['description'] ?? '');
-        $route->setPrivate($routeData['private']);
-        $route->setDistance($routeData['distance']);
-        $route->setElevationGain($routeData['elevation_gain']);
-        $route->setPublic(
-            $route->isNew() ? !$routeData['private'] : $route->isPublic()
-        );
-        $route->setCreatedAt(\DateTime::createFromFormat('Y-m-d\TH:i:s\Z', $routeData['created_at']));
-        $route->setUpdatedAt(\DateTime::createFromFormat('Y-m-d\TH:i:s\Z', $routeData['updated_at']));
-        $route->setMapUrl($routeData['map_urls']['url']);
+        $route
+            ->setAthlete($athlete)
+            ->setType($routeData['type'])
+            ->setSubType($routeData['sub_type'])
+            ->setName(trim($routeData['name']))
+            ->setDescription($routeData['description'] ?? '')
+            ->setPrivate($routeData['private'])
+            ->setDistance($routeData['distance'])
+            ->setElevationGain($routeData['elevation_gain'])
+            ->setPublic($route->isNew() ? !$routeData['private'] : $route->isPublic())
+            ->setCreatedAt(\DateTime::createFromFormat('Y-m-d\TH:i:s\Z', $routeData['created_at']))
+            ->setUpdatedAt(\DateTime::createFromFormat('Y-m-d\TH:i:s\Z', $routeData['updated_at']))
+            ->setMapUrl($routeData['map_urls']['url'])
+        ;
 
         // No segments are included in getRoutesByAthleteId,
         // they are added only to the getRouteById.
@@ -122,10 +123,10 @@ class RouteService
 
     public function syncRoute(int $routeId): ?Route
     {
-//        try {
-            $content = $this->stravaService->getRoute($routeId);
+        try {
+            $response = $this->stravaService->getRoute($routeId);
 
-            $route = $this->save($content);
+            $route = $this->save($response);
 
             $message = '%action% route "%route_name%" (%route_id%) by %athlete%.';
             $params = [
@@ -138,32 +139,30 @@ class RouteService
             $this->requestStack->getSession()->getFlashBag()->add('notice', strtr($message, $params));
 
             return $route;
-//        } catch (ClientException $e) {
-//            $response = $e->getResponse();
-//            $content = \GuzzleHttp\json_decode($response->getBody()->getContents());
-//            $this->logger->error($content->message);
-//            $this->requestStack->getSession()->getFlashBag()->add('error', $content->message);
-//
-//            // Delete local route if it was not found on Strava.
-//            if ($localRoute = $this->load($routeId)) {
-//                $this->delete($localRoute->getId());
-//
-//                $message = 'Deleted route "%route_name%" (%route_id%) by %athlete% not found on Strava.';
-//                $params = [
-//                    '%route_name%' => $localRoute->getName(),
-//                    '%route_id%' => $localRoute->getId(),
-//                    '%athlete%' => $localRoute->getAthlete()->getName(),
-//                ];
-//                $this->logger->info(strtr($message, $params));
-//                $this->requestStack->getSession()->getFlashBag()->add('notice', strtr($message, $params));
-//            }
-//        } catch (NoticeException $e) {
-//            $this->logger->warning($e->getMessage());
-//            $this->requestStack->getSession()->getFlashBag()->add('notice', $e->getMessage());
-//        } catch (\Exception $e) {
-//            $this->logger->error($e->getMessage());
-//            $this->requestStack->getSession()->getFlashBag()->add('error', $e->getMessage());
-//        }
+        } catch (ClientException $clientException) {
+            $response = $clientException->getResponse()->toArray();
+            $this->logger->error($response->message);
+            $this->requestStack->getSession()->getFlashBag()->add('error', $response->message);
+
+            // Delete local route if it was not found on Strava.
+            if ($localRoute = $this->load($routeId)) {
+                $this->delete($localRoute->getId());
+
+                $message = 'Deleted route "%route_name%" (%route_id%) by %athlete% not found on Strava.';
+                $params = [
+                    '%route_name%' => $localRoute->getName(),
+                    '%route_id%' => $localRoute->getId(),
+                    '%athlete%' => $localRoute->getAthlete()->getName(),
+                ];
+                $this->logger->info(strtr($message, $params));
+                $this->requestStack->getSession()->getFlashBag()->add('notice', strtr($message, $params));
+            }
+        } catch (\Exception $exception) {
+            $this->logger->error($exception->getMessage());
+            $this->requestStack->getSession()->getFlashBag()->add('error', $exception->getMessage());
+        }
+
+        return null;
     }
 
     /**
@@ -301,7 +300,7 @@ class RouteService
     }
 
     /**
-     * @param array $filters
+     * @param  array  $filters
      * @return array<string, array<string, string>>
      */
     public function getFiltersForDisplay(array $filters): array
@@ -365,7 +364,7 @@ class RouteService
                         $value = 'within '.($this->getLocationDistances($filters['end_dist']) ? $this->getLocationDistances($filters['end_dist']) : $filters['end_dist']).' from '.$value;
                     }
                 }
-                $return[$nameMap[$key]['label']] = $value . ($nameMap[$key]['suffix'] ?? '');
+                $return[$nameMap[$key]['label']] = $value.($nameMap[$key]['suffix'] ?? '');
             }
         }
 
