@@ -5,7 +5,7 @@ doctrine:
             default:
                 url: '%env(resolve:DATABASE_URL)%'
                 driver: 'pdo_mysql'
-                server_version: '5.7'
+                server_version: '8.2'
                 charset: utf8mb4
                 default_table_options:
                     charset: utf8mb4
@@ -21,7 +21,7 @@ doctrine:
                     collate: utf8mb4_unicode_ci
         types:
             json: App\Doctrine\DBAL\Types\UnescapedJsonType
-            point: CrEOF\Spatial\DBAL\Types\Geometry\PointType
+            point: LongitudeOne\Spatial\DBAL\Types\Geometry\PointType
     orm:
         auto_generate_proxy_classes: true
         enable_lazy_ghost_objects: true
@@ -46,11 +46,11 @@ doctrine:
                     numeric_functions:
                         acos: DoctrineExtensions\Query\Mysql\Acos
                         cos: DoctrineExtensions\Query\Mysql\Cos
-                        point: CrEOF\Spatial\ORM\Query\AST\Functions\MySql\Point
+                        point: LongitudeOne\Spatial\ORM\Query\AST\Functions\MySql\Point
                         radians: DoctrineExtensions\Query\Mysql\Radians
                         sin: DoctrineExtensions\Query\Mysql\Sin
-                        x: CrEOF\Spatial\ORM\Query\AST\Functions\MySql\X
-                        y: CrEOF\Spatial\ORM\Query\AST\Functions\MySql\Y
+                        x: LongitudeOne\Spatial\ORM\Query\AST\Functions\Standard\StX
+                        y: LongitudeOne\Spatial\ORM\Query\AST\Functions\Standard\StY
                     string_functions:
                         match: DoctrineExtensions\Query\Mysql\MatchAgainst
             geonames:

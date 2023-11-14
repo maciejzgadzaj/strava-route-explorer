@@ -54,7 +54,7 @@ services:
             com.example.description: "php-fpm"
 
     mysql:
-        image: mysql:5.7
+        image: mysql:8.2
         platform: linux/x86_64
         container_name: mysql
         hostname: mysql

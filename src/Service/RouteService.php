@@ -7,9 +7,9 @@ namespace App\Service;
 use App\Entity\Athlete;
 use App\Entity\Route;
 use App\Repository\AthleteRepository;
-use CrEOF\Spatial\PHP\Types\Geometry\Point;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use LongitudeOne\Spatial\PHP\Types\Geometry\Point;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 

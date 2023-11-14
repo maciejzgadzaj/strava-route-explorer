@@ -39,7 +39,7 @@ services:
             - mysql
 
     mysql:
-        image: mysql:5.7
+        image: mysql:8.2
         platform: linux/x86_64
         container_name: strava-route-explorer-mysql
         hostname: mysql

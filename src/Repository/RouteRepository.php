@@ -6,10 +6,10 @@ namespace App\Repository;
 
 use App\Entity\Athlete;
 use App\Entity\Route;
-use CrEOF\Spatial\PHP\Types\Geometry\Point;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
+use LongitudeOne\Spatial\PHP\Types\Geometry\Point;
 use Symfony\Bundle\SecurityBundle\Security;
 
 class RouteRepository extends ServiceEntityRepository
