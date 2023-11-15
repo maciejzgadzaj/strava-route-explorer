@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use LongitudeOne\Spatial\PHP\Types\Geometry\GeometryInterface;
 use LongitudeOne\Spatial\PHP\Types\Geometry\Point;
 
 #[ORM\Entity(repositoryClass: RouteRepository::class)]
@@ -72,10 +73,10 @@ class Route
     #[ORM\Column(name: 'climb_category', type: Types::SMALLINT)]
     private int $climbCategory;
 
-    #[ORM\Column(name: 'start', type: 'point')]
+    #[ORM\Column(name: 'start', type: GeometryInterface::POINT)]
     private Point $start;
 
-    #[ORM\Column(name: 'end', type: 'point')]
+    #[ORM\Column(name: 'end', type: GeometryInterface::POINT)]
     private Point $end;
 
     #[ORM\Column(name: 'map_url', type: Types::TEXT, nullable: true)]

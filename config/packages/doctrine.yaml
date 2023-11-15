@@ -21,7 +21,7 @@ doctrine:
                     collate: utf8mb4_unicode_ci
         types:
             json: App\Doctrine\DBAL\Types\UnescapedJsonType
-            point: LongitudeOne\Spatial\DBAL\Types\Geometry\PointType
+            Point: LongitudeOne\Spatial\DBAL\Types\Geometry\PointType
     orm:
         auto_generate_proxy_classes: true
         enable_lazy_ghost_objects: true
