@@ -170,7 +170,10 @@ class RouteService
     public function getAthleteRoutes(Athlete $athlete): array
     {
         /** @var \App\Entity\Route[] $routes */
-        $routes = $this->repository->findBy(['athlete' => $athlete->getId()]);
+        $routes = $this->repository->findBy(
+            ['athlete' => $athlete->getId()],
+            ['updatedAt' => 'DESC'],
+        );
 
         $return = [];
         foreach ($routes as $route) {
