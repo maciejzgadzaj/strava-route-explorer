@@ -12,7 +12,6 @@ use Doctrine\ORM\EntityRepository;
 use LongitudeOne\Spatial\PHP\Types\Geometry\Point;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpClient\Exception\ClientException;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 class RouteService
 {
@@ -20,7 +19,7 @@ class RouteService
 
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
-        private readonly RequestStack $requestStack,
+        private readonly FlashService $flashService,
         private readonly LoggerInterface $logger,
         private readonly AthleteService $athleteService,
         private readonly StravaService $stravaService
@@ -99,11 +98,11 @@ class RouteService
             $pairs = \Polyline::pair($list);
 
             $start = reset($pairs);
-            $startPoint = new Point($start[0], $start[1]);
+            $startPoint = new Point($start[1], $start[0]);
             $route->setStart($startPoint);
 
             $end = end($pairs);
-            $endPoint = new Point($end[0], $end[1]);
+            $endPoint = new Point($end[1], $end[0]);
             $route->setEnd($endPoint);
         }
 
@@ -136,13 +135,13 @@ class RouteService
                 '%athlete%' => $route->getAthlete()->getName(),
             ];
             $this->logger->info(strtr($message, $params));
-            $this->requestStack->getSession()->getFlashBag()->add('notice', strtr($message, $params));
+            $this->flashService->add('notice', strtr($message, $params));
 
             return $route;
         } catch (ClientException $clientException) {
             $response = $clientException->getResponse()->toArray();
             $this->logger->error($response->message);
-            $this->requestStack->getSession()->getFlashBag()->add('error', $response->message);
+            $this->flashService->add('error', $response->message);
 
             // Delete local route if it was not found on Strava.
             if ($localRoute = $this->load($routeId)) {
@@ -155,11 +154,11 @@ class RouteService
                     '%athlete%' => $localRoute->getAthlete()->getName(),
                 ];
                 $this->logger->info(strtr($message, $params));
-                $this->requestStack->getSession()->getFlashBag()->add('notice', strtr($message, $params));
+                $this->flashService->add('notice', strtr($message, $params));
             }
         } catch (\Exception $exception) {
             $this->logger->error($exception->getMessage());
-            $this->requestStack->getSession()->getFlashBag()->add('error', $exception->getMessage());
+            $this->flashService->add('error', $exception->getMessage());
         }
 
         return null;
@@ -282,14 +281,14 @@ class RouteService
     {
         $distances = [
             null => 'any',
-            '0.1' => '100 m',
-            '0.5' => '500 m',
-            '1' => '1 km',
-            '5' => '5 km',
-            '10' => '10 km',
-            '20' => '20 km',
-            '50' => '50 km',
-            '100' => '100 km',
+            '100' => '100 m',
+            '500' => '500 m',
+            '1000' => '1 km',
+            '5000' => '5 km',
+            '10000' => '10 km',
+            '20000' => '20 km',
+            '50000' => '50 km',
+            '100000' => '100 km',
         ];
 
         if (isset($distance)) {

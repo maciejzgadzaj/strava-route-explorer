@@ -9,7 +9,6 @@ use App\Entity\Route;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
-use LongitudeOne\Spatial\PHP\Types\Geometry\Point;
 use Symfony\Bundle\SecurityBundle\Security;
 
 class RouteRepository extends ServiceEntityRepository
@@ -167,18 +166,14 @@ class RouteRepository extends ServiceEntityRepository
 
                 // https://www.movable-type.co.uk/scripts/latlong.html
                 // https://www.movable-type.co.uk/scripts/latlong-db.html
+                // https://dev.mysql.com/doc/refman/8.2/en/spatial-convenience-functions.html#function_st-distance-sphere
                 case 'start':
                     if (!empty($criteria['start_latlon'])) {
-                        $start = new Point(array_reverse(explode(',', $criteria['start_latlon'])));
+                        list($lat, $lng) = explode(',', $criteria['start_latlon']);
                         $query
-                            ->addSelect('
-                                ( 3959 * acos(cos(radians('.$start->getLatitude().'))
-                                * cos( radians( x(r.start) ) )
-                                * cos( radians( y(r.start) )
-                                - radians('.$start->getLongitude().') )
-                                + sin( radians('.$start->getLatitude().') )
-                                * sin( radians( x(r.start) ) ) ) ) AS start_dist
-                            ')
+                            ->addSelect('ST_Distance_Sphere(r.start, POINT(:start_lng, :start_lat)) AS start_dist')
+                            ->setParameter('start_lng', $lng)
+                            ->setParameter('start_lat', $lat)
                             ->addOrderBy('start_dist', 'ASC')
                         ;
                     }
@@ -196,18 +191,16 @@ class RouteRepository extends ServiceEntityRepository
                     }
                     break;
 
+                // https://www.movable-type.co.uk/scripts/latlong.html
+                // https://www.movable-type.co.uk/scripts/latlong-db.html
+                // https://dev.mysql.com/doc/refman/8.2/en/spatial-convenience-functions.html#function_st-distance-sphere
                 case 'end':
                     if (!empty($criteria['end_latlon'])) {
-                        $end = new Point(array_reverse(explode(',', $criteria['end_latlon'])));
+                        list($lat, $lng) = explode(',', $criteria['end_latlon']);
                         $query
-                            ->addSelect('
-                                ( 3959 * acos(cos(radians('.$end->getLatitude().'))
-                                * cos( radians( x(r.end) ) )
-                                * cos( radians( y(r.end) )
-                                - radians('.$end->getLongitude().') )
-                                + sin( radians('.$end->getLatitude().') )
-                                * sin( radians( x(r.end) ) ) ) ) AS end_dist
-                            ')
+                            ->addSelect('ST_Distance_Sphere(r.end, POINT(:end_lng, :end_lat)) AS end_dist')
+                            ->setParameter('end_lng', $lng)
+                            ->setParameter('end_lat', $lat)
                             ->addOrderBy('end_dist', 'ASC')
                         ;
                     }

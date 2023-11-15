@@ -46,9 +46,11 @@ doctrine:
                     numeric_functions:
                         acos: DoctrineExtensions\Query\Mysql\Acos
                         cos: DoctrineExtensions\Query\Mysql\Cos
-                        point: LongitudeOne\Spatial\ORM\Query\AST\Functions\MySql\Point
+                        point: LongitudeOne\Spatial\ORM\Query\AST\Functions\MySql\SpPoint
                         radians: DoctrineExtensions\Query\Mysql\Radians
                         sin: DoctrineExtensions\Query\Mysql\Sin
+                        st_distance: App\Doctrine\ORM\Functions\StDistance
+                        st_distance_sphere: App\Doctrine\ORM\Functions\StDistanceSphere
                         x: LongitudeOne\Spatial\ORM\Query\AST\Functions\Standard\StX
                         y: LongitudeOne\Spatial\ORM\Query\AST\Functions\Standard\StY
                     string_functions:
