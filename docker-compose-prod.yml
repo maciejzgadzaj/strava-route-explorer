@@ -1,5 +1,34 @@
 version: "3.5"
 
+# https://docs.docker.com/compose/compose-file/11-extension/
+x-logging-gcp: &logging-gcp
+    # https://docs.docker.com/config/containers/logging/gcplogs/
+    # https://docs.docker.com/compose/compose-file/05-services/#logging
+    # https://github.com/GoogleCloudPlatform/community/blob/master/archived/docker-gcplogs-driver/index.md
+    driver: gcplogs
+
+x-logging-loki: &logging-loki
+    # https://grafana.com/docs/loki/latest/send-data/docker-driver/
+    # https://grafana.com/docs/loki/latest/send-data/docker-driver/configuration/
+    # https://grafana.com/docs/loki/latest/reference/api/#push-log-entries-to-loki
+    driver: loki
+    # https://docs.docker.com/config/containers/logging/configure/
+    options:
+        loki-url: "https://739186:glc_eyJvIjoiOTg2NzE5IiwibiI6InN0YWNrLTc4NjE5MC1obC13cml0ZS1sb2NhbC1jaGFuZ2VibG9nIiwiayI6IjZIWThBNzJ3VTJCMDhsUDEwSGtjSno1ciIsIm0iOnsiciI6InByb2QtZXUtd2VzdC0yIn19@logs-prod-012.grafana.net/loki/api/v1/push"
+        # https://grafana.com/docs/loki/latest/send-data/promtail/pipelines/
+        # https://grafana.com/docs/loki/latest/send-data/promtail/stages/#prometheus-pipeline-stages
+        loki-pipeline-stages: |
+            - json:
+                expressions:
+                    level: level_name
+            - labels:
+                level:
+            - static_labels:
+                env: prod
+        # https://docs.docker.com/config/containers/logging/json-file/
+        max-file: "1"
+        max-size: "10m"
+
 services:
     nginx:
         image: nginx:1-alpine
@@ -23,14 +52,7 @@ services:
           - php
           - mysql
         restart: always
-        logging:
-            # https://docs.docker.com/config/containers/logging/gcplogs/
-            # https://docs.docker.com/compose/compose-file/05-services/#logging
-            # https://github.com/GoogleCloudPlatform/community/blob/master/archived/docker-gcplogs-driver/index.md
-            driver: gcplogs
-        # https://docs.docker.com/compose/compose-file/compose-file-v3/#labels-1
-        labels:
-            com.example.description: "nginx"
+        logging: *logging-loki
 
     php:
         image: mzgadzaj/gcp-php:latest
@@ -52,14 +74,7 @@ services:
         depends_on:
             - mysql
         restart: always
-        logging:
-            # https://docs.docker.com/config/containers/logging/gcplogs/
-            # https://docs.docker.com/compose/compose-file/05-services/#logging
-            # https://github.com/GoogleCloudPlatform/community/blob/master/archived/docker-gcplogs-driver/index.md
-            driver: gcplogs
-        # https://docs.docker.com/compose/compose-file/compose-file-v3/#labels-1
-        labels:
-            com.example.description: "php-fpm"
+        logging: *logging-loki
 
     mysql:
         image: mysql:8.2
@@ -78,14 +93,7 @@ services:
             MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
         networks:
             - strava-route-explorer
-        logging:
-            # https://docs.docker.com/config/containers/logging/gcplogs/
-            # https://docs.docker.com/compose/compose-file/05-services/#logging
-            # https://github.com/GoogleCloudPlatform/community/blob/master/archived/docker-gcplogs-driver/index.md
-            driver: gcplogs
-        # https://docs.docker.com/compose/compose-file/compose-file-v3/#labels-1
-        labels:
-            com.example.description: "mysql"
+        logging: *logging-loki
 
 networks:
     strava-route-explorer:
