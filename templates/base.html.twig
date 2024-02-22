@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-        <title>{% block title %}Strava Route Explorer{% endblock %} - Strava Route Explorer</title>
+        <title>{% block title %}Route Explorer for Strava{% endblock %} - Route Explorer for Strava</title>
         <meta name="description" content="Browse and search our database of bike and run routes. Filter results by name, distance, elevation gain, athlete, start/end location, and more.">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <script async src="https://www.googletagmanager.com/gtag/js?id={{ google_analytics_tag }}"></script>
@@ -40,7 +40,11 @@
 
         {% block body %}{% endblock %}
 
-        {% block footer %}{% endblock %}
+        {% block footer %}
+            <div class="footer powered-by">
+                <img src="/images/api_logo_pwrdBy_strava_horiz_gray.png" height="30"/>
+            </div>
+        {% endblock %}
 
         {% block javascripts %}
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js" defer></script>

@@ -18,11 +18,11 @@
                 {% for row in data.results %}
                     <div class="row type-{{ row.route.type }} {{ cycle(['odd', 'even'], loop.index0) }}">
                         <div class="cell image">
-                            <a href="https://www.strava.com/routes/{{ row.route.id }}">
+                            <a href="https://www.strava.com/routes/{{ row.route.id }}" title="View route on Strava">
                                 {% if row.route.mapUrl %}
-                                    <img class="strava" src="{{ row.route.mapUrl }}" />
+                                    <img class="strava" src="{{ row.route.mapUrl }}" alt="Route map" title="View route on Strava" />
                                 {% else %}
-                                    <img class="mapquest" src="images/routes/{{ row.route.athlete.id }}/{{ row.route.id }}.jpg" width="75" height="50" />
+                                    <img class="mapquest" src="images/routes/{{ row.route.athlete.id }}/{{ row.route.id }}.jpg" width="75" height="50" alt="Route map" title="View route on Strava" />
                                 {% endif %}
                             </a>
                         </div>
@@ -39,8 +39,8 @@
                             {% if not row.route.public %}
                                 <span class="private" title="This route is not published and is visible only to you">🔒</span>
                             {% endif %}
-                            <a title="See route on Strava.com" href="https://www.strava.com/routes/{{ row.route.id }}">{{ row.route.name }}</a>
-                            <a title="See route on VeloViewer.com" class="link external veloviewer" href="https://veloviewer.com/routes/{{ row.route.id }}">VV</a>
+                            <a title="View route on Strava" href="https://www.strava.com/routes/{{ row.route.id }}">{{ row.route.name }}</a>
+                            <a title="View route on VeloViewer" class="link external veloviewer" href="https://veloviewer.com/routes/{{ row.route.id }}">VV</a>
                             <a title="Download route in .TCX format" class="link external download-tcx" href="https://www.strava.com/routes/{{ row.route.id }}/export_tcx">TCX</a>
                             <a title="Download route in .GPX format" class="link external download-gpx" href="https://www.strava.com/routes/{{ row.route.id }}/export_gpx">GPX</a>
                             {% if is_granted('ROLE_ADMIN') %}
@@ -70,8 +70,8 @@
                         </div>
                         <div class="flex-line-break"></div>
                         <div class="cell athlete">
-                            <a title="See all routes by {{ row.route.athlete.name }}" href="{{ path('routes', { 'filter[athlete]': row.route.athlete.name }) }}">{{ row.route.athlete.name}}</a>
-                            <div class="athlete_id"><a class="small external" title="See athlete profile on Strava.com" href="https://www.strava.com/athletes/{{ row.route.athlete.id }}">{{ row.route.athlete.id }}</a></div>
+                            <a title="View all routes by {{ row.route.athlete.name }}" href="{{ path('routes', { 'filter[athlete]': row.route.athlete.name }) }}">{{ row.route.athlete.name}}</a>
+                            <div class="athlete_id"><a class="small external" title="View athlete profile on Strava" href="https://www.strava.com/athletes/{{ row.route.athlete.id }}">{{ row.route.athlete.id }}</a></div>
                         </div>
                         <div class="cell updated">
                             {{ row.route.updatedAt|date('Y-m-d') }}

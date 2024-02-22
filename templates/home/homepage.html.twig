@@ -7,13 +7,13 @@
     <div class="splash immersive progressive-bg-image small" data-large="https://lh3.googleusercontent.com/frxoy1aAnAvJAqfyvN86tm3s8qzlW88YWoNcSVFQaYsK9-_6dG4rXxKkBwcDT7ANSHMHyTaFEHxaiOdiMQs=w1200-no-tmp.jpg">
         <div class="overlay"></div>
         <div class="text">
-            <h1 class="small">Strava Route Explorer</h1>
+            <h1 class="small">Route Explorer for Strava</h1>
             <h2 class="title">Giving you back what Strava has taken away.</h2>
             <div class="action">
                 {% if app.user %}
                     <a href="{{ path('routes') }}" class="button">Explore routes</a>
                 {% else %}
-                    <a href="{{ path('strava_auth') }}" class="button">Connect with Strava</a>
+                    <a href="{{ path('strava_auth') }}"><img src="/images/btn_strava_connectwith_orange.png" title="Connect with Strava" alt="Connect with Strava" width="193" height="48" /></a>
                 {% endif %}
             </div>
         </div>
@@ -31,7 +31,7 @@
             Even though <a class="external" href="https://web.archive.org/web/20191130221803/https://support.strava.com/hc/en-us/community/posts/208839377-Search-or-Explore-feature-for-Strava-Routes">everyone and their dog has been asking for it for years now</a>.
         </div>
         <div class="description">
-            The times, however, they are a-changin'. Say hello to <a class="external" href="https://github.com/maciejzgadzaj/strava-route-explorer/wiki/About">Strava Route Explorer</a>.
+            The times, however, they are a-changin'. Say hello to <a class="external" href="https://github.com/maciejzgadzaj/strava-route-explorer/wiki/About">Route Explorer for Strava</a>.
         </div>
     </div>
 
@@ -45,11 +45,13 @@
                     We respect your privacy. That's why before allowing anyone access to other athletes' routes we ask everyone to authorize with Strava first.
                     {#This site is free to use for everyone, but for data protection reasons we ask you to connect with your Strava account first before accessing the routes.#}
                 </div>
-                {% if app.user %}
-                    <a class="button disabled">Connect with Strava</a>
-                {% else %}
-                    <a href="{{ path('strava_auth') }}" class="button">Connect with Strava</a>
-                {% endif %}
+                <div class="strava-button">
+                    {% if app.user %}
+                        <img src="/images/btn_strava_connectwith_light.png" title="Connect with Strava" alt="Connect with Strava" width="193" height="48" />
+                    {% else %}
+                        <a href="{{ path('strava_auth') }}"><img src="/images/btn_strava_connectwith_orange.png" title="Connect with Strava" alt="Connect with Strava" width="193" height="48" /></a>
+                    {% endif %}
+                </div>
             </div>
             <div class="step step2">
                 <div class="no">2</div>

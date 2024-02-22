@@ -1,6 +1,6 @@
-# Strava Route Explorer
+# Route Explorer for Strava
 
-[Strava Route Explorer](https://stravaroutes.com/) is a social site for [Strava](https://www.strava.com/) users to share their routes with the community, and benefit for other atletes' routes.
+[Route Explorer for Strava](https://stravaroutes.com/) is a social site for [Strava](https://www.strava.com/) users to share their routes with the community, and benefit for other atletes' routes.
 
 ## Wiki
 

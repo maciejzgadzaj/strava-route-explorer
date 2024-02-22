@@ -1,0 +1,40 @@
+/*!************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].oneOf[1].use[1]!./node_modules/resolve-url-loader/index.js??ruleSet[1].rules[4].oneOf[1].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].oneOf[1].use[3]!./assets/scss/sync-my-routes.scss ***!
+  \************************************************************************************************************************************************************************************************************************************************************************************/
+@charset "UTF-8";
+#fetching {
+  margin-left: 0.8em;
+}
+#fetching span {
+  display: inline-block;
+}
+#fetching #fetching-ellipsis {
+  position: relative;
+  width: 0.8em;
+}
+#fetching #fetching-ellipsis:after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  text-align: left;
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: bottom;
+  -webkit-animation: ellipsis steps(4, end) 900ms infinite;
+  animation: ellipsis steps(4, end) 900ms infinite;
+  content: "…"; /* ascii code for the ellipsis character */
+  width: 0px;
+}
+
+@keyframes ellipsis {
+  to {
+    width: 0.8em;
+  }
+}
+@-webkit-keyframes ellipsis {
+  to {
+    width: 0.8em;
+  }
+}
+
+/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic3luYy1teS1yb3V0ZXMuY3NzIiwibWFwcGluZ3MiOiI7OztBQUFBLGdCQUFnQjtBQUFoQjtFQUNJO0FBRUo7QUFESTtFQUNJO0FBR1I7QUFESTtFQUNJO0VBQ0E7QUFHUjtBQURJO0VBQ0k7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtBQUdSOztBQUFBO0VBQ0k7SUFDSTtFQUdOO0FBQ0Y7QUFEQTtFQUNJO0lBQ0k7RUFHTjtBQUNGLEMiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9hc3NldHMvc2Nzcy9zeW5jLW15LXJvdXRlcy5zY3NzIl0sInNvdXJjZXNDb250ZW50IjpbIiNmZXRjaGluZyB7XG4gICAgbWFyZ2luLWxlZnQ6IC44ZW07XG4gICAgc3BhbiB7XG4gICAgICAgIGRpc3BsYXk6IGlubGluZS1ibG9jaztcbiAgICB9XG4gICAgI2ZldGNoaW5nLWVsbGlwc2lzIHtcbiAgICAgICAgcG9zaXRpb246IHJlbGF0aXZlO1xuICAgICAgICB3aWR0aDogLjhlbTtcbiAgICB9XG4gICAgI2ZldGNoaW5nLWVsbGlwc2lzOmFmdGVyIHtcbiAgICAgICAgcG9zaXRpb246IGFic29sdXRlO1xuICAgICAgICB0b3A6IDA7XG4gICAgICAgIGxlZnQ6IDA7XG4gICAgICAgIHRleHQtYWxpZ246IGxlZnQ7XG4gICAgICAgIG92ZXJmbG93OiBoaWRkZW47XG4gICAgICAgIGRpc3BsYXk6IGlubGluZS1ibG9jaztcbiAgICAgICAgdmVydGljYWwtYWxpZ246IGJvdHRvbTtcbiAgICAgICAgLXdlYmtpdC1hbmltYXRpb246IGVsbGlwc2lzIHN0ZXBzKDQsZW5kKSA5MDBtcyBpbmZpbml0ZTtcbiAgICAgICAgYW5pbWF0aW9uOiBlbGxpcHNpcyBzdGVwcyg0LGVuZCkgOTAwbXMgaW5maW5pdGU7XG4gICAgICAgIGNvbnRlbnQ6IFwiXFwyMDI2XCI7IC8qIGFzY2lpIGNvZGUgZm9yIHRoZSBlbGxpcHNpcyBjaGFyYWN0ZXIgKi9cbiAgICAgICAgd2lkdGg6IDBweDtcbiAgICB9XG59XG5Aa2V5ZnJhbWVzIGVsbGlwc2lzIHtcbiAgICB0byB7XG4gICAgICAgIHdpZHRoOiAuOGVtO1xuICAgIH1cbn1cbkAtd2Via2l0LWtleWZyYW1lcyBlbGxpcHNpcyB7XG4gICAgdG8ge1xuICAgICAgICB3aWR0aDogLjhlbTtcbiAgICB9XG59Il0sIm5hbWVzIjpbXSwic291cmNlUm9vdCI6IiJ9*/
