@@ -13,7 +13,7 @@ RUN apk update \
         libjpeg-turbo-dev \
         libmcrypt-dev \
         libpng-dev \
-        libssl1.1 \
+        libssl3 \
         libtool \
         libzip-dev \
         linux-headers \
